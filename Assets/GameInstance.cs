@@ -66,14 +66,17 @@ public class GameInstance : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.W)) {
 			yield return AttemptMove(0, 1);
 		} else if (Input.GetKeyDown(KeyCode.I)) { 
-			yield return SelectTarget(AttemptMove);
+			yield return SelectTarget(KeyCode.I, (x,y) => AttemptMove(x- player.x, y-player.y));
+		} else if (Input.GetKeyDown(KeyCode.K)) { 
+			yield return SelectCardinalDirection(KeyCode.K, MeleeAttack);
 		} else {
 			yield return ListenForPlayerInput();
 		}
 	}
 
 	private IEnumerator AttemptMove(int dx, int dy) {
-		if (tiles[player.x+dx][player.y+dy].passable) {
+		if (tiles[player.x+dx][player.y+dy].interactable) {
+		} else if (tiles[player.x+dx][player.y+dy].passable) {
 			yield return SlowMove(player.gameObject, new Vector3(player.x+dx, player.y + dy), 0.1f);
 			player.SetCoords(player.x+dx, player.y + dy);
 			yield return TakeBaddiesTurn();
@@ -102,7 +105,7 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	delegate IEnumerator TargettedAction(int x, int y);
-	private IEnumerator SelectTarget(TargettedAction callback) {
+	private IEnumerator SelectTarget(KeyCode selectKeyCode, TargettedAction callback) {
 		yield return null;
 		targettingReticle.transform.position = player.transform.position;
 		// TODO these should probably be provided.
@@ -122,12 +125,51 @@ public class GameInstance : MonoBehaviour {
 			} else if (Input.GetKeyDown(KeyCode.D)) {
 				x += 1;
 				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
-			} else if (Input.GetKeyDown(KeyCode.I)) {
+			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			}
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(x-player.x, y-player.y);
+		yield return callback(x, y);
+	}
+
+	private IEnumerator SelectCardinalDirection(KeyCode selectKeyCode, TargettedAction callback) {
+		yield return null;
+		targettingReticle.transform.position = player.transform.position;
+		// TODO these should probably be provided.
+		int oX = (int)player.transform.position.x;
+		int oY = (int)player.transform.position.y;
+		targettingReticle.SetActive(true);
+		int x = oX;
+		int y = oY-1;
+		while (true) {
+			if (Input.GetKeyDown(KeyCode.W)) {
+				x = oX;
+				y = oY+1;
+				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+			} else if (Input.GetKeyDown(KeyCode.A)) {
+				x = oX-1;
+				y = oY;
+				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+			} else if (Input.GetKeyDown(KeyCode.S)) {
+				x = oX;
+				y = oY-1;
+				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+			} else if (Input.GetKeyDown(KeyCode.D)) {
+				x = oX+1;
+				y = oY;
+				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+			} else if (Input.GetKeyDown(selectKeyCode)) {
+				break;
+			}
+			yield return null;
+		}
+		targettingReticle.SetActive(false);
+		yield return callback(x, y);
+	}
+
+	public IEnumerator MeleeAttack(int x, int y) {
+		yield return ListenForPlayerInput();
 	}
 }

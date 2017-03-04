@@ -14,6 +14,8 @@ public class MapTileComponent : MonoBehaviour {
 		}
 	}
 
+	public bool interactable = false;
+
 	public void SetTerrain(TileTerrain t) {
 		this.terrain = t;
 		this.GetComponent<SpriteRenderer>().sprite = terrain.sprite;
