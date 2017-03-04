@@ -9,8 +9,8 @@ public class LevelMap {
 		"xxxxxxxxxx",
 		"x........x",
 		"x........x",
-		"x........x",
-		"x........x",
+		"x.~~~....x",
+		"x....~~~.x",
 		"x........x",
 		"x........x",
 		"x........x",
@@ -30,7 +30,7 @@ public class LevelMap {
 		for (int i = 0; i < config.width; i+=1) {
 			map[i] = new TileTerrain[config.height];
 			for (int j = 0; j < config.height; j += 1) {
-				map[i][j] = TileTerrainForChar(config, premadeMap[i][j]);
+				map[i][j] = TileTerrainForChar(config, premadeMap[10-j-1][i]);
 			}
 		}
 	}
@@ -39,6 +39,8 @@ public class LevelMap {
 			return defs.wall;
 		} else if (c == '.') {
 			return defs.open;
+		} else if (c == '~') {
+			return defs.pit;
 		} else {
 			Debug.LogError("Unexpected Character - no terrain defintion for [" + c + "]");
 			return null;

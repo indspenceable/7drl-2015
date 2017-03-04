@@ -67,6 +67,7 @@ public class GameInstance : MonoBehaviour {
 
 	private IEnumerator AttemptMove(int dx, int dy) {
 		if (tiles[player.x+dx][player.y+dy].passable) {
+			yield return SlowMove(player.gameObject, new Vector3(player.x+dx, player.y + dy), 0.1f);
 			player.SetCoords(player.x+dx, player.y + dy);
 			yield return TakeBaddiesTurn();
 		} else {
@@ -80,5 +81,16 @@ public class GameInstance : MonoBehaviour {
 
 	private IEnumerator TakePassivesTurn() {
 		yield return ListenForPlayerInput();
+	}
+
+	private IEnumerator SlowMove(GameObject go, Vector3 endPosition, float time) {
+		float dt = 0;
+		Vector3 startPosition = go.transform.position;
+		while (dt < time) {
+			yield return null;
+			dt += Time.deltaTime;
+			go.transform.position = Vector3.Lerp(startPosition, endPosition, dt/time);
+		}
+		go.transform.position = endPosition;
 	}
 }

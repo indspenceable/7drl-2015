@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
 		public int height;
 		public TileTerrain open;
 		public TileTerrain wall;
+		public TileTerrain pit;
 	}
 
 	[System.Serializable]
