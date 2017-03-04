@@ -141,6 +141,11 @@ MonoBehaviour:
     height: 10
     open: {fileID: 11400000, guid: 28a10832692ad43cc99f4607bc5b7fb2, type: 2}
     wall: {fileID: 11400000, guid: d43f24397b8a7401cbc32ab2c6a006f6, type: 2}
+  prefabConfig:
+    playerPrefab: {fileID: 1949329765368028, guid: 212e1fde938ff40cf99bfd6c7aec4aa6,
+      type: 2}
+    tilePrefab: {fileID: 1630155925734204, guid: 57a02dbf174054f55bab137d487016da,
+      type: 2}
 --- !u!4 &863111001
 Transform:
   m_ObjectHideFlags: 0

@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Map
+    uniqueID: 795529995
+    locked: 0
+  - name: Entities
+    uniqueID: 3596441223
+    locked: 0

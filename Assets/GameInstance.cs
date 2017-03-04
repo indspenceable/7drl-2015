@@ -14,29 +14,34 @@ public class GameInstance : MonoBehaviour {
 		}
 	}
 
-	public void Startup(GameManager.MapConfig config) {
+	private Player player;
+
+	public void Startup(GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
 		// Build the level maps
-		levels = new LevelMap[config.totalNumberOfLevels];
-		for (int i = 0; i < config.totalNumberOfLevels; i += 1) {
-			levels[i] = new LevelMap(config);
+		levels = new LevelMap[mapConfig.totalNumberOfLevels];
+		for (int i = 0; i < mapConfig.totalNumberOfLevels; i += 1) {
+			levels[i] = new LevelMap(mapConfig);
 		}
 
 
 		// Now, actually build out the map gameobjects
-		tiles = new MapTileComponent[config.width][];
-		for ( int x = 0; x < config.width; x+=1) {
-			tiles[x] = new MapTileComponent[config.height];
-			for (int y = 0; y < config.height; y +=1) {
-				tiles[x][y] = new GameObject("Tile").AddComponent<MapTileComponent>();
+		tiles = new MapTileComponent[mapConfig.width][];
+		for ( int x = 0; x < mapConfig.width; x+=1) {
+			tiles[x] = new MapTileComponent[mapConfig.height];
+			for (int y = 0; y < mapConfig.height; y +=1) {
+				tiles[x][y] = Instantiate(prefabs.tilePrefab).GetComponent<MapTileComponent>();
 				tiles[x][y].SetCoords(x,y);
 			}
 		}
 
 		// Set their terrain
-		for ( int x = 0; x < config.width; x+=1) {
-			for (int y = 0; y < config.height; y +=1) {
+		for ( int x = 0; x < mapConfig.width; x+=1) {
+			for (int y = 0; y < mapConfig.height; y +=1) {
 				tiles[x][y].SetTerrain(CurrentLevel.GetAt(x,y));
 			}
 		}
+
+		player = Instantiate(prefabs.playerPrefab).GetComponent<Player>();
+		player.SetCoords(1,1);
 	}
 }
