@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-	int x; int y;
+	public int x;
+	public int y;
 
 	// Use this for initialization
 	void Start () {

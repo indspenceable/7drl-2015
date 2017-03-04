@@ -41,7 +41,44 @@ public class GameInstance : MonoBehaviour {
 			}
 		}
 
+		// Set up the player
 		player = Instantiate(prefabs.playerPrefab).GetComponent<Player>();
 		player.SetCoords(1,1);
+
+		// Now that we have all this junk established, we can begin listening to input.
+		StartCoroutine(ListenForPlayerInput());
+	}
+
+
+	private IEnumerator ListenForPlayerInput() {
+		yield return null;
+		if (Input.GetKeyDown(KeyCode.A)) {
+			yield return AttemptMove(-1, 0);
+		} else if (Input.GetKeyDown(KeyCode.D)) {
+			yield return AttemptMove(1, 0);
+		} else if (Input.GetKeyDown(KeyCode.S)) {
+			yield return AttemptMove(0, -1);
+		} else if (Input.GetKeyDown(KeyCode.W)) {
+			yield return AttemptMove(0, 1);
+		} else {
+			yield return ListenForPlayerInput();
+		}
+	}
+
+	private IEnumerator AttemptMove(int dx, int dy) {
+		if (tiles[player.x+dx][player.y+dy].passable) {
+			player.SetCoords(player.x+dx, player.y + dy);
+			yield return TakeBaddiesTurn();
+		} else {
+			yield return ListenForPlayerInput();
+		}
+	}
+
+	private IEnumerator TakeBaddiesTurn() {
+		yield return TakePassivesTurn();
+	}
+
+	private IEnumerator TakePassivesTurn() {
+		yield return ListenForPlayerInput();
 	}
 }

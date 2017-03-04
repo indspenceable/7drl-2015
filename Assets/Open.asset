@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Name: Open
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 76677634de72d463696b4856ba858af9, type: 3}
+  passable: 1

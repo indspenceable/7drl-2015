@@ -8,6 +8,12 @@ public class MapTileComponent : MonoBehaviour {
 	public int x {get; private set;}
 	public int y {get; private set;}
 
+	public bool passable {
+		get {
+			return terrain.passable;
+		}
+	}
+
 	public void SetTerrain(TileTerrain t) {
 		this.terrain = t;
 		this.GetComponent<SpriteRenderer>().sprite = terrain.sprite;
