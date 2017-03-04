@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 	public struct PrefabConfig {
 		public GameObject playerPrefab;
 		public GameObject tilePrefab;
+		public GameObject reticle;
 	}
 		
 	GameInstance instance;
