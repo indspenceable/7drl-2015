@@ -68,7 +68,7 @@ public class GameInstance : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.I)) { 
 			yield return SelectTarget(KeyCode.I, (x,y) => AttemptMove(x- player.x, y-player.y));
 		} else if (Input.GetKeyDown(KeyCode.K)) { 
-			yield return SelectCardinalDirection(KeyCode.K, MeleeAttack);
+			yield return SelectCardinalDirection(KeyCode.K, HookInDirection);
 		} else {
 			yield return ListenForPlayerInput();
 		}
@@ -141,25 +141,25 @@ public class GameInstance : MonoBehaviour {
 		int oX = (int)player.transform.position.x;
 		int oY = (int)player.transform.position.y;
 		targettingReticle.SetActive(true);
-		int x = oX;
-		int y = oY-1;
+		int x = 0;
+		int y = -1;
 		while (true) {
 			if (Input.GetKeyDown(KeyCode.W)) {
-				x = oX;
-				y = oY+1;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				x = 0;
+				y = 1;
+				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.A)) {
-				x = oX-1;
-				y = oY;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				x = -1;
+				y = 0;
+				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.S)) {
-				x = oX;
-				y = oY-1;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				x = 0;
+				y = -1;
+				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.D)) {
-				x = oX+1;
-				y = oY;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				x = 1;
+				y = 0;
+				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			}
@@ -169,7 +169,15 @@ public class GameInstance : MonoBehaviour {
 		yield return callback(x, y);
 	}
 
-	public IEnumerator MeleeAttack(int x, int y) {
-		yield return ListenForPlayerInput();
+	public IEnumerator HookInDirection(int x, int y) {
+		int cX = player.x;
+		int cY = player.y;
+		while (!CurrentLevel.GetAt(cX,cY).blocked) {
+			cX += x;
+			cY += y;
+		}
+		cX -= x;
+		cY -= y;
+		yield return AttemptMove(cX-player.x,cY-player.y);
 	}
 }
