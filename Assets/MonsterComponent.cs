@@ -6,10 +6,10 @@ public class MonsterComponent : MonoBehaviour {
 	private Monster mt;
 	public Coord pos;
 
-	public void Setup(Monster mt, int x, int y) {
+	public void Setup(Monster mt, Coord pos) {
 		this.mt = mt;
 		GetComponent<SpriteRenderer>().sprite = mt.sprite;
-		pos = new Coord(x, y);
-		transform.position = pos.toVec();
+		this.pos = pos;
+		transform.position = this.pos.toVec();
 	}
 }

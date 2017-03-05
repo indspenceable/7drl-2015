@@ -15,8 +15,8 @@ public class Player : MonoBehaviour {
 		
 	}
 
-	public void SetCoords(int x, int y) {
-		this.pos = new Coord(x, y);
+	public void SetCoords(Coord c) {
+		this.pos = c;
 		transform.position = pos.toVec();
 	}
 }

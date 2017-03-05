@@ -21,8 +21,8 @@ public class LevelMap {
 	public LevelMap(GameManager.MapConfig defs) {
 		GenerateFromPremadeMap(defs);
 	}
-	public TileTerrain GetAt(int x, int y) {
-		return map[x][y];
+	public TileTerrain GetAt(Coord c) {
+		return map[c.x][c.y];
 	}
 	private void GenerateFromPremadeMap(GameManager.MapConfig config) {
 		// Normally, generate a level here.

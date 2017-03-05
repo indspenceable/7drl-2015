@@ -6,6 +6,9 @@ public class GameInstance : MonoBehaviour {
 	private LevelMap[] levels;
 
 	private MapTileComponent[][] tiles;
+	private MapTileComponent GetTile(Coord c) {
+		return tiles[c.x][c.y];
+	}
 
 	private int currentLevelNumber;
 	private LevelMap CurrentLevel {
@@ -40,13 +43,13 @@ public class GameInstance : MonoBehaviour {
 		// Set their terrain
 		for ( int x = 0; x < mapConfig.width; x+=1) {
 			for (int y = 0; y < mapConfig.height; y +=1) {
-				tiles[x][y].SetTerrain(CurrentLevel.GetAt(x,y));
+				tiles[x][y].SetTerrain(CurrentLevel.GetAt(new Coord(x,y)));
 			}
 		}
 
 		// Set up the player
 		player = Instantiate(prefabs.playerPrefab).GetComponent<Player>();
-		player.SetCoords(1,1);
+		player.SetCoords(new Coord(1,1));
 
 		// Aaaand the reticle
 		targettingReticle = Instantiate(prefabs.reticle);
@@ -54,15 +57,14 @@ public class GameInstance : MonoBehaviour {
 
 		// Fill in the monsters for this level
 		for (int i = 0; i < 3; i+=1) {
-			int x = 0; int y = 0;
+			Coord c = new Coord(0,0);
 
-			while (CurrentLevel.GetAt(x,y).blocked || !CurrentLevel.GetAt(x,y).passable || (x == 1 && y == 1)) {
-				x = Random.Range(0, 10);
-				y = Random.Range(0, 10);
+			while (CurrentLevel.GetAt(c).blocked || !CurrentLevel.GetAt(c).passable || c.Equals(player.pos)) {
+				c = new Coord(Random.Range(0, 10), Random.Range(0, 10));
 			}
 			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
 			MonsterComponent mc = Instantiate(prefabs.monster).GetComponent<MonsterComponent>();
-			mc.Setup(monsterType, x, y);
+			mc.Setup(monsterType, c);
 			monsters.Add(mc);
 		}
 //
@@ -74,15 +76,15 @@ public class GameInstance : MonoBehaviour {
 	private IEnumerator ListenForPlayerInput() {
 		yield return null;
 		if (Input.GetKeyDown(KeyCode.A)) {
-			yield return AttemptMove(-1, 0);
+			yield return AttemptMove(new Coord(-1, 0) + player.pos);
 		} else if (Input.GetKeyDown(KeyCode.D)) {
-			yield return AttemptMove(1, 0);
+			yield return AttemptMove(new Coord(1, 0) + player.pos);
 		} else if (Input.GetKeyDown(KeyCode.S)) {
-			yield return AttemptMove(0, -1);
+			yield return AttemptMove(new Coord(0, -1) + player.pos);
 		} else if (Input.GetKeyDown(KeyCode.W)) {
-			yield return AttemptMove(0, 1);
+			yield return AttemptMove(new Coord(0, 1) + player.pos);
 		} else if (Input.GetKeyDown(KeyCode.I)) { 
-			yield return SelectTarget(KeyCode.I, (dx, dy) => AttemptMove(dx-player.pos.x, dy-player.pos.y));
+			yield return SelectTarget(KeyCode.I, AttemptMove);
 		} else if (Input.GetKeyDown(KeyCode.K)) { 
 			yield return SelectCardinalDirection(KeyCode.K, HookInDirection);
 		} else {
@@ -90,12 +92,12 @@ public class GameInstance : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator AttemptMove(int dx, int dy) {
-		Coord dest = player.pos + new Coord(dx, dy);
-		if (tiles[dest.x][dest.y].interactable) {
-		} else if (tiles[dest.x][dest.y].passable) {
-			yield return SlowMove(player.gameObject, new Vector3(player.pos.x+dx, player.pos.y + dy), 0.1f);
-			player.SetCoords(dest.x, dest.y);
+	private IEnumerator AttemptMove(Coord dest) {
+//		Coord dest = player.pos + new Coord(dx, dy);
+		if (GetTile(dest).interactable) {
+		} else if (GetTile(dest).passable) {
+			yield return SlowMove(player.gameObject, dest, 0.1f);
+			player.SetCoords(dest);
 			yield return TakeAllMonstersTurn();
 		} else {
 			yield return ListenForPlayerInput();
@@ -140,7 +142,7 @@ public class GameInstance : MonoBehaviour {
 			};
 			foreach (Coord offset in offsets) {
 				Coord c = current + offset;
-				if(!closedList.ContainsKey(c) && CurrentLevel.GetAt(c.x, c.y).passable) {
+				if(!closedList.ContainsKey(c) && CurrentLevel.GetAt(c).passable) {
 					List<Coord> newPath = new List<Coord>(currentPath);
 					newPath.Add(c);
 					closedList[c] = newPath;
@@ -157,7 +159,7 @@ public class GameInstance : MonoBehaviour {
 		if (path == null || path.Count == 0) {
 			// do nothing - no way to approach player
 		} else {
-			yield return SlowMove(m.gameObject, path[0].toVec(), 0.1f);
+			yield return SlowMove(m.gameObject, path[0], 0.1f);
 			m.pos = path[0];
 		}
 	}
@@ -174,9 +176,10 @@ public class GameInstance : MonoBehaviour {
 		yield return ListenForPlayerInput();
 	}
 
-	private IEnumerator SlowMove(GameObject go, Vector3 endPosition, float time) {
+	private IEnumerator SlowMove(GameObject go, Coord target, float time) {
 		float dt = 0;
 		Vector3 startPosition = go.transform.position;
+		Vector3 endPosition = target.toVec();
 		while (dt < time) {
 			yield return null;
 			dt += Time.deltaTime;
@@ -185,7 +188,7 @@ public class GameInstance : MonoBehaviour {
 		go.transform.position = endPosition;
 	}
 
-	delegate IEnumerator TargettedAction(int x, int y);
+	delegate IEnumerator TargettedAction(Coord c);
 	private IEnumerator SelectTarget(KeyCode selectKeyCode, TargettedAction callback) {
 		yield return null;
 		targettingReticle.transform.position = player.transform.position;
@@ -196,23 +199,23 @@ public class GameInstance : MonoBehaviour {
 		while (true) {
 			if (Input.GetKeyDown(KeyCode.W)) {
 				y += 1;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.A)) {
 				x -= 1;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.S)) {
 				y -= 1;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.D)) {
 				x += 1;
-				yield return SlowMove(targettingReticle, new Vector3(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			}
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(x, y);
+		yield return callback(new Coord(x, y));
 	}
 
 	private IEnumerator SelectCardinalDirection(KeyCode selectKeyCode, TargettedAction callback) {
@@ -228,37 +231,34 @@ public class GameInstance : MonoBehaviour {
 			if (Input.GetKeyDown(KeyCode.W)) {
 				x = 0;
 				y = 1;
-				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.A)) {
 				x = -1;
 				y = 0;
-				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.S)) {
 				x = 0;
 				y = -1;
-				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(KeyCode.D)) {
 				x = 1;
 				y = 0;
-				yield return SlowMove(targettingReticle, new Vector3(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			}
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(x, y);
+		yield return callback(new Coord(x, y));
 	}
 
-	private IEnumerator HookInDirection(int x, int y) {
-		int cX = player.pos.x;
-		int cY = player.pos.y;
-		while (!CurrentLevel.GetAt(cX,cY).blocked) {
-			cX += x;
-			cY += y;
+	private IEnumerator HookInDirection(Coord offset) {
+		Coord c = player.pos;
+		while (!CurrentLevel.GetAt(c).blocked) {
+			c = c + offset;
 		}
-		cX -= x;
-		cY -= y;
-		yield return AttemptMove(cX-player.pos.x,cY-player.pos.y);
+		c = c - offset;
+		yield return AttemptMove(c);
 	}
 }
