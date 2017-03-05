@@ -168,13 +168,7 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	private IEnumerator TakeMonsterTurn(MonsterComponent m) {
-		List<Coord> path = AStarMonsterToPlayer(m);
-		if (path == null || path.Count == 0) {
-			// do nothing - no way to approach player
-		} else {
-			yield return SlowMove(m.gameObject, path[0], 0.1f);
-			m.pos = path[0];
-		}
+		return m.ExecuteStrategy(this);
 	}
 
 	private IEnumerator TakeAllMonstersTurn() {
@@ -189,7 +183,7 @@ public class GameInstance : MonoBehaviour {
 		yield return ListenForPlayerInput();
 	}
 
-	private IEnumerator SlowMove(GameObject go, Coord target, float time) {
+	public IEnumerator SlowMove(GameObject go, Coord target, float time) {
 		float dt = 0;
 		Vector3 startPosition = go.transform.position;
 		Vector3 endPosition = target.toVec();
