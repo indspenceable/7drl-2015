@@ -85,6 +85,8 @@ public class GameInstance : MonoBehaviour {
 			yield return AttemptMove(new Coord(0, 1) + player.pos);
 		} else if (Input.GetKeyDown(KeyCode.I)) { 
 			yield return SelectTarget(KeyCode.I, AttemptMove);
+		} else if (Input.GetKeyDown(KeyCode.J)) { 
+			yield return SelectTarget(KeyCode.J, ShootMonster);
 		} else if (Input.GetKeyDown(KeyCode.K)) { 
 			yield return SelectCardinalDirection(KeyCode.K, HookInDirection);
 		} else {
@@ -106,7 +108,18 @@ public class GameInstance : MonoBehaviour {
 	/* ------------------------------- *
 	 * Monster related stuff goes here *
  	 * ------------------------------- */
-
+	public void KillMonster(MonsterComponent m) {
+		monsters.Remove(m);
+		Destroy(m.gameObject);
+	}
+	public MonsterComponent GetMonsterAt(Coord a) {
+		foreach(MonsterComponent m in monsters) {
+			if (m.pos.Equals(a)) {
+				return m;
+			}
+		}
+		return null;
+	}
 
 	private int Comp(Coord a, Coord b) {
 		int ad = a.DistanceTo(player.pos);
@@ -260,5 +273,15 @@ public class GameInstance : MonoBehaviour {
 		}
 		c = c - offset;
 		yield return AttemptMove(c);
+	}
+
+	private IEnumerator ShootMonster(Coord target) {
+		MonsterComponent m = GetMonsterAt(target);
+		if (m != null) {
+			KillMonster(m);
+			yield return TakeAllMonstersTurn();
+		} else {
+			yield return ListenForPlayerInput();
+		}
 	}
 }
