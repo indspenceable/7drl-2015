@@ -17,6 +17,8 @@ public class GameInstance : MonoBehaviour {
 	private Player player;
 	private GameObject targettingReticle;
 
+	private List<MonsterComponent> monsters = new List<MonsterComponent>();
+
 	public void Startup(GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
@@ -50,6 +52,20 @@ public class GameInstance : MonoBehaviour {
 		targettingReticle = Instantiate(prefabs.reticle);
 		targettingReticle.SetActive(false);
 
+		// Fill in the monsters for this level
+		for (int i = 0; i < 3; i+=1) {
+			int x = 0; int y = 0;
+
+			while (CurrentLevel.GetAt(x,y).blocked || !CurrentLevel.GetAt(x,y).passable || (x == 1 && y == 1)) {
+				x = Random.Range(0, 10);
+				y = Random.Range(0, 10);
+			}
+			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+			MonsterComponent mc = Instantiate(prefabs.monster).GetComponent<MonsterComponent>();
+			mc.Setup(monsterType, x, y);
+			monsters.Add(mc);
+		}
+//
 		// Now that we have all this junk established, we can begin listening to input.
 		StartCoroutine(ListenForPlayerInput());
 	}
@@ -66,7 +82,7 @@ public class GameInstance : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.W)) {
 			yield return AttemptMove(0, 1);
 		} else if (Input.GetKeyDown(KeyCode.I)) { 
-			yield return SelectTarget(KeyCode.I, (x,y) => AttemptMove(x- player.x, y-player.y));
+			yield return SelectTarget(KeyCode.I, (dx, dy) => AttemptMove(dx-player.pos.x, dy-player.pos.y));
 		} else if (Input.GetKeyDown(KeyCode.K)) { 
 			yield return SelectCardinalDirection(KeyCode.K, HookInDirection);
 		} else {
@@ -75,17 +91,82 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	private IEnumerator AttemptMove(int dx, int dy) {
-		if (tiles[player.x+dx][player.y+dy].interactable) {
-		} else if (tiles[player.x+dx][player.y+dy].passable) {
-			yield return SlowMove(player.gameObject, new Vector3(player.x+dx, player.y + dy), 0.1f);
-			player.SetCoords(player.x+dx, player.y + dy);
-			yield return TakeBaddiesTurn();
+		Coord dest = player.pos + new Coord(dx, dy);
+		if (tiles[dest.x][dest.y].interactable) {
+		} else if (tiles[dest.x][dest.y].passable) {
+			yield return SlowMove(player.gameObject, new Vector3(player.pos.x+dx, player.pos.y + dy), 0.1f);
+			player.SetCoords(dest.x, dest.y);
+			yield return TakeAllMonstersTurn();
 		} else {
 			yield return ListenForPlayerInput();
 		}
 	}
+	/* ------------------------------- *
+	 * Monster related stuff goes here *
+ 	 * ------------------------------- */
 
-	private IEnumerator TakeBaddiesTurn() {
+
+	private int Comp(Coord a, Coord b) {
+		int ad = a.DistanceTo(player.pos);
+		int bd = b.DistanceTo(player.pos);
+		if (ad < bd) {
+			return -1;
+		} else if (bd < ad) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+	// Find a path from the monster to the player
+	public List<Coord> AStarMonsterToPlayer(MonsterComponent m) {
+		List<Coord> openList = new List<Coord>{ m.pos };
+		Dictionary<Coord, List<Coord>> closedList = new Dictionary<Coord, List<Coord>> {{ m.pos, new List<Coord>() }};
+		// 
+		while (openList.Count > 0) {
+			openList.Sort(Comp);
+			Coord current = openList[0];
+			openList.RemoveAt(0);
+			List<Coord> currentPath = closedList[current];
+		
+			if (current.Equals(player.pos)) {
+				return currentPath;
+			}
+
+			Coord[] offsets = new Coord[] {
+				new Coord(-1, 0),
+				new Coord( 1, 0),
+				new Coord( 0, 1),
+				new Coord( 0,-1)
+			};
+			foreach (Coord offset in offsets) {
+				Coord c = current + offset;
+				if(!closedList.ContainsKey(c) && CurrentLevel.GetAt(c.x, c.y).passable) {
+					List<Coord> newPath = new List<Coord>(currentPath);
+					newPath.Add(c);
+					closedList[c] = newPath;
+					openList.Add(c);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private IEnumerator TakeMonsterTurn(MonsterComponent m) {
+		List<Coord> path = AStarMonsterToPlayer(m);
+		if (path == null || path.Count == 0) {
+			// do nothing - no way to approach player
+		} else {
+			yield return SlowMove(m.gameObject, path[0].toVec(), 0.1f);
+			m.pos = path[0];
+		}
+	}
+
+	private IEnumerator TakeAllMonstersTurn() {
+		foreach( MonsterComponent m in monsters) {
+			yield return TakeMonsterTurn(m);
+		}
+
 		yield return TakePassivesTurn();
 	}
 
@@ -169,15 +250,15 @@ public class GameInstance : MonoBehaviour {
 		yield return callback(x, y);
 	}
 
-	public IEnumerator HookInDirection(int x, int y) {
-		int cX = player.x;
-		int cY = player.y;
+	private IEnumerator HookInDirection(int x, int y) {
+		int cX = player.pos.x;
+		int cY = player.pos.y;
 		while (!CurrentLevel.GetAt(cX,cY).blocked) {
 			cX += x;
 			cY += y;
 		}
 		cX -= x;
 		cY -= y;
-		yield return AttemptMove(cX-player.x,cY-player.y);
+		yield return AttemptMove(cX-player.pos.x,cY-player.pos.y);
 	}
 }

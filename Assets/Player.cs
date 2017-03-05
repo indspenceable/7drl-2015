@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-	public int x;
-	public int y;
+	public Coord pos;
 
 	// Use this for initialization
 	void Start () {
@@ -17,8 +16,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public void SetCoords(int x, int y) {
-		this.x = x;
-		this.y = y;
-		transform.position = new Vector3(x,y);
+		this.pos = new Coord(x, y);
+		transform.position = pos.toVec();
 	}
 }

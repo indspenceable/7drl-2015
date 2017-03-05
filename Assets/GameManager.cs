@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour {
 		public GameObject playerPrefab;
 		public GameObject tilePrefab;
 		public GameObject reticle;
+		public GameObject monster;
+		public Monster[] monsterdefs;
 	}
 		
 	GameInstance instance;

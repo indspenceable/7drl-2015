@@ -148,6 +148,9 @@ MonoBehaviour:
     tilePrefab: {fileID: 1630155925734204, guid: 57a02dbf174054f55bab137d487016da,
       type: 2}
     reticle: {fileID: 1732078563321004, guid: 544fb83a1ac74476882b77a1bd3c3c68, type: 2}
+    monster: {fileID: 1567438238226286, guid: 4557a5f050df6438997646275345333b, type: 2}
+    monsterdefs:
+    - {fileID: 11400000, guid: 02cc90f1bf8e142b690554bd056cf373, type: 2}
 --- !u!4 &863111001
 Transform:
   m_ObjectHideFlags: 0
