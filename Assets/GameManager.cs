@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+	public static float StandardDelay = 0.1f;
+	public float standardDelay = 0.1f;
+
 	[System.Serializable]
 	public struct MapConfig {
 		public int totalNumberOfLevels;
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GameManager.StandardDelay = standardDelay;
 		instance = new GameObject("GameInstance").AddComponent<GameInstance>();
 		instance.Startup(mapConfig, prefabConfig);
 	}

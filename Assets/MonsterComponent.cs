@@ -15,8 +15,8 @@ public class MonsterComponent : MonoBehaviour {
 
 	public IEnumerator ExecuteStrategy(GameInstance instance) {
 		switch(mt.strategy) {
-		case Monster.Strategy.BlindAttack:
-			return BlindAttack(instance);
+		case Monster.Strategy.StandardAttack:
+			return StandardAttack(instance);
 		default:
 			throw new UnityException("Unhandled AI Strategy.");
 		}
@@ -27,17 +27,19 @@ public class MonsterComponent : MonoBehaviour {
 		yield return null;
 	}
 
-	public IEnumerator BlindAttack(GameInstance instance) {
-		List<Coord> path = instance.AStarMonsterToPlayer(this);
-		if (path == null || path.Count == 0) {
-			// do nothing - no way to approach player
-			// Or we're on top of the player..... shouldn't happen, so ignore.
-		} else if (path.Count == 1) {
-			// We're adjacent to the player. Do the attack
-			yield return DisplayAndExecuteAttack();
+	public IEnumerator StandardAttack(GameInstance instance) {
+//		List<Coord> path = instance.AStarMonsterToPlayer(this);
+		DjikstraMap map = instance.BuildPlayerMap();
+		if (map.Value(pos.x, pos.y) < mt.minRange) {
+			Coord c = map.FindWorstNeighbor(pos);
+			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
+			pos = c;
+		} else if (map.Value(pos.x, pos.y) > mt.maxRange) {
+			Coord c = map.FindBestNeighbor(pos);
+			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
+			pos = c;
 		} else {
-			yield return instance.SlowMove(this.gameObject, path[0], 0.1f);
-			this.pos = path[0];
+			yield return DisplayAndExecuteAttack();
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameInstance : MonoBehaviour {
+
 	private LevelMap[] levels;
 
 	private MapTileComponent[][] tiles;
@@ -22,7 +23,12 @@ public class GameInstance : MonoBehaviour {
 
 	private List<MonsterComponent> monsters = new List<MonsterComponent>();
 
+	private GameManager.MapConfig mapConfig;
+
 	public void Startup(GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
+		// Save the map config for use with making Djikstra maps
+		this.mapConfig = mapConfig;
+
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
 		for (int i = 0; i < mapConfig.totalNumberOfLevels; i += 1) {
@@ -56,7 +62,7 @@ public class GameInstance : MonoBehaviour {
 		targettingReticle.SetActive(false);
 
 		// Fill in the monsters for this level
-		for (int i = 0; i < 3; i+=1) {
+		for (int i = 0; i < 1; i+=1) {
 			Coord c = new Coord(0,0);
 
 			while (CurrentLevel.GetAt(c).blocked || !CurrentLevel.GetAt(c).passable || c.Equals(player.pos)) {
@@ -98,7 +104,7 @@ public class GameInstance : MonoBehaviour {
 //		Coord dest = player.pos + new Coord(dx, dy);
 		if (GetTile(dest).interactable) {
 		} else if (GetTile(dest).passable) {
-			yield return SlowMove(player.gameObject, dest, 0.1f);
+			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
 			player.SetCoords(dest);
 			yield return TakeAllMonstersTurn();
 		} else {
@@ -171,6 +177,13 @@ public class GameInstance : MonoBehaviour {
 		return m.ExecuteStrategy(this);
 	}
 
+	public DjikstraMap BuildPlayerMap() {
+		DjikstraMap map = new DjikstraMap(mapConfig.width, mapConfig.height);
+		map.SetGoal(player.pos);
+		map.Calculate(c => CurrentLevel.GetAt(c).passable);
+		return map;
+	}
+
 	private IEnumerator TakeAllMonstersTurn() {
 		foreach( MonsterComponent m in monsters) {
 			yield return TakeMonsterTurn(m);
@@ -206,16 +219,16 @@ public class GameInstance : MonoBehaviour {
 		while (true) {
 			if (Input.GetKeyDown(KeyCode.W)) {
 				y += 1;
-				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(KeyCode.A)) {
 				x -= 1;
-				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(KeyCode.S)) {
 				y -= 1;
-				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(KeyCode.D)) {
 				x += 1;
-				yield return SlowMove(targettingReticle, new Coord(x, y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			}
@@ -238,19 +251,19 @@ public class GameInstance : MonoBehaviour {
 			if (Input.GetKeyDown(KeyCode.W)) {
 				x = 0;
 				y = 1;
-				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(KeyCode.A)) {
 				x = -1;
 				y = 0;
-				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(KeyCode.S)) {
 				x = 0;
 				y = -1;
-				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(KeyCode.D)) {
 				x = 1;
 				y = 0;
-				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), 0.1f);
+				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			}

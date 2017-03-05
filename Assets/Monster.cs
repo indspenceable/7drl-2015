@@ -6,7 +6,12 @@ using UnityEngine;
 public class Monster : ScriptableObject {
 	public Sprite sprite;
 	public enum Strategy {
-		BlindAttack = 0,
+		StandardAttack = 0,
 	}
 	public Strategy strategy;
+
+	public int hp;
+	public int armor;
+	public int minRange;
+	public int maxRange;
 }
