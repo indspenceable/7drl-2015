@@ -95,6 +95,8 @@ public class GameInstance : MonoBehaviour {
 			yield return SelectTarget(KeyCode.J, ShootMonster);
 		} else if (Input.GetKeyDown(KeyCode.K)) { 
 			yield return SelectCardinalDirection(KeyCode.K, HookInDirection);
+		} else if (Input.GetKeyDown(KeyCode.L)) {
+			yield return TakeAllMonstersTurn();
 		} else {
 			yield return ListenForPlayerInput();
 		}
@@ -173,14 +175,25 @@ public class GameInstance : MonoBehaviour {
 		return null;
 	}
 
+	public void ApplyLabels(DjikstraMap map) {
+		for ( int x = 0; x < mapConfig.width; x+=1) {
+			for (int y = 0; y < mapConfig.height; y +=1) {
+				tiles[x][y].name = map.Value(x,y).ToString();
+			}
+		}
+	}
+
 	private IEnumerator TakeMonsterTurn(MonsterComponent m) {
 		return m.ExecuteStrategy(this);
 	}
 
+	public bool Passable(Coord c) {
+		return CurrentLevel.GetAt(c).passable;
+	}
 	public DjikstraMap BuildPlayerMap() {
 		DjikstraMap map = new DjikstraMap(mapConfig.width, mapConfig.height);
 		map.SetGoal(player.pos);
-		map.Calculate(c => CurrentLevel.GetAt(c).passable);
+		map.Calculate(Passable);
 		return map;
 	}
 

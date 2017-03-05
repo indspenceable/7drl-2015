@@ -9,15 +9,15 @@ public class DjikstraMap {
 		new Coord(-1,0),
 		new Coord(1,0),
 	};
-	int[][] map;
+	float[][] map;
 	Coord size;
-	int unreachable;
+	float unreachable;
 	public DjikstraMap(int width, int height) {
 		size = new Coord(width, height);
-		map = new int[width][];
+		map = new float[width][];
 		unreachable = width*height+1;
 		for (int x = 0; x < width; x += 1) {
-			map[x] = new int[height];
+			map[x] = new float[height];
 			for (int y = 0; y < height; y += 1) {
 				map[x][y] = unreachable;
 			}
@@ -40,12 +40,14 @@ public class DjikstraMap {
 
 	public delegate bool TileCheck(Coord c);
 	public void Calculate(TileCheck passable) {
+		Debug.Log("Starting a calculate...");
 		bool madeChangeLastIteration = true;
 		while (madeChangeLastIteration) {
+			Debug.Log("One iteration");
 			madeChangeLastIteration = false;
 			for ( int x = 0; x < size.x; x += 1) {
 				for (int y = 0; y < size.y; y += 1) {
-					int minValue = unreachable;
+					float minValue = unreachable;
 					foreach(Coord o in offsets) {
 						Coord c = o.plus(x,y);
 						if (InBounds(c)) {
@@ -60,10 +62,10 @@ public class DjikstraMap {
 			}
 		}
 	}
-	public int Value(int x, int y) {
+	public float Value(int x, int y) {
 		return map[x][y];
 	}
-	public int Value(Coord c) {
+	public float Value(Coord c) {
 		return Value(c.x, c.y);
 	}
 	public Coord FindWorstNeighbor(Coord p) {
@@ -79,8 +81,17 @@ public class DjikstraMap {
 //		return rtn;
 		return FindBestNeighbor(p, -1);
 	}
-	public Coord FindBestNeighbor(Coord p, int multiplier=1) {
-		int value = unreachable;
+	public void Scale(float f) {
+		for ( int x = 0; x < size.x; x += 1) {
+			for (int y = 0; y < size.y; y += 1) {
+				if (map[x][y] != unreachable) {
+					map[x][y] *= f;
+				}
+			}
+		}
+	}
+	public Coord FindBestNeighbor(Coord p, float multiplier=1) {
+		float value = unreachable;
 		Coord rtn = p;
 		foreach(Coord o in offsets) {
 			Coord c = o + p;

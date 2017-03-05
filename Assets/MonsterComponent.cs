@@ -28,10 +28,11 @@ public class MonsterComponent : MonoBehaviour {
 	}
 
 	public IEnumerator StandardAttack(GameInstance instance) {
-//		List<Coord> path = instance.AStarMonsterToPlayer(this);
 		DjikstraMap map = instance.BuildPlayerMap();
 		if (map.Value(pos.x, pos.y) < mt.minRange) {
-			Coord c = map.FindWorstNeighbor(pos);
+			map.Scale(-1.2f);
+			map.Calculate(instance.Passable);
+			Coord c = map.FindBestNeighbor(pos);
 			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
 			pos = c;
 		} else if (map.Value(pos.x, pos.y) > mt.maxRange) {

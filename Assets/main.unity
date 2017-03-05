@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b860fd9bc88041fba9272fc953de792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  standardDelay: 0
   mapConfig:
     totalNumberOfLevels: 10
     width: 10
