@@ -9,16 +9,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f6b26c0b113749a5a6a2ac521fb0c6f, type: 3}
-  m_Name: Self Heal
+  m_Name: KnockbackHammer
   m_EditorClassIdentifier: 
-  displayName: Repair Nanobots
+  displayName: Impact Hammer
   icon: {fileID: 0}
-  targettingMethod: 1
-  effect: 1
-  cooldown: -1
-  levelLimit: 1
-  totalCharges: 5
+  targettingMethod: 3
+  effect: 4
+  cooldown: 5
+  levelLimit: -1
+  totalCharges: -1
   targettingRange: 0
-  power: 1
+  power: 2
   LOSModifier: 0
   thornsDamage: 0

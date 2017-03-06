@@ -13,8 +13,7 @@ public class Player : MonoBehaviour, Entity {
 	void Start () {
 		gear = new Item[4];
 		for (int i = 0; i < startingGear.Length; i += 1) {
-			gear[i] = new Item();
-			gear[i].SetType(startingGear[i]);
+			SetItem(i, startingGear[i]);
 		}
 	}
 	
@@ -35,5 +34,9 @@ public class Player : MonoBehaviour, Entity {
 	}
 	public Item GetItem(int slot) {
 		return gear[slot];
+	}
+	public void SetItem(int i, ItemDefinition item) {
+		gear[i] = new Item();
+		gear[i].SetType(item);
 	}
 }

@@ -82,6 +82,9 @@ public class GameInstance : MonoBehaviour {
 		for ( int x = 0; x < mapConfig.width; x+=1) {
 			for (int y = 0; y < mapConfig.height; y +=1) {
 				tiles[x][y].SetTerrain(CurrentLevel.GetAt(new Coord(x,y)));
+				if (tiles[x][y].interaction == TileTerrain.Interaction.GIVE_ITEM) {
+					tiles[x][y].item = mapConfig.items[Random.Range(0, mapConfig.items.Length)];
+				}
 			}
 		}
 	}
@@ -152,6 +155,11 @@ public class GameInstance : MonoBehaviour {
 		switch(type) {
 		case TileTerrain.Interaction.NEXT_LEVEL:
 			yield return MoveToNextLevel();
+			break;
+		case TileTerrain.Interaction.GIVE_ITEM:
+			player.SetItem(0, GetTile(dest).item);
+			GetTile(dest).SetTerrain(mapConfig.wall);
+			yield return TakeAllMonstersTurn();
 			break;
 		case TileTerrain.Interaction.NONE:
 		default:

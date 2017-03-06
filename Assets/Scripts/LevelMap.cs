@@ -8,7 +8,7 @@ public class LevelMap {
 	private string[] premadeMap = new string[]{
 		"xxxxxxxxxxxxxxxxxxx",
 		"x.................x",
-		"x.................x",
+		"x........+........x",
 		"x.................x",
 		"x.................x",
 		"x...~~~~~~~~~.....x",
@@ -21,10 +21,10 @@ public class LevelMap {
 		"x...........x.....x",
 		"x.~~~.......x.....x",
 		"x....~~.....x....~x",
-		"x..~~.......x.....x",
+		"x.+~~.......x.....x",
 		"x..~........x.....x",
-		"x...~.......x.....x",
-		"x..~........x.....x",
+		"x.>.~.......x.....x",
+		"x.+~........x.....x",
 		"xxxxxxxxxxxxxxxxxxx",
 	};
 
@@ -53,6 +53,8 @@ public class LevelMap {
 			return defs.pit;
 		} else if (c == '>') {
 			return defs.stairs;
+		} else if (c == '+') {
+			return defs.item;
 		} else {
 			Debug.LogError("Unexpected Character - no terrain defintion for [" + c + "]");
 			return null;

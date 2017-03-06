@@ -8,6 +8,7 @@ public class MapTileComponent : MonoBehaviour {
 	private TileTerrain terrain;
 	public int x {get; private set;}
 	public int y {get; private set;}
+	public ItemDefinition item;
 
 	public bool passable {
 		get {
@@ -17,6 +18,9 @@ public class MapTileComponent : MonoBehaviour {
 
 	public TileTerrain.Interaction interaction {
 		get {
+			Debug.Log(terrain);
+			Debug.Log(x);
+			Debug.Log(y);
 			return terrain.interaction;
 		}
 	}

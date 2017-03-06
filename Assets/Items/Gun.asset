@@ -11,10 +11,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6b26c0b113749a5a6a2ac521fb0c6f, type: 3}
   m_Name: Gun
   m_EditorClassIdentifier: 
+  displayName: Blaster
+  icon: {fileID: 0}
   targettingMethod: 2
   effect: 0
-  cooldown: 3
+  cooldown: -1
   levelLimit: -1
-  totalCharges: -1
+  totalCharges: 10
   targettingRange: 5
   power: 1
+  LOSModifier: 0
+  thornsDamage: 0

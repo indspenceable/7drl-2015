@@ -7,6 +7,7 @@ public class TileTerrain : ScriptableObject {
 	public enum Interaction {
 		NONE,
 		NEXT_LEVEL,
+		GIVE_ITEM,
 	}
 
 	// display

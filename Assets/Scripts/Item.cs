@@ -9,12 +9,11 @@ public class Item  {
 	int usesThisLevel;
 	int chargesUsed;
 
-//	public Item(ItemDefinition itemType) {
-//		this.itemType = itemType;
-//		this.cooldown = 0;
-//		this.usesThisLevel = 0;
-//		this.chargesUsed = 0;
-//	}
+	public string DisplayName {
+		get {
+			return itemType.displayName;
+		}
+	}
 
 	public void SetType(ItemDefinition itemType) {
 		this.itemType = itemType;

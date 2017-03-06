@@ -9,15 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f6b26c0b113749a5a6a2ac521fb0c6f, type: 3}
-  m_Name: Self Heal
+  m_Name: Bombs
   m_EditorClassIdentifier: 
-  displayName: Repair Nanobots
+  displayName: Bombs
   icon: {fileID: 0}
   targettingMethod: 1
-  effect: 1
+  effect: 0
   cooldown: -1
-  levelLimit: 1
-  totalCharges: 5
+  levelLimit: -1
+  totalCharges: 3
   targettingRange: 0
   power: 1
   LOSModifier: 0
