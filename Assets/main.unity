@@ -138,8 +138,8 @@ MonoBehaviour:
   standardDelay: 0
   mapConfig:
     totalNumberOfLevels: 10
-    width: 10
-    height: 10
+    width: 20
+    height: 20
     open: {fileID: 11400000, guid: 28a10832692ad43cc99f4607bc5b7fb2, type: 2}
     wall: {fileID: 11400000, guid: d43f24397b8a7401cbc32ab2c6a006f6, type: 2}
     pit: {fileID: 11400000, guid: eba1b7832d8dc48c4a2ddc0ee5380029, type: 2}
@@ -225,7 +225,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -248,7 +248,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1033426574}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.5, y: 4.5, z: -10}
+  m_LocalPosition: {x: 12, y: 9.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

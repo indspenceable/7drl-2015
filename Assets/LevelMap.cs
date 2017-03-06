@@ -6,16 +6,26 @@ using UnityEngine;
 public class LevelMap {
 	private TileTerrain[][] map;
 	private string[] premadeMap = new string[]{
-		"xxxxxxxxxx",
-		"x........x",
-		"x........x",
-		"x.~~~....x",
-		"x....~~~.x",
-		"x..~~....x",
-		"x..~.....x",
-		"x...~....x",
-		"x..~.....x",
-		"xxxxxxxxxx",
+		"xxxxxxxxxxxxxxxxxxxx",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x..................x",
+		"x.~~~..............x",
+		"x....~~..........~.x",
+		"x..~~..............x",
+		"x..~...............x",
+		"x...~..............x",
+		"x..~...............x",
+		"xxxxxxxxxxxxxxxxxxxx",
 	};
 
 	public LevelMap(GameManager.MapConfig defs) {
@@ -30,7 +40,7 @@ public class LevelMap {
 		for (int i = 0; i < config.width; i+=1) {
 			map[i] = new TileTerrain[config.height];
 			for (int j = 0; j < config.height; j += 1) {
-				map[i][j] = TileTerrainForChar(config, premadeMap[10-j-1][i]);
+				map[i][j] = TileTerrainForChar(config, premadeMap[config.height-j-1][i]);
 			}
 		}
 	}
