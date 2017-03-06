@@ -34,7 +34,9 @@ public class MainMenu : MonoBehaviour {
 				manager.StartNewGame();
 				break;
 			case Action.LOAD_GAME:
-				throw new UnityException("Load game is not yet implemented.");
+				throw new UnityException("Saving is unsupported at this point.");
+//				manager.StartSavedGame();
+//				break;
 			case Action.EXIT:
 				Application.Quit();
 				break;

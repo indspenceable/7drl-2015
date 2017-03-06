@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
+[System.Serializable]
 public class MapTileComponent : MonoBehaviour {
 	private TileTerrain terrain;
 	public int x {get; private set;}

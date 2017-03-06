@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class GameInstance : MonoBehaviour {
 
 	private LevelMap[] levels;
@@ -24,10 +25,19 @@ public class GameInstance : MonoBehaviour {
 	private List<MonsterComponent> monsters = new List<MonsterComponent>();
 
 	private GameManager.MapConfig mapConfig;
+	private GameManager manager;
 
-	public void Startup(GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
+	// UI Related things:
+	[SerializeField]
+	private HealthMeterUI healthMeter;
+	[SerializeField]
+	private GearUI[] gearUIs;
+
+
+	public void Startup(GameManager manager, GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
 		// Save the map config for use with making Djikstra maps
 		this.mapConfig = mapConfig;
+		this.manager = manager;
 
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
@@ -56,6 +66,10 @@ public class GameInstance : MonoBehaviour {
 		// Set up the player
 		player = Instantiate(prefabs.playerPrefab).GetComponent<Player>();
 		player.SetCoords(new Coord(1,1));
+		healthMeter.InstallPlayer(player);
+		foreach(GearUI gui in gearUIs) {
+			gui.InstallPlayer(player);
+		}
 
 		// Aaaand the reticle
 		targettingReticle = Instantiate(prefabs.reticle);
@@ -75,9 +89,12 @@ public class GameInstance : MonoBehaviour {
 		}
 //
 		// Now that we have all this junk established, we can begin listening to input.
-		StartCoroutine(ListenForPlayerInput());
+		StartCoroutine(PreTurn());
 	}
 
+	public void Continue() {
+		StartCoroutine(ListenForPlayerInput());
+	}
 
 	private IEnumerator ListenForPlayerInput() {
 		yield return null;
@@ -207,6 +224,13 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	private IEnumerator TakePassivesTurn() {
+		yield return PreTurn();
+	}
+
+	private IEnumerator PreTurn() {
+		// Save the game here
+		// Unfortunately, saving doesn't work, and is unlikely to in this week.
+		// manager.SaveGameState();
 		yield return ListenForPlayerInput();
 	}
 

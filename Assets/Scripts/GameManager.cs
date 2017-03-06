@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameManager : MonoBehaviour {
 	public static float StandardDelay = 0.1f;
@@ -25,6 +27,8 @@ public class GameManager : MonoBehaviour {
 		public Monster[] monsterdefs;
 	}
 		
+	[SerializeField]
+	GameObject instancePrefab;
 	GameInstance instance;
 	[SerializeField]
 	MapConfig mapConfig;
@@ -37,11 +41,29 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GameManager.StandardDelay = standardDelay;
+		mainMenu.gameObject.SetActive(true);
 		mainMenu.Startup();
 	}
 	public void StartNewGame() {
 		mainMenu.gameObject.SetActive(false);
-		instance = new GameObject("GameInstance").AddComponent<GameInstance>();
-		instance.Startup(mapConfig, prefabConfig);
+//		instance = new GameObject("GameInstance").AddComponent<GameInstance>();
+		instance = Instantiate(instancePrefab).GetComponent<GameInstance>();
+		instance.Startup(this, mapConfig, prefabConfig);
+	}
+		
+	public void SaveGameState() {
+		BinaryFormatter bf = new BinaryFormatter();
+		FileStream file = File.Create (Application.persistentDataPath + "/save.gd"); //you can call it anything you want
+		bf.Serialize(file, instance);
+		file.Close();
+	}
+	public void StartSavedGame() {
+		if(File.Exists(Application.persistentDataPath + "/save.gd")) {
+			BinaryFormatter bf = new BinaryFormatter();
+			FileStream file = File.Open(Application.persistentDataPath + "/save.gd", FileMode.Open);
+			instance = (GameInstance)bf.Deserialize(file);
+			file.Close();
+			instance.Continue();
+		}
 	}
 }
