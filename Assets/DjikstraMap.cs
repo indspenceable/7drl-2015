@@ -40,10 +40,8 @@ public class DjikstraMap {
 
 	public delegate bool TileCheck(Coord c);
 	public void Calculate(TileCheck passable) {
-		Debug.Log("Starting a calculate...");
 		bool madeChangeLastIteration = true;
 		while (madeChangeLastIteration) {
-			Debug.Log("One iteration");
 			madeChangeLastIteration = false;
 			for ( int x = 0; x < size.x; x += 1) {
 				for (int y = 0; y < size.y; y += 1) {

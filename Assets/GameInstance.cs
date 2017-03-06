@@ -18,7 +18,7 @@ public class GameInstance : MonoBehaviour {
 		}
 	}
 
-	private Player player;
+	public Player player;
 	private GameObject targettingReticle;
 
 	private List<MonsterComponent> monsters = new List<MonsterComponent>();
@@ -90,12 +90,14 @@ public class GameInstance : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.W)) {
 			yield return AttemptMove(new Coord(0, 1) + player.pos);
 		} else if (Input.GetKeyDown(KeyCode.I)) { 
-			yield return SelectTarget(KeyCode.I, AttemptMove);
+			yield return player.GetItem(0).BeginActivation(this, TakeAllMonstersTurn(), ListenForPlayerInput());
 		} else if (Input.GetKeyDown(KeyCode.J)) { 
-			yield return SelectTarget(KeyCode.J, ShootMonster);
-		} else if (Input.GetKeyDown(KeyCode.K)) { 
-			yield return SelectCardinalDirection(KeyCode.K, HookInDirection);
+			yield return player.GetItem(1).BeginActivation(this, TakeAllMonstersTurn(), ListenForPlayerInput());
+		} else if (Input.GetKeyDown(KeyCode.K)) {
+			yield return player.GetItem(2).BeginActivation(this, TakeAllMonstersTurn(), ListenForPlayerInput());
 		} else if (Input.GetKeyDown(KeyCode.L)) {
+			yield return player.GetItem(3).BeginActivation(this, TakeAllMonstersTurn(), ListenForPlayerInput());
+		} else if (Input.GetKeyDown(KeyCode.Period)) {
 			yield return TakeAllMonstersTurn();
 		} else {
 			yield return ListenForPlayerInput();
@@ -116,11 +118,10 @@ public class GameInstance : MonoBehaviour {
 	/* ------------------------------- *
 	 * Monster related stuff goes here *
  	 * ------------------------------- */
-	public void KillMonster(MonsterComponent m) {
-		monsters.Remove(m);
-		Destroy(m.gameObject);
-	}
-	public MonsterComponent GetMonsterAt(Coord a) {
+	public Entity GetEntityAt(Coord a) {
+		if (a.Equals(player.pos)) {
+			return player;
+		}
 		foreach(MonsterComponent m in monsters) {
 			if (m.pos.Equals(a)) {
 				return m;
@@ -197,7 +198,7 @@ public class GameInstance : MonoBehaviour {
 		return map;
 	}
 
-	private IEnumerator TakeAllMonstersTurn() {
+	public IEnumerator TakeAllMonstersTurn() {
 		foreach( MonsterComponent m in monsters) {
 			yield return TakeMonsterTurn(m);
 		}
@@ -221,8 +222,8 @@ public class GameInstance : MonoBehaviour {
 		go.transform.position = endPosition;
 	}
 
-	delegate IEnumerator TargettedAction(Coord c);
-	private IEnumerator SelectTarget(KeyCode selectKeyCode, TargettedAction callback) {
+	public delegate IEnumerator TargettedAction(GameInstance instance, Coord c, IEnumerator success);
+	public IEnumerator SelectTarget(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
 		yield return null;
 		targettingReticle.transform.position = player.transform.position;
 		// TODO these should probably be provided.
@@ -248,10 +249,10 @@ public class GameInstance : MonoBehaviour {
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(new Coord(x, y));
+		yield return callback(this, new Coord(x, y), success);
 	}
 
-	private IEnumerator SelectCardinalDirection(KeyCode selectKeyCode, TargettedAction callback) {
+	public IEnumerator SelectCardinalDirection(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
 		yield return null;
 		targettingReticle.transform.position = player.transform.position;
 		// TODO these should probably be provided.
@@ -283,7 +284,7 @@ public class GameInstance : MonoBehaviour {
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(new Coord(x, y));
+		yield return callback(this, new Coord(x, y), success);
 	}
 
 	private IEnumerator HookInDirection(Coord offset) {
@@ -293,15 +294,5 @@ public class GameInstance : MonoBehaviour {
 		}
 		c = c - offset;
 		yield return AttemptMove(c);
-	}
-
-	private IEnumerator ShootMonster(Coord target) {
-		MonsterComponent m = GetMonsterAt(target);
-		if (m != null) {
-			KillMonster(m);
-			yield return TakeAllMonstersTurn();
-		} else {
-			yield return ListenForPlayerInput();
-		}
 	}
 }

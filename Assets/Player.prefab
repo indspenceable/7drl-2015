@@ -52,6 +52,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a76cf4ea539874bd4a401e87435044ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pos:
+    x: 0
+    y: 0
+  startingGear:
+  - {fileID: 11400000, guid: 9f416dd4deb5f4a83a1ddcff9f637f0b, type: 2}
+  - {fileID: 11400000, guid: 9f416dd4deb5f4a83a1ddcff9f637f0b, type: 2}
+  - {fileID: 11400000, guid: 9f416dd4deb5f4a83a1ddcff9f637f0b, type: 2}
+  - {fileID: 11400000, guid: 198b7722d4c494f44b3f7c4e171a56e5, type: 2}
 --- !u!212 &212479154909046710
 SpriteRenderer:
   m_ObjectHideFlags: 1

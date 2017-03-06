@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterComponent : MonoBehaviour {
+	public class MonsterComponent : MonoBehaviour, Entity {
 	private Monster mt;
 	public Coord pos;
 
@@ -20,6 +20,11 @@ public class MonsterComponent : MonoBehaviour {
 		default:
 			throw new UnityException("Unhandled AI Strategy.");
 		}
+	}
+
+	public IEnumerator TakeHit(int power) {
+		Debug.Log("Monster Got hit for " + power + " power.");
+		yield return null;
 	}
 
 	public IEnumerator DisplayAndExecuteAttack() {
