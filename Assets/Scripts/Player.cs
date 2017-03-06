@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, Entity {
 	public Coord pos;
+	[SerializeField]
 	private Item[] gear;
 	[SerializeField]
 	private ItemDefinition[] startingGear;
@@ -12,7 +13,8 @@ public class Player : MonoBehaviour, Entity {
 	void Start () {
 		gear = new Item[4];
 		for (int i = 0; i < startingGear.Length; i += 1) {
-			gear[i] = new Item(startingGear[i]);
+			gear[i] = new Item();
+			gear[i].SetType(startingGear[i]);
 		}
 	}
 	

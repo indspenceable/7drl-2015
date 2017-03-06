@@ -222,7 +222,7 @@ public class GameInstance : MonoBehaviour {
 		go.transform.position = endPosition;
 	}
 
-	public delegate IEnumerator TargettedAction(GameInstance instance, Coord c, IEnumerator success);
+	public delegate IEnumerator TargettedAction(GameInstance instance, Coord c, IEnumerator success, IEnumerator cancel);
 	public IEnumerator SelectTarget(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
 		yield return null;
 		targettingReticle.transform.position = player.transform.position;
@@ -249,7 +249,7 @@ public class GameInstance : MonoBehaviour {
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(this, new Coord(x, y), success);
+		yield return callback(this, new Coord(x, y), success, cancel);
 	}
 
 	public IEnumerator SelectCardinalDirection(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
@@ -284,7 +284,7 @@ public class GameInstance : MonoBehaviour {
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(this, new Coord(x, y), success);
+		yield return callback(this, new Coord(x, y) + player.pos, success, cancel);
 	}
 
 	private IEnumerator HookInDirection(Coord offset) {

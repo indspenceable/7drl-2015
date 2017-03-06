@@ -31,15 +31,17 @@ public class GameManager : MonoBehaviour {
 	[SerializeField] 
 	PrefabConfig prefabConfig;
 
+	[SerializeField]
+	MainMenu mainMenu;
+
 	// Use this for initialization
 	void Start () {
 		GameManager.StandardDelay = standardDelay;
+		mainMenu.Startup();
+	}
+	public void StartNewGame() {
+		mainMenu.gameObject.SetActive(false);
 		instance = new GameObject("GameInstance").AddComponent<GameInstance>();
 		instance.Startup(mapConfig, prefabConfig);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }
