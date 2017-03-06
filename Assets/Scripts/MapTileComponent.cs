@@ -15,7 +15,11 @@ public class MapTileComponent : MonoBehaviour {
 		}
 	}
 
-	public bool interactable = false;
+	public TileTerrain.Interaction interaction {
+		get {
+			return terrain.interaction;
+		}
+	}
 
 	public void SetTerrain(TileTerrain t) {
 		this.terrain = t;

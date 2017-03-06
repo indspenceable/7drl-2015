@@ -12,10 +12,10 @@ public class GameInstance : MonoBehaviour {
 		return tiles[c.x][c.y];
 	}
 
-	private int currentLevelNumber;
+	private int currentLevelIndex;
 	private LevelMap CurrentLevel {
 		get {
-			return levels[currentLevelNumber];
+			return levels[currentLevelIndex];
 		}
 	}
 
@@ -25,7 +25,7 @@ public class GameInstance : MonoBehaviour {
 	private List<MonsterComponent> monsters = new List<MonsterComponent>();
 
 	private GameManager.MapConfig mapConfig;
-	private GameManager manager;
+	private GameManager.PrefabConfig prefabConfig;
 
 	// UI Related things:
 	[SerializeField]
@@ -37,7 +37,8 @@ public class GameInstance : MonoBehaviour {
 	public void Startup(GameManager manager, GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
 		// Save the map config for use with making Djikstra maps
 		this.mapConfig = mapConfig;
-		this.manager = manager;
+		// Save prefabs for future levels;
+		this.prefabConfig = prefabs;
 
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
@@ -56,12 +57,7 @@ public class GameInstance : MonoBehaviour {
 			}
 		}
 
-		// Set their terrain
-		for ( int x = 0; x < mapConfig.width; x+=1) {
-			for (int y = 0; y < mapConfig.height; y +=1) {
-				tiles[x][y].SetTerrain(CurrentLevel.GetAt(new Coord(x,y)));
-			}
-		}
+		SetTerrain();
 
 		// Set up the player
 		player = Instantiate(prefabs.playerPrefab).GetComponent<Player>();
@@ -75,6 +71,26 @@ public class GameInstance : MonoBehaviour {
 		targettingReticle = Instantiate(prefabs.reticle);
 		targettingReticle.SetActive(false);
 
+		PopulateMonsters(prefabs);
+//
+		// Now that we have all this junk established, we can begin listening to input.
+		StartCoroutine(PreTurn());
+	}
+
+	private void SetTerrain() {
+		// Set their terrain
+		for ( int x = 0; x < mapConfig.width; x+=1) {
+			for (int y = 0; y < mapConfig.height; y +=1) {
+				tiles[x][y].SetTerrain(CurrentLevel.GetAt(new Coord(x,y)));
+			}
+		}
+	}
+
+	private void PopulateMonsters(GameManager.PrefabConfig prefabs) {
+		foreach (MonsterComponent m in monsters) {
+			Destroy(m.gameObject);
+		}
+		monsters.Clear();
 		// Fill in the monsters for this level
 		for (int i = 0; i < 1; i+=1) {
 			Coord c = new Coord(0,0);
@@ -87,9 +103,6 @@ public class GameInstance : MonoBehaviour {
 			mc.Setup(monsterType, c);
 			monsters.Add(mc);
 		}
-//
-		// Now that we have all this junk established, we can begin listening to input.
-		StartCoroutine(PreTurn());
 	}
 
 	public void Continue() {
@@ -123,7 +136,8 @@ public class GameInstance : MonoBehaviour {
 
 	private IEnumerator AttemptMove(Coord dest) {
 //		Coord dest = player.pos + new Coord(dx, dy);
-		if (GetTile(dest).interactable) {
+		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
+			yield return Interact(dest);
 		} else if (GetTile(dest).passable) {
 			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
 			player.SetCoords(dest);
@@ -131,6 +145,25 @@ public class GameInstance : MonoBehaviour {
 		} else {
 			yield return ListenForPlayerInput();
 		}
+	}
+
+	public IEnumerator Interact(Coord dest) {
+		TileTerrain.Interaction type = GetTile(dest).interaction;
+		switch(type) {
+		case TileTerrain.Interaction.NEXT_LEVEL:
+			yield return MoveToNextLevel();
+			break;
+		case TileTerrain.Interaction.NONE:
+		default:
+			throw new UnityException("Bad interaction." + type);
+		}
+	}
+	public IEnumerator MoveToNextLevel() {
+		this.currentLevelIndex += 1;
+		SetTerrain();
+		player.SetCoords(new Coord(1,1));
+		PopulateMonsters(prefabConfig);
+		yield return PreTurn();
 	}
 	/* ------------------------------- *
 	 * Monster related stuff goes here *

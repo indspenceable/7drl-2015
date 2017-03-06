@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
 		public TileTerrain open;
 		public TileTerrain wall;
 		public TileTerrain pit;
+		public TileTerrain stairs;
 	}
 
 	[System.Serializable]
