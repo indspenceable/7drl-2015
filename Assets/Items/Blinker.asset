@@ -18,7 +18,7 @@ MonoBehaviour:
   cooldown: -1
   levelLimit: 3
   totalCharges: -1
-  targettingRange: 0
+  targettingRange: 50
   power: 1
   LOSModifier: 0
   thornsDamage: 0

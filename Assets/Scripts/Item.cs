@@ -29,9 +29,6 @@ public class Item  {
 
 
 	public IEnumerator BeginActivation(GameInstance instance, IEnumerator success, IEnumerator back) {
-		// Check if we're able to activate at this point
-		IEnumerator cancel = BeginActivation(instance, success, back);
-
 		if (Usable()) {
 			switch(itemType.targettingMethod) {
 			case ItemDefinition.TargettingMethod.CARDINAL:
@@ -41,10 +38,12 @@ public class Item  {
 				yield return instance.SelectTarget(KeyCode.Space, TargettedActivation, success, back);
 				yield break;
 			case ItemDefinition.TargettingMethod.ME:
-				yield return TargettedActivation(instance, instance.player.pos, success, cancel);
+				yield return TargettedActivation(instance, instance.player.pos, success, back);
 				yield break;
 			default:
-				throw new UnityException("Unexpected TargettingMethod: " + itemType.targettingMethod);
+				Debug.LogError("Unexpected targetting method."  + itemType.targettingMethod);
+				yield return back;
+				yield break;
 			}
 		} else {
 			yield return back;
@@ -90,13 +89,19 @@ public class Item  {
 			List<Coord> possibleDestinations = new List<Coord>();
 			for (int i = -itemType.targettingRange; i <= itemType.targettingRange; i+= 1) {
 				for (int j = -itemType.targettingRange; j <= itemType.targettingRange; j+= 1) {
-					Coord c2 = c + new Coord(i,j);
-					if (instance.InBounds(c2) && instance.GetEntityAt(c2) == null) {
+					Coord c2 = instance.player.pos + new Coord(i, j);
+					if (Mathf.Abs(i+j) <= itemType.targettingRange && 
+						instance.InBounds(c2) && 
+						instance.GetEntityAt(c2) == null && 
+						instance.GetTile(c2).passable) {
+
 						possibleDestinations.Add(c2);
 					}
 				}
 			}
+
 			if (possibleDestinations.Count == 0) {
+				Debug.Log("Did no thing");
 				yield return cancel;
 			} else {			
 				Coord teleDest = possibleDestinations[Random.Range(0, possibleDestinations.Count)];

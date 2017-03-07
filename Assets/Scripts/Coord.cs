@@ -27,4 +27,7 @@ public struct Coord : System.IEquatable<Coord> {
 	public bool Equals(Coord other) {
 		return this.x == other.x && this.y == other.y;
 	}
+	public override string ToString() {
+		return "Coord<" + x + ", " + y + ">";
+	}
 }

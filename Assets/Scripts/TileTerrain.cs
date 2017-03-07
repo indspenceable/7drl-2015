@@ -15,6 +15,6 @@ public class TileTerrain : ScriptableObject {
 	// Can you move over this tile
 	public bool passable;
 	// can you fire over this tile
-	public bool blocked;
+	public bool losBlocked;
 	public Interaction interaction;
 }

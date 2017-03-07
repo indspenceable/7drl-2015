@@ -98,7 +98,7 @@ public class GameInstance : MonoBehaviour {
 		for (int i = 0; i < 1; i+=1) {
 			Coord c = new Coord(0,0);
 
-			while (CurrentLevel.GetAt(c).blocked || !CurrentLevel.GetAt(c).passable || c.Equals(player.pos)) {
+			while (!CurrentLevel.GetAt(c).passable || c.Equals(player.pos)) {
 				c = new Coord(Random.Range(0, 10), Random.Range(0, 10));
 			}
 			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
@@ -359,7 +359,7 @@ public class GameInstance : MonoBehaviour {
 
 	private IEnumerator HookInDirection(Coord offset) {
 		Coord c = player.pos;
-		while (!CurrentLevel.GetAt(c).blocked) {
+		while (!CurrentLevel.GetAt(c).passable) {
 			c = c + offset;
 		}
 		c = c - offset;
