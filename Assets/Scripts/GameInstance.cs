@@ -269,33 +269,42 @@ public class GameInstance : MonoBehaviour {
 		return map;
 	}
 
-	public IEnumerator TakeAllMonstersTurn() {
+
+	public void PruneDeadMonsters() {
 		List<MonsterComponent> deadMonsters = monsters.FindAll( m => m.IsDead() );
 		foreach( MonsterComponent m in deadMonsters) {
-			Debug.Log("Monster died!");
 			monsters.Remove(m);
 			Destroy(m.gameObject);
 		}
+	}
+	public IEnumerator TakeAllMonstersTurn() {
+		PruneDeadMonsters();
 		foreach( MonsterComponent m in monsters) {
 			yield return TakeMonsterTurn(m);
 		}
-
 		yield return TakePassivesTurn();
 	}
 
 	private IEnumerator TakePassivesTurn() {
+		List<Coroutine> cos = new List<Coroutine>();
 		for ( int x = 0; x < mapConfig.width; x+=1) {
 			for (int y = 0; y < mapConfig.height; y +=1) {
 				MapTileComponent t = this.GetTile(new Coord(x,y));
 				if (t.HasPassive()) {
-					yield return t.Passive(this);
+					// This is probably super hacky, but start separate coroutines for all of the tiles.
+					cos.Add(StartCoroutine(t.Passive(this)));
 				}
 			}
 		}
+		foreach(Coroutine co in cos) {
+			yield return co;
+		}
+		PruneDeadMonsters();
 		yield return PreTurn();
 	}
 
 	private IEnumerator PreTurn() {
+		Debug.Log("Preturn!");
 		// Save the game here
 		// Unfortunately, saving doesn't work, and is unlikely to in this week.
 		// manager.SaveGameState();
