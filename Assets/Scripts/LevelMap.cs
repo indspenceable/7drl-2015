@@ -11,11 +11,11 @@ public class LevelMap {
 		"x........+........x",
 		"x.................x",
 		"x.................x",
-		"x...~~~~~~~~~.....x",
+		"xx^x~~~~~~~~~.....x",
 		"x.................x",
-		"x...........x.....x",
-		"x...........x.....x",
-		"x...........x.....x",
+		"x.......^...x.....x",
+		"x...^.......x.....x",
+		"x.....^.....x.....x",
 		"x...........x.>...x",
 		"x...........xxxxx.x",
 		"x...........x.....x",
@@ -55,6 +55,8 @@ public class LevelMap {
 			return defs.stairs;
 		} else if (c == '+') {
 			return defs.item;
+		} else if (c == '^') {
+			return defs.trapped;
 		} else {
 			Debug.LogError("Unexpected Character - no terrain defintion for [" + c + "]");
 			return null;

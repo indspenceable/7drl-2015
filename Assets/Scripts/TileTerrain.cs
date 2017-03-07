@@ -17,4 +17,5 @@ public class TileTerrain : ScriptableObject {
 	// can you fire over this tile
 	public bool losBlocked;
 	public Interaction interaction;
+	public TileEffectDefinition tileEffect;
 }

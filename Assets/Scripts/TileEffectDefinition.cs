@@ -5,8 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Tile Effect", menuName = "Tile Effect", order = 1)]
 public class TileEffectDefinition: ScriptableObject {
 	public enum Type {
-		STATIC = 0,
+		INACTIVE = 0,
 		FUSE = 1,
+		EVERY_TURN = 2,
 	}
 	public int fuseTime;
 	public Type effectType;

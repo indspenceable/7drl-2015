@@ -45,6 +45,10 @@ public class MapTileComponent : MonoBehaviour {
 	public void SetTerrain(TileTerrain t) {
 		this.terrain = t;
 		this.GetComponent<SpriteRenderer>().sprite = terrain.sprite;
+		tileEffects.Clear();
+		if (terrain.tileEffect != null) {
+			AddTileEffect(terrain.tileEffect);
+		}
 	}
 	public void SetCoords(int x, int y) {
 		this.x = x;
@@ -52,7 +56,6 @@ public class MapTileComponent : MonoBehaviour {
 		transform.position = new Vector3(x,y);
 	}
 	public void AddTileEffect(TileEffectDefinition t) {
-		
 		tileEffects.Add(new TileEffect(t, this));
 		UpdateTESprite();
 	}

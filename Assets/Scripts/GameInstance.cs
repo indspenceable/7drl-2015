@@ -101,10 +101,10 @@ public class GameInstance : MonoBehaviour {
 			while (!CurrentLevel.GetAt(c).passable || c.Equals(player.pos)) {
 				c = new Coord(Random.Range(0, 10), Random.Range(0, 10));
 			}
-			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
-			MonsterComponent mc = Instantiate(prefabs.monster).GetComponent<MonsterComponent>();
-			mc.Setup(monsterType, c);
-			monsters.Add(mc);
+//			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+//			MonsterComponent mc = Instantiate(prefabs.monster).GetComponent<MonsterComponent>();
+//			mc.Setup(monsterType, c);
+//			monsters.Add(mc);
 		}
 	}
 

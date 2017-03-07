@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
 		public TileTerrain pit;
 		public TileTerrain stairs;
 		public TileTerrain item;
+		public TileTerrain trapped;
 		public ItemDefinition[] items;
 	}
 

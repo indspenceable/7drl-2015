@@ -14,8 +14,8 @@ MonoBehaviour:
   displayName: Bombs
   icon: {fileID: 0}
   targettingMethod: 1
-  effect: 0
-  tileEffect: {fileID: 0}
+  effect: 5
+  tileEffect: {fileID: 11400000, guid: 2b37168a92a0445c7a93b43e84962772, type: 2}
   cooldown: -1
   levelLimit: -1
   totalCharges: 3
