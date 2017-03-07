@@ -18,6 +18,9 @@ public struct Coord : System.IEquatable<Coord> {
 	public static Coord operator - (Coord a, Coord b) {
 		return new Coord(a.x - b.x, a.y - b.y);
 	}
+	public static Coord operator * (Coord a, int b) {
+		return new Coord(a.x * b, a.y * b);
+	}
 	public Vector3 toVec() {
 		return new Vector3(this.x, this.y);
 	}

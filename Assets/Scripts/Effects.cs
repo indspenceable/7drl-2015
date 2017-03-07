@@ -78,6 +78,13 @@ public class Effects {
 			yield return success;
 			yield break;
 		case Effects.Effect.KNOCKBACK:
+			monster = instance.GetEntityAt(c) as MonsterComponent;
+			pullDestination = instance.player.pos + (c - instance.player.pos).AsCardinalDirection();
+			yield return instance.SlowMove(monster.gameObject, pullDestination, GameManager.StandardDelay);
+			monster.pos = pullDestination;
+			monster.stunned += power;
+			yield return success;
+			yield break;
 		case Effects.Effect.SCRY:
 		case Effects.Effect.SNARE:
 		case Effects.Effect.USE_TILE:

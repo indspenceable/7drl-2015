@@ -304,7 +304,7 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	private IEnumerator PreTurn() {
-		Debug.Log("Preturn!");
+//		Debug.Log("Preturn!");
 		// Save the game here
 		// Unfortunately, saving doesn't work, and is unlikely to in this week.
 		// manager.SaveGameState();
