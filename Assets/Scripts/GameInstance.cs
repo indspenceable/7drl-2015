@@ -259,13 +259,13 @@ public class GameInstance : MonoBehaviour {
 //	public bool PassableAndNoEntity(Coord c) {
 //		return CurrentLevel.GetAt(c).passable && GetEntityAt(c) == null;
 //	}
-	public bool Passable(Coord c) {
-		return CurrentLevel.GetAt(c).passable;
+	public bool Pathable(Coord c) {
+		return CurrentLevel.GetAt(c).passable && !CurrentLevel.GetAt(c).avoidThis;
 	}
 	public DjikstraMap BuildPlayerMap() {
 		DjikstraMap map = new DjikstraMap(mapConfig.width, mapConfig.height);
 		map.SetGoal(player.pos);
-		map.Calculate(Passable);
+		map.Calculate(Pathable);
 		return map;
 	}
 

@@ -55,7 +55,7 @@ using UnityEngine;
 		DjikstraMap map = instance.BuildPlayerMap();
 		if (map.Value(pos.x, pos.y) < mt.minRange) {
 			map.Scale(-1.2f);
-			map.Calculate(instance.Passable);
+			map.Calculate(instance.Pathable);
 			Coord c = map.FindBestNeighbor(pos);
 			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
 			pos = c;
