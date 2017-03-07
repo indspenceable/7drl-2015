@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b860fd9bc88041fba9272fc953de792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standardDelay: 0
+  standardDelay: 0.1
   instancePrefab: {fileID: 1036225661691564, guid: 7d0c7cc95a5b4465a8e850808baa16e7,
     type: 2}
   mapConfig:

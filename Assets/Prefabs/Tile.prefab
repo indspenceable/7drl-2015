@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e5c2b25181742eeaac9519a40ca20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 0
+  item: {fileID: 0}
 --- !u!212 &212817164717627864
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -66,7 +66,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5cd214b46206b4023bf1536115d24c14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

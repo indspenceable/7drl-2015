@@ -14,7 +14,7 @@ MonoBehaviour:
   displayName: Shadowdagger
   icon: {fileID: 0}
   targettingMethod: 3
-  effect: 0
+  effect: 3
   cooldown: 3
   levelLimit: -1
   totalCharges: -1

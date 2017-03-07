@@ -8,7 +8,7 @@ public class GameInstance : MonoBehaviour {
 	private LevelMap[] levels;
 
 	private MapTileComponent[][] tiles;
-	private MapTileComponent GetTile(Coord c) {
+	public MapTileComponent GetTile(Coord c) {
 		return tiles[c.x][c.y];
 	}
 
@@ -137,7 +137,12 @@ public class GameInstance : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator AttemptMove(Coord dest) {
+
+	public bool InBounds(Coord c) {
+		return c.x >= 0 && c.y >= 0 && c.x < mapConfig.width && c.y < mapConfig.height;
+	}
+
+	public IEnumerator AttemptMove(Coord dest) {
 //		Coord dest = player.pos + new Coord(dx, dy);
 		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
 			yield return Interact(dest);

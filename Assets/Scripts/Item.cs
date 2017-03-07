@@ -53,12 +53,12 @@ public class Item  {
 
 
 	private IEnumerator TargettedActivation(GameInstance instance, Coord c, IEnumerator success, IEnumerator cancel){ 
-		Entity e;
+		Entity target;
 		switch(itemType.effect) {
 		case ItemDefinition.Effect.DAMAGE:
-			e = instance.GetEntityAt(c);
-			if (e != null) {
-				yield return e.TakeHit(itemType.power);
+			target = instance.GetEntityAt(c);
+			if (target != null) {
+				yield return target.TakeHit(itemType.power);
 				Use();
 				yield return success;
 			} else {
@@ -66,13 +66,41 @@ public class Item  {
 			}
 			yield break;
 		case ItemDefinition.Effect.HEALING:
-			e = instance.GetEntityAt(c);
-			if (e != null) {
-				yield return e.TakeHit(-itemType.power);
+			target = instance.GetEntityAt(c);
+			if (target != null) {
+				yield return target.TakeHit(-itemType.power);
 				Use();
 				yield return success;
 			} else {
 				yield return cancel;
+			}
+			yield break;
+		case ItemDefinition.Effect.BACKSTAB:
+			target = instance.GetEntityAt(c);
+			Coord dest = c-instance.player.pos + c;
+			MapTileComponent tile = instance.GetTile(dest);
+			if (tile.passable && instance.GetEntityAt(dest) == null) {
+				yield return target.TakeHit(-itemType.power);
+				yield return instance.AttemptMove(dest);
+			} else {
+				yield return cancel;
+			}
+			yield break;
+		case ItemDefinition.Effect.BLINK:
+			List<Coord> possibleDestinations = new List<Coord>();
+			for (int i = -itemType.targettingRange; i <= itemType.targettingRange; i+= 1) {
+				for (int j = -itemType.targettingRange; j <= itemType.targettingRange; j+= 1) {
+					Coord c2 = c + new Coord(i,j);
+					if (instance.InBounds(c2) && instance.GetEntityAt(c2) == null) {
+						possibleDestinations.Add(c2);
+					}
+				}
+			}
+			if (possibleDestinations.Count == 0) {
+				yield return cancel;
+			} else {			
+				Coord teleDest = possibleDestinations[Random.Range(0, possibleDestinations.Count)];
+				yield return instance.AttemptMove(teleDest);
 			}
 			yield break;
 		default:

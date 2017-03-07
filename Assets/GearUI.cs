@@ -18,7 +18,6 @@ public class GearUI : MonoBehaviour {
 	void Update () {
 		// Actually draw the UI!
 		if (player == null) return;
-		Debug.Log("Setting name!");
 		name.text = player.GetItem(slot).DisplayName;
 	}
 }

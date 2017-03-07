@@ -18,9 +18,6 @@ public class MapTileComponent : MonoBehaviour {
 
 	public TileTerrain.Interaction interaction {
 		get {
-			Debug.Log(terrain);
-			Debug.Log(x);
-			Debug.Log(y);
 			return terrain.interaction;
 		}
 	}
