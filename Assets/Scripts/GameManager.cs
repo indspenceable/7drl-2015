@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 		
 	[SerializeField]
 	GameObject instancePrefab;
+	[SerializeField]
 	GameInstance instance;
 	[SerializeField]
 	MapConfig mapConfig;
@@ -48,8 +49,8 @@ public class GameManager : MonoBehaviour {
 		SwapToMainMenu();
 	}
 	public void SwapToMainMenu() {
-		if (instance) {
-			Destroy(instance);
+		if (instance != null) {
+			Destroy(instance.gameObject);
 		}
 		mainMenu.gameObject.SetActive(true);
 		mainMenu.Startup();

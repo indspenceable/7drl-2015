@@ -49,6 +49,7 @@ public class MapTileComponent : MonoBehaviour {
 		if (terrain.tileEffect != null) {
 			AddTileEffect(terrain.tileEffect);
 		}
+		UpdateTESprite();
 	}
 	public void SetCoords(int x, int y) {
 		this.x = x;

@@ -41,7 +41,7 @@ public class GameInstance : MonoBehaviour {
 		// Save prefabs for future levels;
 		this.prefabConfig = prefabs;
 		// Save the manager so that we can transition back to the main menu when we win/lose
-
+		this.manager = manager;
 
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
@@ -52,10 +52,12 @@ public class GameInstance : MonoBehaviour {
 
 		// Now, actually build out the map gameobjects
 		tiles = new MapTileComponent[mapConfig.width][];
+		GameObject tileContainer = new GameObject();
+		tileContainer.transform.parent = transform;
 		for ( int x = 0; x < mapConfig.width; x+=1) {
 			tiles[x] = new MapTileComponent[mapConfig.height];
 			for (int y = 0; y < mapConfig.height; y +=1) {
-				tiles[x][y] = Instantiate(prefabs.tilePrefab).GetComponent<MapTileComponent>();
+				tiles[x][y] = Instantiate(prefabs.tilePrefab, tileContainer.transform).GetComponent<MapTileComponent>();
 				tiles[x][y].SetCoords(x,y);
 			}
 		}
@@ -63,7 +65,7 @@ public class GameInstance : MonoBehaviour {
 		SetTerrain();
 
 		// Set up the player
-		player = Instantiate(prefabs.playerPrefab).GetComponent<Player>();
+		player = Instantiate(prefabs.playerPrefab, transform).GetComponent<Player>();
 		player.SetCoords(new Coord(1,1));
 		healthMeter.InstallPlayer(player);
 		foreach(GearUI gui in gearUIs) {
@@ -71,7 +73,7 @@ public class GameInstance : MonoBehaviour {
 		}
 
 		// Aaaand the reticle
-		targettingReticle = Instantiate(prefabs.reticle);
+		targettingReticle = Instantiate(prefabs.reticle, transform);
 		targettingReticle.SetActive(false);
 
 		PopulateMonsters(prefabs);
@@ -105,7 +107,7 @@ public class GameInstance : MonoBehaviour {
 				c = new Coord(Random.Range(0, 10), Random.Range(0, 10));
 			}
 //			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
-//			MonsterComponent mc = Instantiate(prefabs.monster).GetComponent<MonsterComponent>();
+//			MonsterComponent mc = Instantiate(prefabs.monster, transform).GetComponent<MonsterComponent>();
 //			mc.Setup(monsterType, c);
 //			monsters.Add(mc);
 		}
