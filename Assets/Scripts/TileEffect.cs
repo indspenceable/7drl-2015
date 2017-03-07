@@ -32,7 +32,6 @@ public class TileEffect {
 	}
 
 	public IEnumerator Activate(GameInstance instance) {
-		Debug.Log("Triggering!");
 		List<Coroutine> coroutines = new List<Coroutine>();
 		for (int i = -def.range; i <=def.range; i+=1) {
 			for (int j = -def.range; j <=def.range; j+=1) {

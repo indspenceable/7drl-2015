@@ -5,11 +5,13 @@ using UnityEngine;
 	public class MonsterComponent : MonoBehaviour, Entity {
 	private Monster mt;
 	public Coord pos;
+	public int hits;
 
 	public void Setup(Monster mt, Coord pos) {
 		this.mt = mt;
 		GetComponent<SpriteRenderer>().sprite = mt.sprite;
 		this.pos = pos;
+		this.hits = 0;
 		transform.position = this.pos.toVec();
 	}
 
@@ -24,12 +26,17 @@ using UnityEngine;
 
 	public IEnumerator TakeHit(int power) {
 		Debug.Log("Monster Got hit for " + power + " power.");
+		hits += power;
 		yield return null;
 	}
 
 	public IEnumerator DisplayAndExecuteAttack() {
 		Debug.Log("We did the attack!");
 		yield return null;
+	}
+
+	public bool IsDead() {
+		return hits > mt.hp;
 	}
 
 	public IEnumerator StandardAttack(GameInstance instance) {

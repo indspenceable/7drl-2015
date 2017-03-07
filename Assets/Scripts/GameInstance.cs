@@ -265,6 +265,11 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	public IEnumerator TakeAllMonstersTurn() {
+		List<MonsterComponent> deadMonsters = monsters.FindAll( m => m.IsDead() );
+		foreach( MonsterComponent m in deadMonsters) {
+			Debug.Log("Monster died!");
+			monsters.Remove(m);
+		}
 		foreach( MonsterComponent m in monsters) {
 			yield return TakeMonsterTurn(m);
 		}
@@ -288,8 +293,19 @@ public class GameInstance : MonoBehaviour {
 		// Save the game here
 		// Unfortunately, saving doesn't work, and is unlikely to in this week.
 		// manager.SaveGameState();
-		player.RestItems();
-		yield return ListenForPlayerInput();
+		if (player.IsDead()) {
+			Debug.Log("Dead!!!");
+			// You died!
+			yield return GameOver();
+		} else {
+			player.RestItems();
+			yield return ListenForPlayerInput();
+		}
+	}
+
+	private IEnumerator GameOver() {
+		yield return null;
+		manager.SwapToMainMenu();
 	}
 
 	public IEnumerator SlowMove(GameObject go, Coord target, float time) {

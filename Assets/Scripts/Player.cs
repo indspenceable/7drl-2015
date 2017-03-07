@@ -8,6 +8,7 @@ public class Player : MonoBehaviour, Entity {
 	private Item[] gear;
 	[SerializeField]
 	private ItemDefinition[] startingGear;
+	public int hp =5;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +25,12 @@ public class Player : MonoBehaviour, Entity {
 
 	public IEnumerator TakeHit(int power) {
 		Debug.Log("Player Got hit for " + power + " power.");
+		hp -= power;
 		yield return null;
+	}
+
+	public bool IsDead() {
+		return hp <= 0;
 	}
 
 

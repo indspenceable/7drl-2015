@@ -45,6 +45,12 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GameManager.StandardDelay = standardDelay;
+		SwapToMainMenu();
+	}
+	public void SwapToMainMenu() {
+		if (instance) {
+			Destroy(instance);
+		}
 		mainMenu.gameObject.SetActive(true);
 		mainMenu.Startup();
 	}
@@ -52,6 +58,7 @@ public class GameManager : MonoBehaviour {
 		mainMenu.gameObject.SetActive(false);
 //		instance = new GameObject("GameInstance").AddComponent<GameInstance>();
 		instance = Instantiate(instancePrefab).GetComponent<GameInstance>();
+		instance.gameObject.SetActive(true);
 		instance.Startup(this, mapConfig, prefabConfig);
 	}
 		

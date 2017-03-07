@@ -9,10 +9,14 @@ public class HealthMeterUI : MonoBehaviour {
 	private GameObject[] hearts;
 
 	public void InstallPlayer(Player p) {
+		this.p = p;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		// Here's were we update the UI!
+		for (int i = 0; i < hearts.Length; i+=1) {
+			hearts[i].SetActive(p.hp>i);
+		}
 	}
 }

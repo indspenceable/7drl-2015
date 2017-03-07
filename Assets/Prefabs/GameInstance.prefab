@@ -60,7 +60,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1047228116978410
 GameObject:
   m_ObjectHideFlags: 1
@@ -559,7 +559,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d732db5d4b7d14df5b8808032d86c399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hearts: []
+  hearts:
+  - {fileID: 1834104260139898}
+  - {fileID: 1329791432373134}
+  - {fileID: 1329986828978678}
+  - {fileID: 1186355540513842}
+  - {fileID: 1619339859052918}
 --- !u!114 &114332195564223816
 MonoBehaviour:
   m_ObjectHideFlags: 1
