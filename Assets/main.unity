@@ -250,6 +250,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 252305928}
+--- !u!212 &356472069 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212210417402515378, guid: 57a02dbf174054f55bab137d487016da,
+    type: 2}
+  m_PrefabInternal: {fileID: 1883935280}
 --- !u!1 &415261511
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,7 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b860fd9bc88041fba9272fc953de792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standardDelay: 0.1
+  standardDelay: 0
   instancePrefab: {fileID: 1036225661691564, guid: 7d0c7cc95a5b4465a8e850808baa16e7,
     type: 2}
   mapConfig:
@@ -1090,6 +1095,53 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1652468946}
+--- !u!1001 &1883935280
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727053760931248, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114249650948833124, guid: 57a02dbf174054f55bab137d487016da,
+        type: 2}
+      propertyPath: TESpriteRenderer
+      value: 
+      objectReference: {fileID: 356472069}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 57a02dbf174054f55bab137d487016da, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &1940923872
 Prefab:
   m_ObjectHideFlags: 0

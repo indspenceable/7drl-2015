@@ -270,6 +270,15 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	private IEnumerator TakePassivesTurn() {
+		for ( int x = 0; x < mapConfig.width; x+=1) {
+			for (int y = 0; y < mapConfig.height; y +=1) {
+				MapTileComponent t = this.GetTile(new Coord(x,y));
+				if (t.HasPassive()) {
+					yield return t.Passive(this);
+				}
+			}
+		}
+		Debug.Log("Done!");
 		yield return PreTurn();
 	}
 

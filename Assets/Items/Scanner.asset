@@ -14,7 +14,8 @@ MonoBehaviour:
   displayName: Remote Scanner
   icon: {fileID: 0}
   targettingMethod: 2
-  effect: 2
+  effect: 5
+  tileEffect: {fileID: 0}
   cooldown: -1
   levelLimit: 1
   totalCharges: -1

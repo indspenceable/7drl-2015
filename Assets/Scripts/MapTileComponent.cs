@@ -9,6 +9,10 @@ public class MapTileComponent : MonoBehaviour {
 	public int x {get; private set;}
 	public int y {get; private set;}
 	public ItemDefinition item;
+	private List<TileEffect> tileEffects = new List<TileEffect>();
+
+	[SerializeField]
+	private SpriteRenderer TESpriteRenderer;
 
 	public bool passable {
 		get {
@@ -22,6 +26,22 @@ public class MapTileComponent : MonoBehaviour {
 		}
 	}
 
+	public bool HasPassive() {
+		foreach(TileEffect te in tileEffects) {
+			if (te.HasPassive()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public IEnumerator Passive(GameInstance instance) {
+		foreach(TileEffect te in tileEffects) {
+			yield return te.Passive(instance);
+		}
+		tileEffects.RemoveAll(te => te.Expired());
+		UpdateTESprite();
+	}
+
 	public void SetTerrain(TileTerrain t) {
 		this.terrain = t;
 		this.GetComponent<SpriteRenderer>().sprite = terrain.sprite;
@@ -30,5 +50,24 @@ public class MapTileComponent : MonoBehaviour {
 		this.x = x;
 		this.y = y;
 		transform.position = new Vector3(x,y);
+	}
+	public void AddTileEffect(TileEffectDefinition t) {
+		
+		tileEffects.Add(new TileEffect(t, this));
+		UpdateTESprite();
+	}
+	public void RemoveTileEffect(TileEffect te) {
+		tileEffects.Remove(te);
+		UpdateTESprite();
+	}
+	private void UpdateTESprite() {
+		Sprite tesprite = null;
+		foreach(TileEffect te in tileEffects) {
+			if (te.def.sprite) {
+				tesprite = te.def.sprite;
+				break;
+			}
+		}
+		TESpriteRenderer.sprite = tesprite;
 	}
 }

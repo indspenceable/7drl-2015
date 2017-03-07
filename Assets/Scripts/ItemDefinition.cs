@@ -10,22 +10,11 @@ public class ItemDefinition : ScriptableObject {
 		WITHIN_RANGE = 2,
 		CARDINAL=3,
 	}
-	public enum Effect {
-		DAMAGE = 0,
-		HEALING = 1,
-		SCRY = 2,
-		BACKSTAB = 3,
-		KNOCKBACK = 4,
-		BOMBS = 5,
-		HOOK = 6,
-		BLINK= 7,
-		USE_TILE=8,
-		SNARE=9,
-	}
 	public string displayName;
 	public Sprite icon;
 	public TargettingMethod targettingMethod;
-	public Effect effect;
+	public Effects.Effect effect;
+	public TileEffectDefinition tileEffect;
 	public int cooldown = -1;
 	public int levelLimit = -1;
 	public int totalCharges = -1;
