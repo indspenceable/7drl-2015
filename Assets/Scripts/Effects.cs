@@ -11,7 +11,7 @@ public class Effects {
 		KNOCKBACK = 4,
 		ADD_TILE_EFFECT = 5,
 		HOOK = 6,
-		BLINK= 7,
+		GOTO= 7,
 		USE_TILE=8,
 		SNARE=9,
 	}
@@ -60,27 +60,8 @@ public class Effects {
 				yield return cancel;
 			}
 			yield break;
-		case Effects.Effect.BLINK:
-			List<Coord> possibleDestinations = new List<Coord>();
-			for (int i = -range; i <= range; i+= 1) {
-				for (int j = -range; j <= range; j+= 1) {
-					Coord c2 = instance.player.pos + new Coord(i, j);
-					if (Mathf.Abs(i+j) <= range && 
-						instance.InBounds(c2) && 
-						instance.GetEntityAt(c2) == null && 
-						instance.GetTile(c2).passable) {
-
-						possibleDestinations.Add(c2);
-					}
-				}
-			}
-
-			if (possibleDestinations.Count == 0) {
-				yield return cancel;
-			} else {			
-				Coord teleDest = possibleDestinations[Random.Range(0, possibleDestinations.Count)];
-				yield return instance.AttemptMove(teleDest, success, cancel);
-			}
+		case Effects.Effect.GOTO:
+			yield return instance.AttemptMove(c, success, cancel);
 			yield break;
 		case Effects.Effect.ADD_TILE_EFFECT:
 			MapTileComponent t = instance.GetTile(c);

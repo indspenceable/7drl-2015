@@ -9,6 +9,7 @@ public class ItemDefinition : ScriptableObject {
 		ME = 1,
 		WITHIN_RANGE = 2,
 		CARDINAL=3,
+		WITHIN_RANGE_RANDOM=4,
 	}
 	public string displayName;
 	public Sprite icon;

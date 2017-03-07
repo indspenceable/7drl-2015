@@ -41,7 +41,12 @@ public class Item  {
 			case ItemDefinition.TargettingMethod.WITHIN_RANGE:
 				yield return instance.SelectTarget(KeyCode.Space, TargettedItemActivation, Use(success), back);
 				yield break;
+			case ItemDefinition.TargettingMethod.WITHIN_RANGE_RANDOM:
+				// Probably shouldn't use the player directly here...
+				yield return instance.RandomSpace(instance.player.pos, itemType.targettingRange, TargettedItemActivation, Use(success), back);
+				yield break;
 			case ItemDefinition.TargettingMethod.ME:
+				// Or here.
 				yield return TargettedItemActivation(instance, instance.player.pos, Use(success), back);
 				yield break;
 			default:

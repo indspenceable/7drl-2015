@@ -364,4 +364,28 @@ public class GameInstance : MonoBehaviour {
 		targettingReticle.SetActive(false);
 		yield return callback(this, new Coord(x, y) + player.pos, success, cancel);
 	}
+
+	public IEnumerator RandomSpace(Coord focus, int range, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
+		List<Coord> possibleDestinations = new List<Coord>();
+		for (int i = -range; i <= range; i+= 1) {
+			for (int j = -range; j <= range; j+= 1) {
+				Coord c2 = focus + new Coord(i, j);
+				if (Mathf.Abs(i+j) <= range && 
+					InBounds(c2) && 
+					GetEntityAt(c2) == null && 
+					GetTile(c2).passable) {
+
+					possibleDestinations.Add(c2);
+				}
+			}
+		}
+
+		if (possibleDestinations.Count == 0) {
+			yield return cancel;
+		} else {			
+			Coord finalChoice = possibleDestinations[Random.Range(0, possibleDestinations.Count)];
+			yield return callback(this, finalChoice, success, cancel);
+		}
+		yield break;
+	}
 }
