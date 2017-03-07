@@ -79,10 +79,16 @@ public class Effects {
 			yield break;
 		case Effects.Effect.KNOCKBACK:
 			monster = instance.GetEntityAt(c) as MonsterComponent;
-			pullDestination = instance.player.pos + (c - instance.player.pos).AsCardinalDirection();
-			yield return instance.SlowMove(monster.gameObject, pullDestination, GameManager.StandardDelay);
-			monster.pos = pullDestination;
-			monster.stunned += power;
+			Coord pushDirection =  (c - instance.player.pos).AsCardinalDirection();
+			int tilesPushed = 0;
+			while (instance.EmptyAndPassable(monster.pos + pushDirection) && tilesPushed<range) {
+				yield return instance.SlowMove(monster.gameObject, monster.pos + pushDirection, GameManager.StandardDelay);
+				monster.pos = monster.pos + pushDirection;
+				tilesPushed += 1;
+			}
+			if(tilesPushed < range) {
+				monster.stunned += power;
+			}
 			yield return success;
 			yield break;
 		case Effects.Effect.SNARE:

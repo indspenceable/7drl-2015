@@ -369,10 +369,13 @@ public class GameInstance : MonoBehaviour {
 		TargettedAction a = (instance, c, suc, can) => callback(instance, player.pos + c, suc, can);
 		return GetCardinalDirectionInput(selectKeyCode, a, success, cancel);
 	}
+	public bool EmptyAndPassable(Coord c) {
+		return GetTile(c).passable && GetEntityAt(c) == null;
+	}
 	public IEnumerator CardinalDirectionOpen(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
 		TargettedAction a = (instance, c, suc, can) => {
 			Coord pos = player.pos;
-			while (GetTile(pos + c).passable && GetEntityAt(pos+c) == null) {
+			while (EmptyAndPassable(pos+c)) {
 				pos += c;
 			}
 			return callback(instance, pos, suc, can);
