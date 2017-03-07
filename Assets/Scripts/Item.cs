@@ -23,9 +23,9 @@ public class Item  {
 	}
 
 	public bool Usable() {
-//		return CheckCooldown() && CheckLevelLimit() && CheckCharges() && 
-//			itemType.targettingMethod != ItemDefinition.TargettingMethod.UNUSABLE;
-		return true;
+		return CheckCooldown() && CheckLevelLimit() && CheckCharges() && 
+			itemType.targettingMethod != ItemDefinition.TargettingMethod.UNUSABLE;
+//		return true;
 	}
 
 	public IEnumerator TargettedItemActivation(GameInstance instance, Coord c, IEnumerator success, IEnumerator cancel) {

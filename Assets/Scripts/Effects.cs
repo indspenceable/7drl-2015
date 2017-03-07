@@ -55,7 +55,7 @@ public class Effects {
 			MapTileComponent tile = instance.GetTile(dest);
 			if (tile.passable && instance.GetEntityAt(dest) == null) {
 				yield return target.TakeHit(-power);
-				yield return instance.AttemptMove(dest);
+				yield return instance.AttemptMove(dest, success, cancel);
 			} else {
 				yield return cancel;
 			}
@@ -79,11 +79,10 @@ public class Effects {
 				yield return cancel;
 			} else {			
 				Coord teleDest = possibleDestinations[Random.Range(0, possibleDestinations.Count)];
-				yield return instance.AttemptMove(teleDest);
+				yield return instance.AttemptMove(teleDest, success, cancel);
 			}
 			yield break;
 		case Effects.Effect.ADD_TILE_EFFECT:
-			Debug.Log("Adding tile effect!");
 			MapTileComponent t = instance.GetTile(c);
 			t.AddTileEffect(tileEffect);
 			yield return success;

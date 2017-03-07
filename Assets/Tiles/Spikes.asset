@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a0d02bd4d9f44a2853dc3d68eb6894, type: 3}
   m_Name: Spikes
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 1a9301817f64b46feb451ee1b275be64, type: 3}
+  sprite: {fileID: 21300000, guid: 76677634de72d463696b4856ba858af9, type: 3}
   passable: 1
   losBlocked: 0
   interaction: 0

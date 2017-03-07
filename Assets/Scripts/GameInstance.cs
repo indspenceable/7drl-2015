@@ -115,13 +115,13 @@ public class GameInstance : MonoBehaviour {
 	private IEnumerator ListenForPlayerInput() {
 		yield return null;
 		if (Input.GetKeyDown(KeyCode.A)) {
-			yield return AttemptMove(new Coord(-1, 0) + player.pos);
+			yield return AttemptMove(new Coord(-1, 0) + player.pos, TakeAllMonstersTurn(), ListenForPlayerInput());
 		} else if (Input.GetKeyDown(KeyCode.D)) {
-			yield return AttemptMove(new Coord(1, 0) + player.pos);
+			yield return AttemptMove(new Coord(1, 0) + player.pos, TakeAllMonstersTurn(), ListenForPlayerInput());
 		} else if (Input.GetKeyDown(KeyCode.S)) {
-			yield return AttemptMove(new Coord(0, -1) + player.pos);
+			yield return AttemptMove(new Coord(0, -1) + player.pos, TakeAllMonstersTurn(), ListenForPlayerInput());
 		} else if (Input.GetKeyDown(KeyCode.W)) {
-			yield return AttemptMove(new Coord(0, 1) + player.pos);
+			yield return AttemptMove(new Coord(0, 1) + player.pos, TakeAllMonstersTurn(), ListenForPlayerInput());
 		} else if (Input.GetKeyDown(KeyCode.I)) { 
 			yield return player.GetItem(0).BeginActivation(this, TakeAllMonstersTurn(), ListenForPlayerInput());
 		} else if (Input.GetKeyDown(KeyCode.J)) { 
@@ -142,16 +142,16 @@ public class GameInstance : MonoBehaviour {
 		return c.x >= 0 && c.y >= 0 && c.x < mapConfig.width && c.y < mapConfig.height;
 	}
 
-	public IEnumerator AttemptMove(Coord dest) {
+	public IEnumerator AttemptMove(Coord dest, IEnumerator success, IEnumerator cancel) {
 //		Coord dest = player.pos + new Coord(dx, dy);
 		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
 			yield return Interact(dest);
 		} else if (GetTile(dest).passable) {
 			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
 			player.SetCoords(dest);
-			yield return TakeAllMonstersTurn();
+			yield return success;
 		} else {
-			yield return ListenForPlayerInput();
+			yield return cancel;
 		}
 	}
 
@@ -278,7 +278,6 @@ public class GameInstance : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log("Done!");
 		yield return PreTurn();
 	}
 
@@ -364,14 +363,5 @@ public class GameInstance : MonoBehaviour {
 		}
 		targettingReticle.SetActive(false);
 		yield return callback(this, new Coord(x, y) + player.pos, success, cancel);
-	}
-
-	private IEnumerator HookInDirection(Coord offset) {
-		Coord c = player.pos;
-		while (!CurrentLevel.GetAt(c).passable) {
-			c = c + offset;
-		}
-		c = c - offset;
-		yield return AttemptMove(c);
 	}
 }
