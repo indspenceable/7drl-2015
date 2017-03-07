@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Vicious Hook
   icon: {fileID: 0}
-  targettingMethod: 3
+  targettingMethod: 6
   effect: 6
   tileEffect: {fileID: 0}
   cooldown: 5

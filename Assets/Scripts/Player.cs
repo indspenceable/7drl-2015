@@ -23,6 +23,11 @@ public class Player : MonoBehaviour, Entity {
 		
 	}
 
+	// For the interface
+	public GameObject GameObject() {
+		return gameObject;
+	}
+
 	public IEnumerator TakeHit(int power) {
 		Debug.Log("Player Got hit for " + power + " power.");
 		hp -= power;

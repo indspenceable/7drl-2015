@@ -30,4 +30,14 @@ public struct Coord : System.IEquatable<Coord> {
 	public override string ToString() {
 		return "Coord<" + x + ", " + y + ">";
 	}
+	public Coord AsCardinalDirection() {
+		if (! (x == 0) ^ (y == 0)) {
+			throw new UnityException("Coord " + ToString() + " is not a cardinal direction");
+		}
+		if (x == 0) {
+			return new Coord(0, y / Mathf.Abs(y));
+		} else {
+			return new Coord(x / Mathf.Abs(x), 0);
+		}
+	}
 }

@@ -69,6 +69,14 @@ public class Effects {
 			yield return success;
 			yield break;
 		case Effects.Effect.HOOK:
+			MonsterComponent monster = instance.GetEntityAt(c) as MonsterComponent;
+			Coord pullDestination = instance.player.pos + (c - instance.player.pos).AsCardinalDirection();
+			yield return instance.SlowMove(monster.gameObject, pullDestination, GameManager.StandardDelay);
+			monster.pos = pullDestination;
+			monster.stunned += 1;
+
+			yield return success;
+			yield break;
 		case Effects.Effect.KNOCKBACK:
 		case Effects.Effect.SCRY:
 		case Effects.Effect.SNARE:

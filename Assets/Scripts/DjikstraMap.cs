@@ -8,6 +8,7 @@ public class DjikstraMap {
 		new Coord(0,-1),
 		new Coord(-1,0),
 		new Coord(1,0),
+		new Coord(0, 0),
 	};
 	float[][] map;
 	Coord size;
@@ -65,19 +66,6 @@ public class DjikstraMap {
 	}
 	public float Value(Coord c) {
 		return Value(c.x, c.y);
-	}
-	public Coord FindWorstNeighbor(Coord p) {
-//		int value = -1;
-//		Coord rtn = p;
-//		foreach(Coord o in offsets) {
-//			Coord c = o + p;
-//			if (InBounds(c) && Value(c) != unreachable && Value(c) > value) {
-//				rtn = c;
-//				value = Value(c);
-//			}
-//		}
-//		return rtn;
-		return FindBestNeighbor(p, -1);
 	}
 	public void Scale(float f) {
 		for ( int x = 0; x < size.x; x += 1) {

@@ -106,10 +106,10 @@ public class GameInstance : MonoBehaviour {
 			while (!CurrentLevel.GetAt(c).passable || c.Equals(player.pos)) {
 				c = new Coord(Random.Range(0, 10), Random.Range(0, 10));
 			}
-//			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
-//			MonsterComponent mc = Instantiate(prefabs.monster, transform).GetComponent<MonsterComponent>();
-//			mc.Setup(monsterType, c);
-//			monsters.Add(mc);
+			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+			MonsterComponent mc = Instantiate(prefabs.monster, transform).GetComponent<MonsterComponent>();
+			mc.Setup(monsterType, c);
+			monsters.Add(mc);
 		}
 	}
 
@@ -256,6 +256,9 @@ public class GameInstance : MonoBehaviour {
 		return m.ExecuteStrategy(this);
 	}
 
+//	public bool PassableAndNoEntity(Coord c) {
+//		return CurrentLevel.GetAt(c).passable && GetEntityAt(c) == null;
+//	}
 	public bool Passable(Coord c) {
 		return CurrentLevel.GetAt(c).passable;
 	}
@@ -271,6 +274,7 @@ public class GameInstance : MonoBehaviour {
 		foreach( MonsterComponent m in deadMonsters) {
 			Debug.Log("Monster died!");
 			monsters.Remove(m);
+			Destroy(m.gameObject);
 		}
 		foreach( MonsterComponent m in monsters) {
 			yield return TakeMonsterTurn(m);
@@ -373,7 +377,7 @@ public class GameInstance : MonoBehaviour {
 				pos += c;
 			}
 			if (GetEntityAt(pos+c) != null) {
-				return callback(instance, pos, suc, can);
+				return callback(instance, pos+c, suc, can);
 			} else {
 				return cancel;
 			}

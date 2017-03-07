@@ -6,12 +6,14 @@ using UnityEngine;
 	private Monster mt;
 	public Coord pos;
 	public int hits;
+	public int stunned;
 
 	public void Setup(Monster mt, Coord pos) {
 		this.mt = mt;
 		GetComponent<SpriteRenderer>().sprite = mt.sprite;
 		this.pos = pos;
 		this.hits = 0;
+		this.stunned = 0;
 		transform.position = this.pos.toVec();
 	}
 
@@ -22,6 +24,11 @@ using UnityEngine;
 		default:
 			throw new UnityException("Unhandled AI Strategy.");
 		}
+	}
+
+	// For the inteface.
+	public GameObject GameObject() {
+		return gameObject;
 	}
 
 	public IEnumerator TakeHit(int power) {
@@ -40,6 +47,11 @@ using UnityEngine;
 	}
 
 	public IEnumerator StandardAttack(GameInstance instance) {
+		if (stunned > 0) {
+			stunned -= 1;
+			yield break;
+		}
+
 		DjikstraMap map = instance.BuildPlayerMap();
 		if (map.Value(pos.x, pos.y) < mt.minRange) {
 			map.Scale(-1.2f);

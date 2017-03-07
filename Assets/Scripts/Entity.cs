@@ -5,4 +5,5 @@ using UnityEngine;
 public interface Entity {
 	IEnumerator TakeHit(int power);
 	bool IsDead();
+	GameObject GameObject();
 }
