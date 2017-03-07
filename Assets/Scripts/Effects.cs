@@ -85,8 +85,11 @@ public class Effects {
 			monster.stunned += power;
 			yield return success;
 			yield break;
-		case Effects.Effect.SCRY:
 		case Effects.Effect.SNARE:
+			monster = instance.GetEntityAt(c) as MonsterComponent;
+			monster.stunned += power;
+			yield return success;
+			yield break;
 		case Effects.Effect.USE_TILE:
 		default:
 			Debug.LogError("Unexpected Effect: " + effect);
