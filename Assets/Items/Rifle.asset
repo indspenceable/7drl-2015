@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f6b26c0b113749a5a6a2ac521fb0c6f, type: 3}
-  m_Name: Gun
+  m_Name: Rifle
   m_EditorClassIdentifier: 
-  displayName: Blaster
+  displayName: Rifle
   icon: {fileID: 0}
-  targettingMethod: 2
+  targettingMethod: 6
   effect: 0
   tileEffect: {fileID: 0}
   cooldown: -1

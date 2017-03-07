@@ -35,6 +35,11 @@ public class Player : MonoBehaviour, Entity {
 	public Item GetItem(int slot) {
 		return gear[slot];
 	}
+	public void  RestItems() {
+		foreach (Item i in gear) {
+			i.Rest();
+		}
+	}
 	public void SetItem(int i, ItemDefinition item) {
 		gear[i] = new Item();
 		gear[i].SetType(item);

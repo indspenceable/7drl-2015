@@ -10,6 +10,8 @@ public class ItemDefinition : ScriptableObject {
 		WITHIN_RANGE = 2,
 		CARDINAL=3,
 		WITHIN_RANGE_RANDOM=4,
+		CARDINAL_WHILE_OPEN=5,
+		CARDINAL_FIRST_ENTITY=6,
 	}
 	public string displayName;
 	public Sprite icon;

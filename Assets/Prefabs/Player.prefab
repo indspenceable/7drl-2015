@@ -57,7 +57,7 @@ MonoBehaviour:
     y: 0
   gear: []
   startingGear:
-  - {fileID: 11400000, guid: 2abdd11cc4c444aba99bee94965dff8a, type: 2}
+  - {fileID: 11400000, guid: 19cf57bea44924c4a993c385ef2f8f68, type: 2}
   - {fileID: 11400000, guid: 7210ffdb4814e4ddb8ca9ddec743342e, type: 2}
   - {fileID: 11400000, guid: b4a497c60635b4e09b17b69070bff8d4, type: 2}
   - {fileID: 11400000, guid: 605d14777bd8a414ca45ad16faed0629, type: 2}

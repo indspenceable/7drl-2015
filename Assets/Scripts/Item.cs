@@ -45,6 +45,12 @@ public class Item  {
 				// Probably shouldn't use the player directly here...
 				yield return instance.RandomSpace(instance.player.pos, itemType.targettingRange, TargettedItemActivation, Use(success), back);
 				yield break;
+			case ItemDefinition.TargettingMethod.CARDINAL_FIRST_ENTITY:
+				yield return instance.CardinalDirectionFirstEntity(KeyCode.Space, TargettedItemActivation, Use(success), back);
+				yield break;
+			case ItemDefinition.TargettingMethod.CARDINAL_WHILE_OPEN:
+				yield return instance.CardinalDirectionOpen(KeyCode.Space, TargettedItemActivation, Use(success), back);
+				yield break;
 			case ItemDefinition.TargettingMethod.ME:
 				// Or here.
 				yield return TargettedItemActivation(instance, instance.player.pos, Use(success), back);
@@ -71,7 +77,11 @@ public class Item  {
 		}
 		yield return callback;
 	}
-
+	public void Rest() {
+		if (cooldown > 0) {
+			cooldown -= 1;
+		}
+	}
 	private bool CheckCooldown() {
 		return (itemType.cooldown == -1 || cooldown == 0);
 	}

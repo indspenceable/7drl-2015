@@ -26,6 +26,7 @@ public class GameInstance : MonoBehaviour {
 
 	private GameManager.MapConfig mapConfig;
 	private GameManager.PrefabConfig prefabConfig;
+	private GameManager manager;
 
 	// UI Related things:
 	[SerializeField]
@@ -39,6 +40,8 @@ public class GameInstance : MonoBehaviour {
 		this.mapConfig = mapConfig;
 		// Save prefabs for future levels;
 		this.prefabConfig = prefabs;
+		// Save the manager so that we can transition back to the main menu when we win/lose
+
 
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
@@ -285,6 +288,7 @@ public class GameInstance : MonoBehaviour {
 		// Save the game here
 		// Unfortunately, saving doesn't work, and is unlikely to in this week.
 		// manager.SaveGameState();
+		player.RestItems();
 		yield return ListenForPlayerInput();
 	}
 
@@ -331,6 +335,34 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	public IEnumerator SelectCardinalDirection(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
+		TargettedAction a = (instance, c, suc, can) => callback(instance, player.pos + c, suc, can);
+		return GetCardinalDirectionInput(selectKeyCode, a, success, cancel);
+	}
+	public IEnumerator CardinalDirectionOpen(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
+		TargettedAction a = (instance, c, suc, can) => {
+			Coord pos = player.pos;
+			while (GetTile(pos + c).passable && GetEntityAt(pos+c) == null) {
+				pos += c;
+			}
+			return callback(instance, pos, suc, can);
+		};
+		return GetCardinalDirectionInput(selectKeyCode, a, success, cancel);
+	}
+	public IEnumerator CardinalDirectionFirstEntity(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
+		TargettedAction a = (instance, c, suc, can) => {
+			Coord pos = player.pos;
+			while (GetTile(pos + c).passable && GetEntityAt(pos+c) == null) {
+				pos += c;
+			}
+			if (GetEntityAt(pos+c) != null) {
+				return callback(instance, pos, suc, can);
+			} else {
+				return cancel;
+			}
+		};
+		return GetCardinalDirectionInput(selectKeyCode, a, success, cancel);
+	}
+	public IEnumerator GetCardinalDirectionInput(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
 		yield return null;
 		targettingReticle.transform.position = player.transform.position;
 		// TODO these should probably be provided.
@@ -362,7 +394,7 @@ public class GameInstance : MonoBehaviour {
 			yield return null;
 		}
 		targettingReticle.SetActive(false);
-		yield return callback(this, new Coord(x, y) + player.pos, success, cancel);
+		yield return callback(this, new Coord(x, y), success, cancel);
 	}
 
 	public IEnumerator RandomSpace(Coord focus, int range, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
