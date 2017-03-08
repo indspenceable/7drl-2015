@@ -18,9 +18,18 @@ using UnityEngine;
 	}
 
 	public IEnumerator ExecuteStrategy(GameInstance instance) {
+		if (stunned > 0) {
+			stunned -= 1;
+			return null;
+		}
+
 		switch(mt.strategy) {
-		case Monster.Strategy.StandardAttack:
+		case Monster.Strategy.STANDARD_ATTACK:
 			return StandardAttack(instance);
+		case Monster.Strategy.STATIC:
+			return Static(instance);
+		case Monster.Strategy.HEAL:
+			return Healer(instance);
 		default:
 			throw new UnityException("Unhandled AI Strategy.");
 		}
@@ -48,16 +57,45 @@ using UnityEngine;
 		yield return instance.player.TakeHit(mt.damage);
 	}
 
+	public IEnumerator Heal(MonsterComponent target) {
+		yield return target.TakeHit(-mt.damage);
+	}
+
 	public bool IsDead() {
 		return hits >= mt.hp;
 	}
 
-	public IEnumerator StandardAttack(GameInstance instance) {
-		if (stunned > 0) {
-			stunned -= 1;
-			yield break;
-		}
 
+	// HEALING doesn't repect min range. Deal with it.
+	public IEnumerator Healer(GameInstance instance) {
+		List<MonsterComponent> others = instance.GetMonsters();
+		others.Remove(this);
+		DjikstraMap map = instance.BuildPlayerMap(this);
+		map.Scale(-2.4f);
+		List<DjikstraMap> maps = new List<DjikstraMap>();
+		foreach (MonsterComponent mc in others) {
+			DjikstraMap currentMap = instance.BuildTargettedMap(this, mc.pos);
+			if (map.Value(pos.x, pos.y) < mt.maxRange && mc.hits > 0) {
+				yield return Heal(mc);
+				yield break;
+			}
+			maps.Add(currentMap);
+		}
+		//If we get here, we aren't close to a target that needs healing. So, find one!
+		foreach (DjikstraMap m in maps) {
+			map.CombineWith(m);
+		}
+		Coord c = map.FindBestNeighbor(pos);
+		yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
+		pos = c;
+	}
+	public IEnumerator Static(GameInstance instance) {
+		int dist = pos.DistanceTo(instance.player.pos);
+		if (dist >= mt.minRange && dist >= mt.maxRange) {
+			yield return DisplayAndExecuteAttack(instance);
+		}
+	}
+	public IEnumerator StandardAttack(GameInstance instance) {
 		DjikstraMap map = instance.BuildPlayerMap(this);
 		if (map.Value(pos.x, pos.y) < mt.minRange) {
 			map.Scale(-1.2f);

@@ -92,4 +92,12 @@ public class DjikstraMap {
 	private bool InBounds(Coord c) {
 		return c.x >= 0 && c.y >= 0 && c.x < size.x && c.y < size.y;
 	}
+
+	public void CombineWith(DjikstraMap other) {
+		for ( int x = 0; x < size.x; x += 1) {
+			for (int y = 0; y < size.y; y += 1) {
+				map[x][y] += other.Value(x,y);
+			}
+		}
+	}
 }

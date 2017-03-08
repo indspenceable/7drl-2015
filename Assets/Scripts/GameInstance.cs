@@ -100,14 +100,14 @@ public class GameInstance : MonoBehaviour {
 		}
 		monsters.Clear();
 		// Fill in the monsters for this level
-		for (int i = 0; i < 1; i+=1) {
+		for (int i = 0; i < 5; i+=1) {
 			Coord c = new Coord(0,0);
 
 			while (!EmptyAndPassable(c) || !Pathable(c) ) {
 				c = new Coord(Random.Range(0, mapConfig.width), Random.Range(0, mapConfig.height));
 			}
-//			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
-			Monster monsterType = prefabs.monsterdefs[3];
+			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+//			Monster monsterType = prefabs.monsterdefs[3];
 			MonsterComponent mc = Instantiate(prefabs.monster, transform).GetComponent<MonsterComponent>();
 			mc.Setup(monsterType, c);
 			monsters.Add(mc);
@@ -153,7 +153,7 @@ public class GameInstance : MonoBehaviour {
 		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
 			yield return Interact(dest);
 			yield return TakeAllMonstersTurn();
-		} else if (Pathable(dest)) {
+		} else if (Pathable(dest, player)) {
 			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
 			player.SetCoords(dest);
 			yield return success;
@@ -264,14 +264,22 @@ public class GameInstance : MonoBehaviour {
 		return CurrentLevel.GetAt(c).passable && !GetTile(c).ShouldAvoid(e);
 	}
 	public DjikstraMap BuildPlayerMap(Entity forWhom) {
+		return BuildTargettedMap(forWhom, player.pos);
+	}
+		
+	public DjikstraMap BuildTargettedMap(Entity forWhom, params Coord[] targets) {
 		DjikstraMap map = new DjikstraMap(mapConfig.width, mapConfig.height);
-		map.SetGoal(player.pos);
+		foreach (Coord c in targets) {
+			map.SetGoal(c);
+		}
 		map.Calculate(Pathable, forWhom);
 		ApplyLabels(map);
 		return map;
 	}
 
-
+	public List<MonsterComponent> GetMonsters() {
+		return new List<MonsterComponent>(monsters);
+	}
 	public void PruneDeadMonsters() {
 		List<MonsterComponent> deadMonsters = monsters.FindAll( m => m.IsDead() );
 		foreach( MonsterComponent m in deadMonsters) {

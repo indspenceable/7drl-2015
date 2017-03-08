@@ -9,18 +9,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f6b26c0b113749a5a6a2ac521fb0c6f, type: 3}
-  m_Name: Snaregun
+  m_Name: Jetpack
   m_EditorClassIdentifier: 
-  displayName: Snare Gun
+  displayName: Jetpack
   icon: {fileID: 0}
-  targettingMethod: 6
-  effect: 9
+  targettingMethod: 0
+  effect: 0
   tileEffect: {fileID: 0}
-  cooldown: 3
+  cooldown: -1
   levelLimit: -1
-  totalCharges: 20
+  totalCharges: -1
   targettingRange: 0
-  power: 3
+  power: 1
   LOSModifier: 0
   thornsDamage: 0
-  providesFlight: 0
+  providesFlight: 1

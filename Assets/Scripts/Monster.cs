@@ -6,7 +6,9 @@ using UnityEngine;
 public class Monster : ScriptableObject {
 	public Sprite sprite;
 	public enum Strategy {
-		StandardAttack = 0,
+		STANDARD_ATTACK = 0,
+		STATIC = 1,
+		HEAL = 2,
 	}
 	public Strategy strategy;
 

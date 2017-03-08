@@ -499,6 +499,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 98d4eba637964428e9292da476c29c6c, type: 2}
     - {fileID: 11400000, guid: 6fee8366ec5bc441981d5af7cb3c430f, type: 2}
     - {fileID: 11400000, guid: 2e73b43c09bc547019b8f8e1f5e8f76a, type: 2}
+    - {fileID: 11400000, guid: e757ec0322098423ebdc0dd205279d6d, type: 2}
   prefabConfig:
     playerPrefab: {fileID: 1949329765368028, guid: 212e1fde938ff40cf99bfd6c7aec4aa6,
       type: 2}
@@ -511,6 +512,9 @@ MonoBehaviour:
     - {fileID: 11400000, guid: abab9550004694001abc9b96bea80041, type: 2}
     - {fileID: 11400000, guid: 56eee2c49dd244c8eb86f7f63b4682db, type: 2}
     - {fileID: 11400000, guid: c88bf47a6964e4b08a31a4140efa7ffb, type: 2}
+    - {fileID: 11400000, guid: 10b337df75dc14c168d903a0a48bbae2, type: 2}
+    - {fileID: 11400000, guid: 11ed7f8d9bfca4de880f39a0453856e6, type: 2}
+    - {fileID: 11400000, guid: 6f526981b56c14c57b67a63f2a82f6d7, type: 2}
   mainMenu: {fileID: 556296277}
 --- !u!4 &863111001
 Transform:
