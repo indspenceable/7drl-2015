@@ -91,7 +91,7 @@ using UnityEngine;
 	}
 	public IEnumerator Static(GameInstance instance) {
 		int dist = pos.DistanceTo(instance.player.pos);
-		if (dist >= mt.minRange && dist >= mt.maxRange) {
+		if (dist >= mt.minRange && dist <= mt.maxRange) {
 			yield return DisplayAndExecuteAttack(instance);
 		}
 	}

@@ -474,7 +474,7 @@ MonoBehaviour:
     type: 2}
   instance: {fileID: 0}
   mapConfig:
-    totalNumberOfLevels: 10
+    totalNumberOfLevels: 1
     width: 19
     height: 20
     open: {fileID: 11400000, guid: 28a10832692ad43cc99f4607bc5b7fb2, type: 2}
