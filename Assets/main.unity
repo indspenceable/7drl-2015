@@ -505,6 +505,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: f5a761ff3d852451691b0b78b8a7a0e9, type: 2}
     - {fileID: 11400000, guid: 84717e47ae99d4fa8be6834853a70fa5, type: 2}
     - {fileID: 11400000, guid: 86118fcde605c42f19d00f162b35fb6c, type: 2}
+    - {fileID: 11400000, guid: cb979b05d9a664d1fbe64cc2ead755e7, type: 2}
+    - {fileID: 11400000, guid: df6e5f03b8f0e43c9b6caead0ea50a11, type: 2}
   prefabConfig:
     playerPrefab: {fileID: 1949329765368028, guid: 212e1fde938ff40cf99bfd6c7aec4aa6,
       type: 2}
