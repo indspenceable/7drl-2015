@@ -15,5 +15,5 @@ MonoBehaviour:
   strategy: 0
   hp: 0
   armor: 0
-  minRange: 20
-  maxRange: 20
+  minRange: 1
+  maxRange: 1

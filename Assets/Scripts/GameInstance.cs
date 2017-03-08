@@ -103,7 +103,7 @@ public class GameInstance : MonoBehaviour {
 		for (int i = 0; i < 1; i+=1) {
 			Coord c = new Coord(0,0);
 
-			while (!CurrentLevel.GetAt(c).passable || c.Equals(player.pos)) {
+			while (!EmptyAndPassable(c) || !Pathable(c) ) {
 				c = new Coord(Random.Range(0, 10), Random.Range(0, 10));
 			}
 			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
