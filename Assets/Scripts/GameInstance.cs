@@ -179,10 +179,15 @@ public class GameInstance : MonoBehaviour {
 	}
 	public IEnumerator MoveToNextLevel() {
 		this.currentLevelIndex += 1;
-		SetTerrain();
-		player.SetCoords(new Coord(1,1));
-		PopulateMonsters(prefabConfig);
-		yield return PreTurn();
+
+		if (this.currentLevelIndex == mapConfig.totalNumberOfLevels) {
+			manager.Win();
+		} else {
+			SetTerrain();
+			player.SetCoords(new Coord(1,1));
+			PopulateMonsters(prefabConfig);
+			yield return PreTurn();
+		}
 	}
 	/* ------------------------------- *
 	 * Monster related stuff goes here *

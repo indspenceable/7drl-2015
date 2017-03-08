@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour {
 		mainMenu.gameObject.SetActive(true);
 		mainMenu.Startup();
 	}
+
+	public void Win() {
+		Debug.Log("You win!");
+		SwapToMainMenu();
+	}
 	public void StartNewGame() {
 		mainMenu.gameObject.SetActive(false);
 //		instance = new GameObject("GameInstance").AddComponent<GameInstance>();
