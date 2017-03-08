@@ -5,15 +5,16 @@ using UnityEngine;
 public class Player : MonoBehaviour, Entity {
 	public Coord pos;
 	[SerializeField]
-	private Item[] gear;
+	private List<Item> gear;
 	[SerializeField]
 	private ItemDefinition[] startingGear;
 	public int hp =5;
 
 	// Use this for initialization
 	void Start () {
-		gear = new Item[4];
+		gear = new List<Item>(4);
 		for (int i = 0; i < startingGear.Length; i += 1) {
+			gear.Add(new Item());
 			SetItem(i, startingGear[i]);
 		}
 	}
@@ -23,13 +24,16 @@ public class Player : MonoBehaviour, Entity {
 		
 	}
 
+	public bool HasQuality(Qualities.Quality quality) {
+		return gear.Exists(g => g.GivesQuality(quality));
+	}
+
 	// For the interface
 	public GameObject GameObject() {
 		return gameObject;
 	}
 
 	public IEnumerator TakeHit(int power) {
-		Debug.Log("Player Got hit for " + power + " power.");
 		hp -= power;
 		yield return null;
 	}

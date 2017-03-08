@@ -22,6 +22,13 @@ public class Item  {
 		this.chargesUsed = 0;
 	}
 
+	public bool GivesQuality(Qualities.Quality quality) {
+		if (quality == Qualities.Quality.FLYING) {
+			return itemType.providesFlight;
+		}
+		return false;
+	}
+
 	public bool Usable() {
 		return CheckCooldown() && CheckLevelLimit() && CheckCharges() && 
 			itemType.targettingMethod != ItemDefinition.TargettingMethod.UNUSABLE;

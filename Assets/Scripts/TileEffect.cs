@@ -11,6 +11,16 @@ public class TileEffect {
 		this.myTile = myTile;
 	}
 
+	public bool ShouldAvoid(Entity e) {
+		if (!def.avoid) {
+			return false;
+		}
+		if (!def.targetsFliers && (e != null) && e.HasQuality(Qualities.Quality.FLYING)) {
+			
+			return false;
+		}
+		return true;
+	}
 	public bool HasPassive() {
 		return def.effectType != TileEffectDefinition.Type.INACTIVE;
 	}

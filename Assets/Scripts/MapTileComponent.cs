@@ -26,6 +26,10 @@ public class MapTileComponent : MonoBehaviour {
 		}
 	}
 
+	public bool ShouldAvoid(Entity e) {
+		return tileEffects.Exists(te => te.ShouldAvoid(e));
+	}
+
 	public bool HasPassive() {
 		foreach(TileEffect te in tileEffects) {
 			if (te.HasPassive()) {

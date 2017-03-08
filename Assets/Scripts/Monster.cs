@@ -14,4 +14,6 @@ public class Monster : ScriptableObject {
 	public int armor;
 	public int minRange;
 	public int maxRange;
+	public int damage;
+	public bool flies;
 }

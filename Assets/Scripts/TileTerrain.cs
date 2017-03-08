@@ -16,8 +16,8 @@ public class TileTerrain : ScriptableObject {
 	public bool passable;
 	// can you fire over this tile
 	public bool losBlocked;
-	// Will monsters ever path over this?
-	public bool avoidThis;
+//	// Will monsters ever path over this?
+//	public bool avoidThis;
 	public Interaction interaction;
 	public TileEffectDefinition tileEffect;
 }

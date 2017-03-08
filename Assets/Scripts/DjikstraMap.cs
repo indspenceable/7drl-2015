@@ -24,7 +24,7 @@ public class DjikstraMap {
 			}
 		}
 	}
-	public static DjikstraMap BuildAndCalculate(int width, int height, TileCheck passable, params Coord[] goals) {
+	public static DjikstraMap BuildAndCalculate(int width, int height, TileCheck passable, Entity e, params Coord[] goals) {
 //		return BuildAndCalculate(width, height, passable, goals);
 //	}
 //	public static DjikstraMap BuildAndCalculate(int width, int height, TileCheck passable, Coord[] goals) {
@@ -32,15 +32,15 @@ public class DjikstraMap {
 		foreach(Coord goal in goals) {
 			map.SetGoal(goal);
 		}
-		map.Calculate(passable);
+		map.Calculate(passable, e);
 		return map;
 	}
 	public void SetGoal(Coord p) {
-		map[p.x][p.y] = 1;
+		map[p.x][p.y] = 0;
 	}
 
-	public delegate bool TileCheck(Coord c);
-	public void Calculate(TileCheck passable) {
+	public delegate bool TileCheck(Coord c, Entity e);
+	public void Calculate(TileCheck passable, Entity e) {
 		bool madeChangeLastIteration = true;
 		while (madeChangeLastIteration) {
 			madeChangeLastIteration = false;
@@ -53,7 +53,7 @@ public class DjikstraMap {
 							minValue = Mathf.Min(minValue, map[c.x][c.y]);
 						}
 					}
-					if (minValue+1 < map[x][y] && passable(new Coord (x,y))) {
+					if (minValue+1 < map[x][y] && passable(new Coord (x,y), e)) {
 						madeChangeLastIteration = true;
 						map[x][y] = minValue+1;
 					}

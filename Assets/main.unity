@@ -219,7 +219,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4141839833873046, guid: 7d0c7cc95a5b4465a8e850808baa16e7, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7d0c7cc95a5b4465a8e850808baa16e7, type: 2}
@@ -350,13 +350,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 556296275}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 246.48654, y: 149.81384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1593741906}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 863111001}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &556296277
 MonoBehaviour:
@@ -508,6 +508,9 @@ MonoBehaviour:
     monster: {fileID: 1567438238226286, guid: 4557a5f050df6438997646275345333b, type: 2}
     monsterdefs:
     - {fileID: 11400000, guid: 02cc90f1bf8e142b690554bd056cf373, type: 2}
+    - {fileID: 11400000, guid: abab9550004694001abc9b96bea80041, type: 2}
+    - {fileID: 11400000, guid: 56eee2c49dd244c8eb86f7f63b4682db, type: 2}
+    - {fileID: 11400000, guid: c88bf47a6964e4b08a31a4140efa7ffb, type: 2}
   mainMenu: {fileID: 556296277}
 --- !u!4 &863111001
 Transform:
@@ -518,7 +521,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 556296276}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -886,7 +890,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1434003835
 GameObject:

@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdc431926d8e144bd9fb1a7e9a467b93, type: 3}
-  m_Name: Rat
+  m_Name: Hulk
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 7d5ace612300b4cde99121184fc176ab, type: 3}
+  sprite: {fileID: 21300000, guid: 0f74e8108bf6d4a94b27b01355b00504, type: 3}
   strategy: 0
-  hp: 1
+  hp: 3
   armor: 0
   minRange: 1
   maxRange: 1

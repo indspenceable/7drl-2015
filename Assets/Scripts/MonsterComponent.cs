@@ -26,6 +26,13 @@ using UnityEngine;
 		}
 	}
 
+	public bool HasQuality(Qualities.Quality q) {
+		if (q == Qualities.Quality.FLYING) {
+			return mt.flies;
+		}
+		return false;
+	}
+
 	// For the inteface.
 	public GameObject GameObject() {
 		return gameObject;
@@ -37,13 +44,12 @@ using UnityEngine;
 		yield return null;
 	}
 
-	public IEnumerator DisplayAndExecuteAttack() {
-		Debug.Log("We did the attack!");
-		yield return null;
+	public IEnumerator DisplayAndExecuteAttack(GameInstance instance) {
+		yield return instance.player.TakeHit(mt.damage);
 	}
 
 	public bool IsDead() {
-		return hits > mt.hp;
+		return hits >= mt.hp;
 	}
 
 	public IEnumerator StandardAttack(GameInstance instance) {
@@ -52,10 +58,10 @@ using UnityEngine;
 			yield break;
 		}
 
-		DjikstraMap map = instance.BuildPlayerMap();
+		DjikstraMap map = instance.BuildPlayerMap(this);
 		if (map.Value(pos.x, pos.y) < mt.minRange) {
 			map.Scale(-1.2f);
-			map.Calculate(instance.Pathable);
+			map.Calculate(instance.Pathable, this);
 			Coord c = map.FindBestNeighbor(pos);
 			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
 			pos = c;
@@ -64,7 +70,7 @@ using UnityEngine;
 			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
 			pos = c;
 		} else {
-			yield return DisplayAndExecuteAttack();
+			yield return DisplayAndExecuteAttack(instance);
 		}
 	}
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Effects {
 	public enum Effect {
 		DAMAGE = 0,
-		HEALING = 1,
+		GROUNDED_DAMAGE = 1,
 		SCRY = 2,
 		BACKSTAB = 3,
 		KNOCKBACK = 4,
@@ -40,10 +40,10 @@ public class Effects {
 				yield return cancel;
 			}
 			yield break;
-		case Effects.Effect.HEALING:
+		case Effects.Effect.GROUNDED_DAMAGE:
 			target = instance.GetEntityAt(c);
-			if (target != null) {
-				yield return target.TakeHit(-power);
+			if (target != null && !target.HasQuality(Qualities.Quality.FLYING)) {
+				yield return target.TakeHit(power);
 				yield return success;
 			} else {
 				yield return cancel;
@@ -54,7 +54,7 @@ public class Effects {
 			Coord dest = c-instance.player.pos + c;
 			MapTileComponent tile = instance.GetTile(dest);
 			if (tile.passable && instance.GetEntityAt(dest) == null) {
-				yield return target.TakeHit(-power);
+				yield return target.TakeHit(power);
 				yield return instance.AttemptMove(dest, success, cancel);
 			} else {
 				yield return cancel;
@@ -97,6 +97,12 @@ public class Effects {
 			yield return success;
 			yield break;
 		case Effects.Effect.USE_TILE:
+			if (instance.GetTile(c).interaction != TileTerrain.Interaction.NONE) {
+				yield return instance.Interact(c);
+			} else {
+				yield return cancel;
+			}
+			yield break;
 		default:
 			Debug.LogError("Unexpected Effect: " + effect);
 			yield break;

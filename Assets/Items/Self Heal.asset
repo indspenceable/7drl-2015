@@ -14,11 +14,13 @@ MonoBehaviour:
   displayName: Repair Nanobots
   icon: {fileID: 0}
   targettingMethod: 1
-  effect: 1
+  effect: 0
+  tileEffect: {fileID: 0}
   cooldown: -1
   levelLimit: 1
   totalCharges: 5
   targettingRange: 0
-  power: 1
+  power: -1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

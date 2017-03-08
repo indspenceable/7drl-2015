@@ -16,4 +16,7 @@ public class TileEffectDefinition: ScriptableObject {
 	public Effects.Effect onTrigger;
 	public int power;
 	public int range;
+
+	public bool targetsFliers;
+	public bool avoid;
 }

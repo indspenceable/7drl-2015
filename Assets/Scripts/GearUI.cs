@@ -26,9 +26,6 @@ public class GearUI : MonoBehaviour {
 		// Actually draw the UI!
 		if (player == null) return;
 		Item item = player.GetItem(slot);
-		Debug.Log(item);
-		Debug.Log(slot);
-		Debug.Log(itemName);
 		itemName.text = item.DisplayName;
 		if (item.itemType.cooldown != -1) {
 			cooldown.text = "Cooldown: " + item.cooldown + " / " + item.itemType.cooldown;

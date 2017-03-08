@@ -104,9 +104,10 @@ public class GameInstance : MonoBehaviour {
 			Coord c = new Coord(0,0);
 
 			while (!EmptyAndPassable(c) || !Pathable(c) ) {
-				c = new Coord(Random.Range(0, 10), Random.Range(0, 10));
+				c = new Coord(Random.Range(0, mapConfig.width), Random.Range(0, mapConfig.height));
 			}
-			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+//			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+			Monster monsterType = prefabs.monsterdefs[3];
 			MonsterComponent mc = Instantiate(prefabs.monster, transform).GetComponent<MonsterComponent>();
 			mc.Setup(monsterType, c);
 			monsters.Add(mc);
@@ -151,7 +152,8 @@ public class GameInstance : MonoBehaviour {
 //		Coord dest = player.pos + new Coord(dx, dy);
 		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
 			yield return Interact(dest);
-		} else if (GetTile(dest).passable) {
+			yield return TakeAllMonstersTurn();
+		} else if (Pathable(dest)) {
 			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
 			player.SetCoords(dest);
 			yield return success;
@@ -165,12 +167,11 @@ public class GameInstance : MonoBehaviour {
 		switch(type) {
 		case TileTerrain.Interaction.NEXT_LEVEL:
 			yield return MoveToNextLevel();
-			break;
+			yield break;
 		case TileTerrain.Interaction.GIVE_ITEM:
 			player.SetItem(0, GetTile(dest).item);
 			GetTile(dest).SetTerrain(mapConfig.wall);
-			yield return TakeAllMonstersTurn();
-			break;
+			yield break;
 		case TileTerrain.Interaction.NONE:
 		default:
 			throw new UnityException("Bad interaction." + type);
@@ -259,13 +260,14 @@ public class GameInstance : MonoBehaviour {
 //	public bool PassableAndNoEntity(Coord c) {
 //		return CurrentLevel.GetAt(c).passable && GetEntityAt(c) == null;
 //	}
-	public bool Pathable(Coord c) {
-		return CurrentLevel.GetAt(c).passable && !CurrentLevel.GetAt(c).avoidThis;
+	public bool Pathable(Coord c, Entity e = null) {
+		return CurrentLevel.GetAt(c).passable && !GetTile(c).ShouldAvoid(e);
 	}
-	public DjikstraMap BuildPlayerMap() {
+	public DjikstraMap BuildPlayerMap(Entity forWhom) {
 		DjikstraMap map = new DjikstraMap(mapConfig.width, mapConfig.height);
 		map.SetGoal(player.pos);
-		map.Calculate(Pathable);
+		map.Calculate(Pathable, forWhom);
+		ApplyLabels(map);
 		return map;
 	}
 
@@ -358,6 +360,10 @@ public class GameInstance : MonoBehaviour {
 				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
+			} else if (Input.GetKeyDown(KeyCode.Escape)) {
+				targettingReticle.SetActive(false);
+				yield return cancel;
+				yield break;
 			}
 			yield return null;
 		}
@@ -398,13 +404,15 @@ public class GameInstance : MonoBehaviour {
 	}
 	public IEnumerator GetCardinalDirectionInput(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
 		yield return null;
-		targettingReticle.transform.position = player.transform.position;
+
 		// TODO these should probably be provided.
 		int oX = (int)player.transform.position.x;
 		int oY = (int)player.transform.position.y;
-		targettingReticle.SetActive(true);
 		int x = 0;
 		int y = -1;
+
+		targettingReticle.transform.position = player.transform.position  + new Coord(x, y).toVec();
+		targettingReticle.SetActive(true);
 		while (true) {
 			if (Input.GetKeyDown(KeyCode.W)) {
 				x = 0;
@@ -424,6 +432,10 @@ public class GameInstance : MonoBehaviour {
 				yield return SlowMove(targettingReticle, new Coord(oX+x, oY+y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
+			} else if (Input.GetKeyDown(KeyCode.Escape)) {
+				targettingReticle.SetActive(false);
+				yield return cancel;
+				yield break;
 			}
 			yield return null;
 		}

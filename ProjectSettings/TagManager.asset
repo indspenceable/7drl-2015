@@ -44,9 +44,9 @@ TagManager:
   - name: Map
     uniqueID: 795529995
     locked: 0
-  - name: Entities
-    uniqueID: 3596441223
-    locked: 0
   - name: Effects
     uniqueID: 3509012753
+    locked: 0
+  - name: Entities
+    uniqueID: 3596441223
     locked: 0
