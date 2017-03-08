@@ -4,10 +4,10 @@ using UnityEngine;
 
 [System.Serializable]
 public class Item  {
-	ItemDefinition itemType;
-	int cooldown;
-	int usesThisLevel;
-	int chargesUsed;
+	public ItemDefinition itemType{ get; private set; }
+	public int cooldown { get; private set; }
+	public int usesThisLevel{ get; private set; }
+	public int chargesUsed{ get; private set; }
 
 	public string DisplayName {
 		get {

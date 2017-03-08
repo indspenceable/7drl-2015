@@ -15,9 +15,10 @@ MonoBehaviour:
   icon: {fileID: 0}
   targettingMethod: 3
   effect: 9
-  cooldown: -1
+  tileEffect: {fileID: 0}
+  cooldown: 3
   levelLimit: -1
-  totalCharges: -1
+  totalCharges: 20
   targettingRange: 0
   power: 3
   LOSModifier: 0
