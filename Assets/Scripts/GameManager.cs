@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
 		public TileTerrain item;
 		public TileTerrain trapped;
 		public ItemDefinition[] items;
+		public VaultDefinition[] vaults;
 	}
 
 	[System.Serializable]

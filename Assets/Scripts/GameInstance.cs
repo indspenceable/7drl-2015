@@ -66,7 +66,11 @@ public class GameInstance : MonoBehaviour {
 
 		// Set up the player
 		player = Instantiate(prefabs.playerPrefab, transform).GetComponent<Player>();
-		player.SetCoords(new Coord(1,1));
+		Coord c = new Coord(0,0);
+		while (!Pathable(c,player)) {
+			c = new Coord(Random.Range(0,mapConfig.width), Random.Range(0,mapConfig.height));
+		}
+		player.SetCoords(c);
 		healthMeter.InstallPlayer(player);
 		foreach(GearUI gui in gearUIs) {
 			gui.InstallPlayer(player);
