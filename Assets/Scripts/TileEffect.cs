@@ -27,6 +27,9 @@ public class TileEffect {
 	public bool Expired() {
 		return turnCount > def.fuseTime && def.effectType == TileEffectDefinition.Type.FUSE;
 	}
+	public string Explain() {
+		return def.explanation;
+	}
 	private bool ShouldActivate() {
 		return (turnCount > def.fuseTime && def.effectType == TileEffectDefinition.Type.FUSE) ||
 			def.effectType == TileEffectDefinition.Type.EVERY_TURN;

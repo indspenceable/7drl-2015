@@ -16,3 +16,4 @@ MonoBehaviour:
   losBlocked: 0
   interaction: 0
   tileEffect: {fileID: 11400000, guid: 330344ce131de456c8eaf4e6e2e9a05c, type: 2}
+  explanation: Spikes will hurt you if you walk over them.

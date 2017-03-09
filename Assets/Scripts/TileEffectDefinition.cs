@@ -19,4 +19,6 @@ public class TileEffectDefinition: ScriptableObject {
 
 	public bool targetsFliers;
 	public bool avoid;
+
+	public string explanation;
 }

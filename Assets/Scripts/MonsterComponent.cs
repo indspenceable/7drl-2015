@@ -10,6 +10,14 @@ using UnityEngine;
 
 	public bool hover;
 
+	public void OnMouseEnter() {
+		hover = true;
+	}
+	public void OnMouseExit() {
+		hover = false;
+	}
+
+
 	public void Setup(Monster mt, Coord pos) {
 		this.mt = mt;
 		GetComponent<SpriteRenderer>().sprite = mt.sprite;
@@ -17,13 +25,6 @@ using UnityEngine;
 		this.hits = 0;
 		this.stunned = 0;
 		transform.position = this.pos.toVec();
-	}
-
-	public void OnMouseEnter() {
-		hover = true;
-	}
-	public void OnMouseExit() {
-		hover = false;
 	}
 
 	public string DisplayName() {

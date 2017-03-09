@@ -69,6 +69,17 @@ public class GameInstance : MonoBehaviour {
 				return;
 			}
 		}
+		for ( int x = 0; x < mapConfig.width; x+=1) {
+			for (int y = 0; y < mapConfig.height; y +=1) {
+				MapTileComponent t = GetTile(new Coord(x, y));
+				if (t.hover) {
+					if (t.ShouldExplain()) {
+						SetOverlay(t.Explain());
+						return;
+					}
+				}
+			}
+		}
 		SetOverlay("");
 	}
 
@@ -100,20 +111,16 @@ public class GameInstance : MonoBehaviour {
 				tiles[x][y].SetCoords(x,y);
 			}
 		}
-
-		yield return SetTerrain();
-
+			
 		// Set up the player
 		player = Instantiate(prefabs.playerPrefab, transform).GetComponent<Player>();
-		Coord c = new Coord(0,0);
-		while (!Pathable(c,player)) {
-			c = new Coord(Random.Range(0,mapConfig.width), Random.Range(0,mapConfig.height));
-		}
-		player.SetCoords(CurrentLevel.startPos);
 		healthMeter.InstallPlayer(player);
 		foreach(GearUI gui in gearUIs) {
 			gui.InstallPlayer(player);
 		}
+
+		yield return SetTerrain();
+		player.SetCoords(CurrentLevel.startPos);
 
 		// Aaaand the reticle
 		targettingReticle = Instantiate(prefabs.reticle, transform);

@@ -13,5 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 79a78c907d9f34737bf1b6e2b8b99a6c, type: 3}
   passable: 1
-  blocked: 0
+  losBlocked: 0
   interaction: 1
+  tileEffect: {fileID: 0}
+  explanation: Brings you to the next level!

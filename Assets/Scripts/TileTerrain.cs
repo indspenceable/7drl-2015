@@ -20,4 +20,6 @@ public class TileTerrain : ScriptableObject {
 //	public bool avoidThis;
 	public Interaction interaction;
 	public TileEffectDefinition tileEffect;
+
+	public string explanation;
 }

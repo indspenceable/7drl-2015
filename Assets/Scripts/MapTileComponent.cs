@@ -26,6 +26,29 @@ public class MapTileComponent : MonoBehaviour {
 		}
 	}
 
+	public bool hover;
+
+	public void OnMouseEnter() {
+		hover = true;
+	}
+	public void OnMouseExit() {
+		hover = false;
+	}
+
+	public bool ShouldExplain() {
+		return Explain() != "";
+	}
+	public string Explain() {
+		if (terrain == null) return "";
+		if (terrain.explanation != "") {
+			return terrain.explanation;
+		}
+//		foreach(TileEffect te in tileEffects) {
+//			return te.Explain();
+//		}
+		return "";
+	}
+
 	public bool ShouldAvoid(Entity e) {
 		return tileEffects.Exists(te => te.ShouldAvoid(e));
 	}

@@ -19,4 +19,4 @@ MonoBehaviour:
   power: 1
   range: 0
   targetsFliers: 0
-  avoid: 0
+  avoid: 1
