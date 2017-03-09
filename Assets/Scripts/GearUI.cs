@@ -29,12 +29,19 @@ public class GearUI : MonoBehaviour {
 		itemName.text = item.DisplayName;
 		if (item.itemType.cooldown != -1) {
 			cooldown.text = "Cooldown: " + item.cooldown + " / " + item.itemType.cooldown;
+		} else {
+			cooldown.text ="";
 		}
 		if (item.itemType.totalCharges != -1) {
 			chargesTotal.text = "" + item.chargesUsed + " / " + item.itemType.totalCharges + " used.";
+		} else {
+			chargesTotal.text ="";
 		}
+
 		if (item.itemType.levelLimit != -1 ) {
 			chargesThisLevel.text = "" + item.usesThisLevel + " / " + item.itemType.levelLimit + " this level";
+		} else {
+			chargesThisLevel.text ="";
 		}
 	}
 }
