@@ -207,7 +207,7 @@ public class GameInstance : MonoBehaviour {
 		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
 			yield return Interact(dest, success, cancel);
 			yield return TakeAllMonstersTurn();
-		} else if (Pathable(dest, player)) {
+		} else if (Pathable(dest, player) && GetEntityAt(dest) == null) {
 			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
 			player.SetCoords(dest);
 			yield return success;
