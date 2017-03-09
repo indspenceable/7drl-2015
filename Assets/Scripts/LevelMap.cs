@@ -34,6 +34,7 @@ public class LevelMap {
 	public IEnumerator Generate(GameManager.MapConfig config) {
 		yield return GenerateNewMapAndSave(config, config.vaults[0], config.vaults);
 		GenerateFromStringMap(config, myMap);
+		yield return Cleanup(config);
 	}
 	public TileTerrain GetAt(Coord c) {
 		return map[c.x][c.y];
@@ -46,6 +47,52 @@ public class LevelMap {
 				map[i][j] = TileTerrainForChar(config, stringMap[config.height-j-1][i]);
 			}
 		}
+	}
+
+	private IEnumerator Cleanup(GameManager.MapConfig config) {
+		bool requiresAdditionalSweep = true;
+		while (requiresAdditionalSweep) {
+			requiresAdditionalSweep = false;
+			List<Coord> newWalls = new List<Coord>();
+			List<Coord> newOpens = new List<Coord>();
+			for (int x = 0; x < config.width; x+=1) {
+				for (int y = 0; y < config.height; y += 1) {
+					int surroundingWalls = 0;
+					for (int dx = -1; dx <=1; dx +=1 ) {
+						for (int dy = -1; dy <=1; dy +=1 ) {
+							// In bounds + Cardinal directions only
+							if (InBounds(x+dx, y+dy, config) && Cardinal(dx, dy)) {
+								if (map[x+dx][y+dy] == config.wall) {
+									surroundingWalls += 1;
+								}
+							}
+						}
+					}
+					if (surroundingWalls >= 3 && map[x][y] == config.open){ 
+						newWalls.Add(new Coord(x,y));
+					}
+					if (surroundingWalls == 1 && map[x][y] == config.wall){ 
+						newOpens.Add(new Coord(x,y));
+					}
+				}
+			}
+			foreach (Coord c in newWalls) {
+				requiresAdditionalSweep = true;
+				map[c.x][c.y] = config.wall;
+			}
+
+			foreach (Coord c in newOpens) {
+				requiresAdditionalSweep = true;
+				map[c.x][c.y] = config.open;
+			}
+			yield return null;
+		}
+	}
+	private bool Cardinal(int x, int y) {
+		return (x == 0) ^ (y == 0);
+	}
+	private bool InBounds(int x, int y, GameManager.MapConfig config) {
+		return !(x < 0 || y < 0 || x >= config.width || y  >= config.height);
 	}
 
 	private IEnumerator GenerateNewMapAndSave(GameManager.MapConfig config, VaultDefinition entry, VaultDefinition[] vaults) {
@@ -67,9 +114,7 @@ public class LevelMap {
 		// Move floor size out of here
 		for (int i = 0; i < 200; i+=1) {
 			yield return null;
-			Debug.Log(i);
 			VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
-//			VaultDefinition v = vaults[0];
 			AttemptToPlaceAndAdd(config, tempMap, v);
 		}
 		foreach(Coord c in FindPossibleOutlets(config, tempMap)) {
