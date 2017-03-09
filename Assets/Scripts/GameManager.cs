@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour {
 //		instance = new GameObject("GameInstance").AddComponent<GameInstance>();
 		instance = Instantiate(instancePrefab).GetComponent<GameInstance>();
 		instance.gameObject.SetActive(true);
-		instance.Startup(this, mapConfig, prefabConfig);
+		instance.StartCoroutine(instance.Startup(this, mapConfig, prefabConfig));
 	}
 		
 	public void SaveGameState() {

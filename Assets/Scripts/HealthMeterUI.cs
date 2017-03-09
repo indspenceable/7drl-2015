@@ -14,6 +14,7 @@ public class HealthMeterUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (p == null) return;
 		// Here's were we update the UI!
 		for (int i = 0; i < hearts.Length; i+=1) {
 			hearts[i].SetActive(p.hp>i);

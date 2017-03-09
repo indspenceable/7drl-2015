@@ -35,7 +35,7 @@ public class GameInstance : MonoBehaviour {
 	private GearUI[] gearUIs;
 
 
-	public void Startup(GameManager manager, GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
+	public IEnumerator Startup(GameManager manager, GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
 		// Save the map config for use with making Djikstra maps
 		this.mapConfig = mapConfig;
 		// Save prefabs for future levels;
@@ -46,7 +46,8 @@ public class GameInstance : MonoBehaviour {
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
 		for (int i = 0; i < mapConfig.totalNumberOfLevels; i += 1) {
-			levels[i] = new LevelMap(mapConfig);
+			levels[i] = new LevelMap();
+			levels[i].GenerateCallback = StartCoroutine(levels[i].Generate(mapConfig));
 		}
 
 
@@ -62,7 +63,7 @@ public class GameInstance : MonoBehaviour {
 			}
 		}
 
-		SetTerrain();
+		yield return SetTerrain();
 
 		// Set up the player
 		player = Instantiate(prefabs.playerPrefab, transform).GetComponent<Player>();
@@ -83,10 +84,11 @@ public class GameInstance : MonoBehaviour {
 		PopulateMonsters(prefabs);
 //
 		// Now that we have all this junk established, we can begin listening to input.
-		StartCoroutine(PreTurn());
+		yield return PreTurn();
 	}
 
-	private void SetTerrain() {
+	private IEnumerator SetTerrain() {
+		yield return CurrentLevel.GenerateCallback;
 		// Set their terrain
 		for ( int x = 0; x < mapConfig.width; x+=1) {
 			for (int y = 0; y < mapConfig.height; y +=1) {

@@ -28,9 +28,12 @@ public class LevelMap {
 		"x.+~........x.....x",
 		"xxxxxxxxxxxxxxxxxxx",
 	};
+	private string[] myMap;
+	public Coroutine GenerateCallback;
 
-	public LevelMap(GameManager.MapConfig config) {
-		GenerateFromStringMap(config, GenerateNewMap(config, config.vaults[0], config.vaults));
+	public IEnumerator Generate(GameManager.MapConfig config) {
+		yield return GenerateNewMapAndSave(config, config.vaults[0], config.vaults);
+		GenerateFromStringMap(config, myMap);
 	}
 	public TileTerrain GetAt(Coord c) {
 		return map[c.x][c.y];
@@ -45,7 +48,7 @@ public class LevelMap {
 		}
 	}
 
-	private string[] GenerateNewMap(GameManager.MapConfig config, VaultDefinition entry, VaultDefinition[] vaults) {
+	private IEnumerator GenerateNewMapAndSave(GameManager.MapConfig config, VaultDefinition entry, VaultDefinition[] vaults) {
 		StringBuilder[] tempMap = new StringBuilder[config.height];
 		for (int i = 0; i < config.height; i+=1) {
 			tempMap[i] = new StringBuilder(new string(' ', config.width));
@@ -62,31 +65,28 @@ public class LevelMap {
 
 		AddVault(tempMap, entry.Process()[0], new Coord(2,2));
 		// Move floor size out of here
-		int totalTries = 0;
 		for (int i = 0; i < 200; i+=1) {
+			yield return null;
 			Debug.Log(i);
 			VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
 //			VaultDefinition v = vaults[0];
 			AttemptToPlaceAndAdd(config, tempMap, v);
 		}
 		foreach(Coord c in FindPossibleOutlets(config, tempMap)) {
-			tempMap[c.y][c.x] = '~';
+			tempMap[c.y][c.x] = 'x';
 		}
 		string[] rtn = new string[config.height];
 		for (int i = 0; i < config.height; i+=1) {
 			rtn[i] = tempMap[i].ToString().Replace(' ', 'x');
 		}
-		return rtn;
+		myMap = rtn;
 	}
 	private bool AttemptToPlaceAndAdd(GameManager.MapConfig config, StringBuilder[] tempMap, VaultDefinition vd) {
 		foreach (Vault v in vd.Process()) {
-			Debug.Log("ya");
 			List<Coord> possibleOutlets = FindPossibleOutlets(config, tempMap);
 			List<Coord> vaultOutlets = FindAttachPointInVault(v);
 			foreach (Coord p1 in possibleOutlets) {
-				Debug.Log("bleh");
 				foreach(Coord p2 in vaultOutlets) {
-					Debug.Log("neh");
 					Coord placeVaultAt= new Coord(p1.x - p2.x, p1.y - p2.y);
 
 					if (CheckVault(tempMap, v, placeVaultAt)) {
