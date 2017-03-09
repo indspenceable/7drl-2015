@@ -52,26 +52,29 @@ public class LevelMap {
 	private IEnumerator Cleanup(GameManager.MapConfig config) {
 		bool requiresAdditionalSweep = true;
 		while (requiresAdditionalSweep) {
+			Debug.Log("Starting sweep.");
 			requiresAdditionalSweep = false;
 			List<Coord> newWalls = new List<Coord>();
 			List<Coord> newOpens = new List<Coord>();
 			for (int x = 0; x < config.width; x+=1) {
 				for (int y = 0; y < config.height; y += 1) {
-					int surroundingWalls = 0;
+					int surroundingWallsCardinal = 0;
+					int surroundingWallsAll = 0;
 					for (int dx = -1; dx <=1; dx +=1 ) {
 						for (int dy = -1; dy <=1; dy +=1 ) {
-							// In bounds + Cardinal directions only
-							if (InBounds(x+dx, y+dy, config) && Cardinal(dx, dy)) {
-								if (map[x+dx][y+dy] == config.wall) {
-									surroundingWalls += 1;
+							// In bounds + Walls
+							if (InBounds(x+dx, y+dy, config) && map[x+dx][y+dy] == config.wall) {
+								if (Cardinal(dx, dy)) {
+									surroundingWallsCardinal += 1;
 								}
+								surroundingWallsAll += 1;
 							}
 						}
 					}
-					if (surroundingWalls >= 3 && map[x][y] == config.open){ 
+					if (surroundingWallsCardinal >= 3 && map[x][y] == config.open){ 
 						newWalls.Add(new Coord(x,y));
 					}
-					if (surroundingWalls == 1 && map[x][y] == config.wall){ 
+					if (surroundingWallsCardinal == 1 && map[x][y] == config.wall){ 
 						newOpens.Add(new Coord(x,y));
 					}
 				}
