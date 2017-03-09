@@ -60,7 +60,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5853e11f4b6384302825309a2557eb27, type: 2}
   - {fileID: 11400000, guid: 7210ffdb4814e4ddb8ca9ddec743342e, type: 2}
   - {fileID: 11400000, guid: b4a497c60635b4e09b17b69070bff8d4, type: 2}
-  - {fileID: 11400000, guid: e757ec0322098423ebdc0dd205279d6d, type: 2}
+  - {fileID: 11400000, guid: 9f416dd4deb5f4a83a1ddcff9f637f0b, type: 2}
   hp: 5
 --- !u!212 &212479154909046710
 SpriteRenderer:
