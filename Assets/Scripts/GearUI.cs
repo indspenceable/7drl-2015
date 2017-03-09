@@ -14,7 +14,13 @@ public class GearUI : MonoBehaviour {
 	[SerializeField]
 	UnityEngine.UI.Text chargesThisLevel;
 
-
+	public bool hover;
+	public void PointerEnter() {
+		hover = true;
+	}
+	public void PointerExit() {
+		hover = false;
+	}
 	private Player player;
 
 	public void InstallPlayer(Player p) {

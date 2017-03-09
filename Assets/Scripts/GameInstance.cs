@@ -41,9 +41,37 @@ public class GameInstance : MonoBehaviour {
 	[SerializeField]
 	private Text statusAreaText;
 
+	[SerializeField]
+	private GameObject overlayArea;
+	[SerializeField]
+	private Text overlayText;
+
 	private void SetStatus(string status) {
 		statusAreaText.text = status;
 		statusArea.SetActive(status != "");
+	}
+
+	private void SetOverlay(string status) {
+		overlayText.text = status;
+		overlayArea.SetActive(status != "");
+	}
+
+	public void Update() {
+		foreach (MonsterComponent mc in monsters) {
+			if (mc.hover) {
+				Debug.Log("Hovering on a monster.");
+				SetOverlay(mc.name);
+				return;
+			}
+		}
+		foreach(GearUI gui in gearUIs) {
+			if (gui.hover) {
+				Debug.Log("Hovering on a gear.");
+				SetOverlay(gui.name);
+				return;
+			}
+		}
+		SetOverlay("");
 	}
 
 	public IEnumerator Startup(GameManager manager, GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
