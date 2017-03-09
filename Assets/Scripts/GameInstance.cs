@@ -289,6 +289,7 @@ public class GameInstance : MonoBehaviour {
 			yield return SetTerrain();
 			player.SetCoords(CurrentLevel.startPos);
 			PopulateMonsters(prefabConfig);
+			player.LevelRestItems();
 			yield return PreTurn();
 		}
 	}

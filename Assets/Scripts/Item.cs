@@ -95,6 +95,10 @@ public class Item  {
 			cooldown -= 1;
 		}
 	}
+	public void LevelRest() {
+		cooldown = 0;
+		usesThisLevel = 0;
+	}
 	private bool CheckCooldown() {
 		return (itemType.cooldown == -1 || cooldown == 0);
 	}

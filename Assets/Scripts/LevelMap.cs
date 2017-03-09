@@ -120,9 +120,9 @@ public class LevelMap {
 		targetPositions.Add(startCoord);
 
 		bool first = true;
-		// 3 monsters on first level, +1 each level
+		// 3 monsters on first level, +1 every other level
 		// 3 additional features (stairs + item canister) per level
-		while (targetPositions.Count < difficulty + 3 + 3) {
+		while (targetPositions.Count < difficulty/2 + 2 + 3) {
 			foreach(Coord c in targetPositions) {
 				yield return null;
 //				Debug.Log("added a goal.");

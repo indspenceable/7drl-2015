@@ -55,6 +55,11 @@ public class Player : MonoBehaviour, Entity {
 			i.Rest();
 		}
 	}
+	public void LevelRestItems() {
+		foreach (Item i in gear) {
+			i.LevelRest();
+		}
+	}
 	public void SetItem(int i, ItemDefinition item) {
 		gear[i] = new Item();
 		gear[i].SetType(item);
