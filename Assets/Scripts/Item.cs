@@ -52,7 +52,7 @@ public class Item  {
 				yield return instance.SelectCardinalDirection(KeyCode.Space, TargettedItemActivation, Use(success), back);
 				yield break;
 			case ItemDefinition.TargettingMethod.WITHIN_RANGE:
-				yield return instance.SelectTarget(KeyCode.Space, TargettedItemActivation, Use(success), back);
+				yield return instance.SelectTarget(itemType.targettingRange, KeyCode.Space, TargettedItemActivation, Use(success), back);
 				yield break;
 			case ItemDefinition.TargettingMethod.WITHIN_RANGE_RANDOM:
 				// Probably shouldn't use the player directly here...

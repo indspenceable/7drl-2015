@@ -46,7 +46,7 @@ public class GameInstance : MonoBehaviour {
 	[SerializeField]
 	private Text overlayText;
 
-	private void SetStatus(string status) {
+	private void SetInstructions(string status) {
 		statusAreaText.text = status;
 		statusArea.SetActive(status != "");
 	}
@@ -90,7 +90,7 @@ public class GameInstance : MonoBehaviour {
 		this.prefabConfig = prefabs;
 		// Save the manager so that we can transition back to the main menu when we win/lose
 		this.manager = manager;
-		SetStatus("");
+		SetInstructions("");
 
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
@@ -221,7 +221,7 @@ public class GameInstance : MonoBehaviour {
 		while (true){
 			yield return null;
 			if (Input.GetKeyDown(KeyCode.Escape)) {
-				SetStatus("");
+				SetInstructions("");
 				yield return back;
 				yield break;
 			} else if (Input.GetKeyDown(KeyCode.I)) {
@@ -254,10 +254,10 @@ public class GameInstance : MonoBehaviour {
 			yield return success;
 			yield break;
 		case TileTerrain.Interaction.GIVE_ITEM:
-			SetStatus("Select item to replace with " + GetTile(dest).item.displayName);
+			SetInstructions("Select item to replace with " + GetTile(dest).item.displayName);
 			yield return SelectItemToReplace(
 					(i)=>{
-						SetStatus("");
+						SetInstructions("");
 						player.SetItem(i, GetTile(dest).item);
 						GetTile(dest).SetTerrain(mapConfig.wall);
 					},
@@ -442,35 +442,38 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	public delegate IEnumerator TargettedAction(GameInstance instance, Coord c, IEnumerator success, IEnumerator cancel);
-	public IEnumerator SelectTarget(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
+	public IEnumerator SelectTarget(int range, KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
+		SetInstructions("Select target w/ WASD");
 		yield return null;
 		targettingReticle.transform.position = player.transform.position;
 		// TODO these should probably be provided.
-		int x = (int)player.transform.position.x;
-		int y = (int)player.transform.position.y;
+		int x = (int)player.pos.x;
+		int y = (int)player.pos.y;
 		targettingReticle.SetActive(true);
 		while (true) {
-			if (Input.GetKeyDown(KeyCode.W)) {
+			if (Input.GetKeyDown(KeyCode.W) && player.pos.DistanceTo(new Coord(x, y+1)) <= range) {
 				y += 1;
 				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
-			} else if (Input.GetKeyDown(KeyCode.A)) {
+			} else if (Input.GetKeyDown(KeyCode.A) && player.pos.DistanceTo(new Coord(x-1, y)) <= range) {
 				x -= 1;
 				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
-			} else if (Input.GetKeyDown(KeyCode.S)) {
+			} else if (Input.GetKeyDown(KeyCode.S) && player.pos.DistanceTo(new Coord(x, y-1)) <= range) {
 				y -= 1;
 				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
-			} else if (Input.GetKeyDown(KeyCode.D)) {
+			} else if (Input.GetKeyDown(KeyCode.D) && player.pos.DistanceTo(new Coord(x+1, y)) <= range	) {
 				x += 1;
 				yield return SlowMove(targettingReticle, new Coord(x, y), GameManager.StandardDelay);
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			} else if (Input.GetKeyDown(KeyCode.Escape)) {
+				SetInstructions("");
 				targettingReticle.SetActive(false);
 				yield return cancel;
 				yield break;
 			}
 			yield return null;
 		}
+		SetInstructions("");
 		targettingReticle.SetActive(false);
 		yield return callback(this, new Coord(x, y), success, cancel);
 	}
@@ -508,6 +511,7 @@ public class GameInstance : MonoBehaviour {
 	}
 	public IEnumerator GetCardinalDirectionInput(KeyCode selectKeyCode, TargettedAction callback, IEnumerator success, IEnumerator cancel) {
 		yield return null;
+		SetInstructions("Select a direction w/ WASD");
 
 		// TODO these should probably be provided.
 		int oX = (int)player.transform.position.x;
@@ -537,12 +541,14 @@ public class GameInstance : MonoBehaviour {
 			} else if (Input.GetKeyDown(selectKeyCode)) {
 				break;
 			} else if (Input.GetKeyDown(KeyCode.Escape)) {
+				SetInstructions("");
 				targettingReticle.SetActive(false);
 				yield return cancel;
 				yield break;
 			}
 			yield return null;
 		}
+		SetInstructions("");
 		targettingReticle.SetActive(false);
 		yield return callback(this, new Coord(x, y), success, cancel);
 	}
