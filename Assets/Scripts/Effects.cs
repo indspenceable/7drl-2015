@@ -98,7 +98,7 @@ public class Effects {
 			yield break;
 		case Effects.Effect.USE_TILE:
 			if (instance.GetTile(c).interaction != TileTerrain.Interaction.NONE) {
-				yield return instance.Interact(c);
+				yield return instance.Interact(c, success, cancel);
 			} else {
 				yield return cancel;
 			}

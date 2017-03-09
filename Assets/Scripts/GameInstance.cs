@@ -161,7 +161,7 @@ public class GameInstance : MonoBehaviour {
 	public IEnumerator AttemptMove(Coord dest, IEnumerator success, IEnumerator cancel) {
 //		Coord dest = player.pos + new Coord(dx, dy);
 		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
-			yield return Interact(dest);
+			yield return Interact(dest, success, cancel);
 			yield return TakeAllMonstersTurn();
 		} else if (Pathable(dest, player)) {
 			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
@@ -172,15 +172,47 @@ public class GameInstance : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator Interact(Coord dest) {
+	public IEnumerator SelectItemToReplace(System.Action<int> callback, IEnumerator success, IEnumerator back) {
+		while (true){
+			yield return null;
+			if (Input.GetKeyDown(KeyCode.Escape)) {
+				yield return back;
+				yield break;
+			} else if (Input.GetKeyDown(KeyCode.I)) {
+				callback(0);
+				yield return success;
+				yield break;
+			} else if (Input.GetKeyDown(KeyCode.J)) {
+				callback(1);
+				yield return success;
+				yield break;
+			} else if (Input.GetKeyDown(KeyCode.K)) {
+				callback(2);
+				yield return success;
+				yield break;
+			} else if (Input.GetKeyDown(KeyCode.L)) {
+				callback(3);
+				yield return success;
+				yield break;
+			}
+		}
+	}
+
+	public IEnumerator Interact(Coord dest, IEnumerator success, IEnumerator back) {
+		
 		TileTerrain.Interaction type = GetTile(dest).interaction;
 		switch(type) {
 		case TileTerrain.Interaction.NEXT_LEVEL:
 			yield return MoveToNextLevel();
+			yield return success;
 			yield break;
 		case TileTerrain.Interaction.GIVE_ITEM:
-			player.SetItem(0, GetTile(dest).item);
-			GetTile(dest).SetTerrain(mapConfig.wall);
+			yield return SelectItemToReplace(
+					(i)=>{
+						player.SetItem(i, GetTile(dest).item);
+						GetTile(dest).SetTerrain(mapConfig.wall);
+					},
+				success, back);
 			yield break;
 		case TileTerrain.Interaction.NONE:
 		default:
