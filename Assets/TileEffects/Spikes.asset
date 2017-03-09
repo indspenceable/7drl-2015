@@ -18,5 +18,6 @@ MonoBehaviour:
   onTrigger: 0
   power: 1
   range: 0
-  targetsFliers: 0
+  targetsFliers: 1
   avoid: 1
+  explanation: 

@@ -158,33 +158,50 @@ public class LevelMap {
 	}
 
 	private IEnumerator GenerateNewMapAndSave(GameManager.MapConfig config, VaultDefinition entry, VaultDefinition[] vaults) {
+		int vaultCount = 0;
 		StringBuilder[] tempMap = new StringBuilder[config.height];
-		for (int i = 0; i < config.height; i+=1) {
-			tempMap[i] = new StringBuilder(new string(' ', config.width));
-		}
-		// Place the outerwalls
-		for (int x = 0; x < config.width; x+=1) {
-			for (int y = 0; y < config.height; y+=1) {
-				if (x == 0 || y == 0 || x == config.width-1 || y == config.height-1) {
-					tempMap[y][x] = 'x';
+		while (vaultCount < 5) {
+			
+			tempMap = new StringBuilder[config.height];
+			for (int i = 0; i < config.height; i+=1) {
+				tempMap[i] = new StringBuilder(new string(' ', config.width));
+			}
+			// Place the outerwalls
+			for (int x = 0; x < config.width; x+=1) {
+				for (int y = 0; y < config.height; y+=1) {
+					if (x == 0 || y == 0 || x == config.width-1 || y == config.height-1) {
+						tempMap[y][x] = 'x';
+					}
 				}
 			}
-		}
-	
+		
+			Coord c1 = new Coord(-5, -5);
+			Vault v1 = vaults[Random.Range(0,vaults.Length)].Process()[Random.Range(0,2)];
+			while (!CheckVault(tempMap, v1, c1)) {
+				c1 = new Coord(Random.Range(0, 7), Random.Range(0, 7));
+			}
+			AddVault(tempMap, v1, c1);
+			// Move floor size out of here
 
-		AddVault(tempMap, entry.Process()[0], new Coord(2,2));
-		// Move floor size out of here
-		for (int i = 0; i < 200; i+=1) {
-			yield return null;
-			VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
-			AttemptToPlaceAndAdd(config, tempMap, v);
+			vaultCount = 0;
+			for (int i = 0; i < 200; i+=1) {
+				Debug.Log("Trying to place a vault...");
+				yield return null;
+				VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
+				if (AttemptToPlaceAndAdd(config, tempMap, v)) {
+					vaultCount += 1;
+				}
+			}
+			Debug.Log("Placed: " + vaultCount);
 		}
+
 		foreach(Coord c in FindPossibleOutlets(config, tempMap)) {
 			tempMap[c.y][c.x] = 'x';
 		}
 		string[] rtn = new string[config.height];
 		for (int i = 0; i < config.height; i+=1) {
 			rtn[i] = tempMap[i].ToString().Replace(' ', 'x');
+			rtn[i] = rtn[i].ToString().Replace('?', 'x');
 		}
 		myMap = rtn;
 	}
