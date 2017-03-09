@@ -78,14 +78,21 @@ public class DjikstraMap {
 			}
 		}
 	}
-	public Coord FindBestNeighbor(Coord p, float multiplier=1) {
+	public delegate bool CoordCheck(Coord p);
+	public bool IdentityCoordCheck(Coord p) {
+		return true;
+	}
+	public Coord FindBestNeighbor(Coord p, CoordCheck pathable = null) {
+		if (pathable == null) {
+			pathable = IdentityCoordCheck;
+		}
 		float value = unreachable;
 		Coord rtn = p;
 		foreach(Coord o in offsets) {
 			Coord c = o + p;
-			if (InBounds(c) && Value(c) <= unreachable-1 && Value(c)*multiplier < value) {
+			if (InBounds(c) && Value(c) <= unreachable-1 && pathable(c) && Value(c) < value) {
 				rtn = c;
-				value = Value(c)*multiplier;
+				value = Value(c);
 			}
 		}
 		return rtn;

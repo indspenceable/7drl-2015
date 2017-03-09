@@ -179,6 +179,7 @@ public class LevelMap {
 			Vault v1 = vaults[Random.Range(0,vaults.Length)].Process()[Random.Range(0,2)];
 			int tries = 0;
 			while (!CheckVault(tempMap, v1, c1) && tries < 100) {
+				if (tries%10 == 0) yield return null;
 				c1 = new Coord(Random.Range(0, 7), Random.Range(0, 7));
 				tries += 1;
 			}
@@ -189,14 +190,14 @@ public class LevelMap {
 
 			vaultCount = 0;
 			for (int i = 0; i < 200; i+=1) {
-				Debug.Log("Trying to place a vault...");
+//				Debug.Log("Trying to place a vault...");
 				yield return null;
 				VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
 				if (AttemptToPlaceAndAdd(config, tempMap, v)) {
 					vaultCount += 1;
 				}
 			}
-			Debug.Log("Placed: " + vaultCount);
+//			Debug.Log("Placed: " + vaultCount);
 		}
 
 		foreach(Coord c in FindPossibleOutlets(config, tempMap)) {

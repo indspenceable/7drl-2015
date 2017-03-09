@@ -103,7 +103,7 @@ using UnityEngine;
 		foreach (DjikstraMap m in maps) {
 			map.CombineWith(m);
 		}
-		Coord c = map.FindBestNeighbor(pos);
+		Coord c = map.FindBestNeighbor(pos, (co) => instance.Pathable(co) && instance.GetEntityAt(co) == null);
 		yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
 		pos = c;
 	}
@@ -118,11 +118,11 @@ using UnityEngine;
 		if (map.Value(pos.x, pos.y) < mt.minRange) {
 			map.Scale(-1.2f);
 			map.Calculate(instance.Pathable, this);
-			Coord c = map.FindBestNeighbor(pos);
+			Coord c = map.FindBestNeighbor(pos, (co) => instance.Pathable(co, this) && instance.GetEntityAt(co) == null );
 			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
 			pos = c;
 		} else if (map.Value(pos.x, pos.y) > mt.maxRange) {
-			Coord c = map.FindBestNeighbor(pos);
+			Coord c = map.FindBestNeighbor(pos, (co) => instance.Pathable(co, this) && instance.GetEntityAt(co) == null);
 			yield return instance.SlowMove(gameObject, c, GameManager.StandardDelay);
 			pos = c;
 		} else {
