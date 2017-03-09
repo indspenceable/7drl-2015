@@ -57,10 +57,10 @@ MonoBehaviour:
     y: 0
   gear: []
   startingGear:
-  - {fileID: 11400000, guid: 5853e11f4b6384302825309a2557eb27, type: 2}
-  - {fileID: 11400000, guid: 7210ffdb4814e4ddb8ca9ddec743342e, type: 2}
-  - {fileID: 11400000, guid: b4a497c60635b4e09b17b69070bff8d4, type: 2}
-  - {fileID: 11400000, guid: 9f416dd4deb5f4a83a1ddcff9f637f0b, type: 2}
+  - {fileID: 11400000, guid: 98d4eba637964428e9292da476c29c6c, type: 2}
+  - {fileID: 11400000, guid: ed07771e21f20451c897a03bbeae11a3, type: 2}
+  - {fileID: 11400000, guid: ed07771e21f20451c897a03bbeae11a3, type: 2}
+  - {fileID: 11400000, guid: ed07771e21f20451c897a03bbeae11a3, type: 2}
   hp: 5
 --- !u!212 &212479154909046710
 SpriteRenderer:
