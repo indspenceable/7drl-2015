@@ -177,9 +177,13 @@ public class LevelMap {
 		
 			Coord c1 = new Coord(-5, -5);
 			Vault v1 = vaults[Random.Range(0,vaults.Length)].Process()[Random.Range(0,2)];
-			while (!CheckVault(tempMap, v1, c1)) {
+			int tries = 0;
+			while (!CheckVault(tempMap, v1, c1) && tries < 100) {
 				c1 = new Coord(Random.Range(0, 7), Random.Range(0, 7));
+				tries += 1;
 			}
+			yield return null;
+			if (tries >= 100) continue;
 			AddVault(tempMap, v1, c1);
 			// Move floor size out of here
 

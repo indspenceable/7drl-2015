@@ -259,7 +259,7 @@ public class GameInstance : MonoBehaviour {
 					(i)=>{
 						SetInstructions("");
 						player.SetItem(i, GetTile(dest).item);
-						GetTile(dest).SetTerrain(mapConfig.wall);
+						GetTile(dest).SetTerrain(mapConfig.open);
 					},
 				success, back);
 			yield break;
