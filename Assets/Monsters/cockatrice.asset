@@ -19,3 +19,7 @@ MonoBehaviour:
   maxRange: 1
   damage: 5
   flies: 0
+  displayName: Cockatrice
+  desc: 'No smarter than a rat, but if it hits you it''s gameover!
+
+'

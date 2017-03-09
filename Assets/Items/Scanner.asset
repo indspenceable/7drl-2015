@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Scanner
   m_EditorClassIdentifier: 
   displayName: Remote Scanner
+  desc: Uh, doesn't really do much yet.
   icon: {fileID: 0}
   targettingMethod: 2
   effect: 5
@@ -23,3 +24,4 @@ MonoBehaviour:
   power: 3
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

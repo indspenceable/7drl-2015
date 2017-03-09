@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Name: Bombs
   m_EditorClassIdentifier: 
   displayName: Bombs
+  desc: Leaves a bomb on your current tile, which will blow up for massive damage
+    (to it and surrounding tiles) in 3 turns.
   icon: {fileID: 0}
   targettingMethod: 1
   effect: 5
@@ -23,3 +25,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

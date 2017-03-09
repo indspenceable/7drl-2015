@@ -27,6 +27,14 @@ public class GearUI : MonoBehaviour {
 		player = p;
 	}
 
+	public string ItemName() {
+		return player.GetItem(slot).DisplayName;
+	}
+	public string ItemDesc() {
+		return player.GetItem(slot).Description;
+	}
+
+
 	// Update is called once per frame
 	void Update () {
 		// Actually draw the UI!

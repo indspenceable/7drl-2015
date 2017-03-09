@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Name: Snaregun
   m_EditorClassIdentifier: 
   displayName: Snare Gun
+  desc: 'Stop an enemy from moving for 3 turns, in a cardinal direction. Works well
+    with traps.
+
+'
   icon: {fileID: 0}
   targettingMethod: 6
   effect: 9

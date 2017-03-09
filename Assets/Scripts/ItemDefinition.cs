@@ -14,6 +14,8 @@ public class ItemDefinition : ScriptableObject {
 		CARDINAL_FIRST_ENTITY=6,
 	}
 	public string displayName;
+	[TextArea]
+	public string desc;
 	public Sprite icon;
 	public TargettingMethod targettingMethod;
 	public Effects.Effect effect;

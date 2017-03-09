@@ -18,3 +18,8 @@ MonoBehaviour:
   minRange: 1
   maxRange: 1
   damage: 1
+  flies: 0
+  displayName: Hulk
+  desc: 'This monstrosity takes 3 hits to kill.
+
+'

@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Name: ShadowDagger
   m_EditorClassIdentifier: 
   displayName: Shadowdagger
+  desc: 'Hit an enemy directly next you, and jump behind them in the process
+
+'
   icon: {fileID: 0}
   targettingMethod: 3
   effect: 3
+  tileEffect: {fileID: 0}
   cooldown: 3
   levelLimit: -1
   totalCharges: -1
@@ -22,3 +26,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

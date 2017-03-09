@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Blinker
   m_EditorClassIdentifier: 
   displayName: Blinker
+  desc: 'Teleport to a random open tile within 5 spaces
+
+'
   icon: {fileID: 0}
   targettingMethod: 4
   effect: 7
@@ -23,3 +26,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

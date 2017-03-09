@@ -19,3 +19,7 @@ MonoBehaviour:
   maxRange: 0
   damage: 0
   flies: 0
+  displayName: Wall
+  desc: 'Destructable wall. Won''t attack.
+
+'

@@ -15,6 +15,12 @@ public class Item  {
 		}
 	}
 
+	public string Description {
+		get {
+			return itemType.desc;
+		}
+	}
+
 	public void SetType(ItemDefinition itemType) {
 		this.itemType = itemType;
 		this.cooldown = 0;

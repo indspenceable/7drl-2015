@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Hook Pull
   m_EditorClassIdentifier: 
   displayName: Vicious Hook
+  desc: 'Pull an enemy to you, in a cardinal direction
+
+'
   icon: {fileID: 0}
   targettingMethod: 6
   effect: 6
@@ -23,3 +26,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

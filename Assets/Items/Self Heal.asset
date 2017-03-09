@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Self Heal
   m_EditorClassIdentifier: 
   displayName: Repair Nanobots
+  desc: Heal yourself by 1hp, once a level.
   icon: {fileID: 0}
   targettingMethod: 1
   effect: 0

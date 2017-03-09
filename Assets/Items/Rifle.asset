@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Rifle
   m_EditorClassIdentifier: 
   displayName: Rifle
+  desc: 'Hit an enemy at any range, in a cardinal direction.
+
+'
   icon: {fileID: 0}
   targettingMethod: 6
   effect: 0
@@ -23,3 +26,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

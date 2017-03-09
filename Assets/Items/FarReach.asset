@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Name: FarReach
   m_EditorClassIdentifier: 
   displayName: FarReach
+  desc: Activate a tile from a distance of 1-3
   icon: {fileID: 0}
   targettingMethod: 2
   effect: 8
+  tileEffect: {fileID: 0}
   cooldown: -1
   levelLimit: -1
   totalCharges: -1
@@ -22,3 +24,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

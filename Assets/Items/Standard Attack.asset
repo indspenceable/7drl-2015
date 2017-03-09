@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Standard Attack
   m_EditorClassIdentifier: 
   displayName: Wimpy Fists
+  desc: 'Hit an enemy at range 1. Pretty weak.
+
+'
   icon: {fileID: 0}
   targettingMethod: 3
   effect: 0
@@ -23,3 +26,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

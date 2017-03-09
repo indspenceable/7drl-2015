@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Hook Warp
   m_EditorClassIdentifier: 
   displayName: Matter Transporter
+  desc: 'Pull yourself to a wall or a monster in a cardinal direction
+
+'
   icon: {fileID: 0}
   targettingMethod: 5
   effect: 7
@@ -23,3 +26,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Jetpack
   m_EditorClassIdentifier: 
   displayName: Jetpack
+  desc: 'While you have this equipped, you won''t take damage from spikes or lava
+
+'
   icon: {fileID: 0}
   targettingMethod: 0
   effect: 0

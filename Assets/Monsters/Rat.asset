@@ -18,3 +18,6 @@ MonoBehaviour:
   minRange: 1
   maxRange: 1
   damage: 1
+  flies: 0
+  displayName: Rat
+  desc: runs at you and hits you for 1hp. Pretty annoying, but not a huge threat.

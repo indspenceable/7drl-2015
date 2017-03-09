@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Name: ThornsArmor
   m_EditorClassIdentifier: 
   displayName: Thorn Armor
+  desc: 'No Effect
+
+'
   icon: {fileID: 0}
   targettingMethod: 0
   effect: 0
+  tileEffect: {fileID: 0}
   cooldown: -1
   levelLimit: -1
   totalCharges: -1
@@ -22,3 +26,4 @@ MonoBehaviour:
   power: 1
   LOSModifier: 0
   thornsDamage: 1
+  providesFlight: 0

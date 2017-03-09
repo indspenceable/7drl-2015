@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Blaster
   m_EditorClassIdentifier: 
   displayName: Blaster
+  desc: Hit any enemy within 3 spaces.
   icon: {fileID: 0}
   targettingMethod: 2
   effect: 0
@@ -19,7 +20,8 @@ MonoBehaviour:
   cooldown: -1
   levelLimit: -1
   totalCharges: 10
-  targettingRange: 10
+  targettingRange: 3
   power: 1
   LOSModifier: 0
   thornsDamage: 0
+  providesFlight: 0

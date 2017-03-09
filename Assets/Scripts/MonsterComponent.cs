@@ -26,6 +26,14 @@ using UnityEngine;
 		hover = false;
 	}
 
+	public string DisplayName() {
+		return mt.displayName;
+	}
+	public string Desc() {
+		return mt.desc;
+	}
+
+
 	public IEnumerator ExecuteStrategy(GameInstance instance) {
 		if (stunned > 0) {
 			stunned -= 1;

@@ -18,4 +18,8 @@ public class Monster : ScriptableObject {
 	public int maxRange;
 	public int damage;
 	public bool flies;
+
+	public string displayName;
+	[TextArea]
+	public string desc;
 }

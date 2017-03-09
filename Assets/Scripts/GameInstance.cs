@@ -59,15 +59,13 @@ public class GameInstance : MonoBehaviour {
 	public void Update() {
 		foreach (MonsterComponent mc in monsters) {
 			if (mc.hover) {
-				Debug.Log("Hovering on a monster.");
-				SetOverlay(mc.name);
+				SetOverlay(mc.DisplayName() + "\n\n" + mc.Desc());
 				return;
 			}
 		}
 		foreach(GearUI gui in gearUIs) {
 			if (gui.hover) {
-				Debug.Log("Hovering on a gear.");
-				SetOverlay(gui.name);
+				SetOverlay(gui.ItemName() + "\n\n" + gui.ItemDesc());
 				return;
 			}
 		}
