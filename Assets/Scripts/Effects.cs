@@ -53,7 +53,7 @@ public class Effects {
 			target = instance.GetEntityAt(c);
 			Coord dest = c-instance.player.pos + c;
 			MapTileComponent tile = instance.GetTile(dest);
-			if (tile.passable && instance.GetEntityAt(dest) == null) {
+			if (tile.passable && instance.GetEntityAt(dest) == null && target != null) {
 				yield return target.TakeHit(power);
 				yield return instance.AttemptMove(dest, success, cancel);
 			} else {

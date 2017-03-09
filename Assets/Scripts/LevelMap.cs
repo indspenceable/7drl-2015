@@ -58,7 +58,7 @@ public class LevelMap {
 	private IEnumerator Cleanup(GameManager.MapConfig config) {
 		bool requiresAdditionalSweep = true;
 		while (requiresAdditionalSweep) {
-			Debug.Log("Starting sweep.");
+//			Debug.Log("Starting sweep.");
 			requiresAdditionalSweep = false;
 			List<Coord> newWalls = new List<Coord>();
 			List<Coord> newOpens = new List<Coord>();
@@ -120,10 +120,12 @@ public class LevelMap {
 		targetPositions.Add(startCoord);
 
 		bool first = true;
-		while (targetPositions.Count < difficulty + 4) {
+		// 3 monsters on first level, +1 each level
+		// 3 additional features (stairs + item canister) per level
+		while (targetPositions.Count < difficulty + 3 + 3) {
 			foreach(Coord c in targetPositions) {
 				yield return null;
-				Debug.Log("added a goal.");
+//				Debug.Log("added a goal.");
 				dm.SetGoal(c);
 			}
 				

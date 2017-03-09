@@ -19,6 +19,7 @@ MonoBehaviour:
   maxRange: 4
   damage: 1
   flies: 0
+  minimumFloor: 4
   displayName: Archer
   desc: 'This monster will attempt to stay 3-4 distance away from you, and pelt you
     with arrows.

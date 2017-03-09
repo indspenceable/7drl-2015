@@ -57,6 +57,9 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	public void Update() {
+		if (!LevelGeneratingOverlay.activeSelf) {
+			return;
+		}
 		foreach (MonsterComponent mc in monsters) {
 			if (mc.hover) {
 				SetOverlay(mc.DisplayName() + "\n\n" + mc.Desc());
@@ -160,11 +163,20 @@ public class GameInstance : MonoBehaviour {
 //				c = new Coord(Random.Range(0, mapConfig.width), Random.Range(0, mapConfig.height));
 //			}
 		foreach (Coord c in CurrentLevel.MonsterPositions) {
-			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+			Monster monsterType = SelectMonsterForCurrentFloor(prefabs);
 //			Monster monsterType = prefabs.monsterdefs[3];
 			MonsterComponent mc = Instantiate(prefabs.monster, transform).GetComponent<MonsterComponent>();
 			mc.Setup(monsterType, c);
 			monsters.Add(mc);
+		}
+	}
+
+	public Monster SelectMonsterForCurrentFloor(GameManager.PrefabConfig prefabs) {
+		while (true) {
+			Monster m = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
+			if (m.minimumFloor <= currentLevelIndex) {
+				return m;
+			}
 		}
 	}
 
@@ -207,7 +219,7 @@ public class GameInstance : MonoBehaviour {
 		if (GetTile(dest).interaction != TileTerrain.Interaction.NONE) {
 			yield return Interact(dest, success, cancel);
 			yield return TakeAllMonstersTurn();
-		} else if (Pathable(dest, player) && GetEntityAt(dest) == null) {
+		} else if (GetTile(dest).passable && GetEntityAt(dest) == null) {
 			yield return SlowMove(player.gameObject, dest, GameManager.StandardDelay);
 			player.SetCoords(dest);
 			yield return success;
@@ -329,7 +341,7 @@ public class GameInstance : MonoBehaviour {
 			};
 			foreach (Coord offset in offsets) {
 				Coord c = current + offset;
-				if(!closedList.ContainsKey(c) && CurrentLevel.GetAt(c).passable) {
+				if(!closedList.ContainsKey(c) && GetTile(c).passable) {
 					List<Coord> newPath = new List<Coord>(currentPath);
 					newPath.Add(c);
 					closedList[c] = newPath;
@@ -357,7 +369,7 @@ public class GameInstance : MonoBehaviour {
 //		return CurrentLevel.GetAt(c).passable && GetEntityAt(c) == null;
 //	}
 	public bool Pathable(Coord c, Entity e = null) {
-		return CurrentLevel.GetAt(c).passable && !GetTile(c).ShouldAvoid(e);
+		return GetTile(c).passable && !GetTile(c).ShouldAvoid(e);
 	}
 	public DjikstraMap BuildPlayerMap(Entity forWhom) {
 		return BuildTargettedMap(forWhom, player.pos);

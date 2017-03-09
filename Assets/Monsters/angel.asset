@@ -19,6 +19,7 @@ MonoBehaviour:
   maxRange: 1
   damage: 1
   flies: 1
+  minimumFloor: 2
   displayName: Angel
   desc: 'This monster can fly over lava and traps!
 

@@ -19,6 +19,7 @@ MonoBehaviour:
   maxRange: 4
   damage: 1
   flies: 0
+  minimumFloor: 2
   displayName: Turret
   desc: 'Hits at range 2-4; but can''t move. Get into it''s minimum range and you''re
     golden.
