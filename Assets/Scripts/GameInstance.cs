@@ -33,7 +33,8 @@ public class GameInstance : MonoBehaviour {
 	private HealthMeterUI healthMeter;
 	[SerializeField]
 	private GearUI[] gearUIs;
-
+	[SerializeField]
+	private GameObject LevelGeneratingOverlay;
 
 	public IEnumerator Startup(GameManager manager, GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
 		// Save the map config for use with making Djikstra maps
@@ -47,7 +48,7 @@ public class GameInstance : MonoBehaviour {
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
 		for (int i = 0; i < mapConfig.totalNumberOfLevels; i += 1) {
 			levels[i] = new LevelMap();
-			levels[i].GenerateCallback = StartCoroutine(levels[i].Generate(mapConfig));
+			levels[i].GenerateCallback = StartCoroutine(levels[i].Generate(i, mapConfig));
 		}
 
 
@@ -71,7 +72,7 @@ public class GameInstance : MonoBehaviour {
 		while (!Pathable(c,player)) {
 			c = new Coord(Random.Range(0,mapConfig.width), Random.Range(0,mapConfig.height));
 		}
-		player.SetCoords(c);
+		player.SetCoords(CurrentLevel.startPos);
 		healthMeter.InstallPlayer(player);
 		foreach(GearUI gui in gearUIs) {
 			gui.InstallPlayer(player);
@@ -88,7 +89,9 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	private IEnumerator SetTerrain() {
+		LevelGeneratingOverlay.SetActive(true);
 		yield return CurrentLevel.GenerateCallback;
+		LevelGeneratingOverlay.SetActive(false);
 		// Set their terrain
 		for ( int x = 0; x < mapConfig.width; x+=1) {
 			for (int y = 0; y < mapConfig.height; y +=1) {
@@ -106,12 +109,13 @@ public class GameInstance : MonoBehaviour {
 		}
 		monsters.Clear();
 		// Fill in the monsters for this level
-		for (int i = 0; i < 5; i+=1) {
-			Coord c = new Coord(0,0);
-
-			while (!EmptyAndPassable(c) || !Pathable(c) ) {
-				c = new Coord(Random.Range(0, mapConfig.width), Random.Range(0, mapConfig.height));
-			}
+//		for (int i = 0; i < 5; i+=1) {
+//			Coord c = new Coord(0,0);
+//
+//			while (!EmptyAndPassable(c) || !Pathable(c) ) {
+//				c = new Coord(Random.Range(0, mapConfig.width), Random.Range(0, mapConfig.height));
+//			}
+		foreach (Coord c in CurrentLevel.MonsterPositions) {
 			Monster monsterType = prefabs.monsterdefs[Random.Range(0, prefabs.monsterdefs.Length)];
 //			Monster monsterType = prefabs.monsterdefs[3];
 			MonsterComponent mc = Instantiate(prefabs.monster, transform).GetComponent<MonsterComponent>();
@@ -189,8 +193,8 @@ public class GameInstance : MonoBehaviour {
 		if (this.currentLevelIndex == mapConfig.totalNumberOfLevels) {
 			manager.Win();
 		} else {
-			SetTerrain();
-			player.SetCoords(new Coord(1,1));
+			yield return SetTerrain();
+			player.SetCoords(CurrentLevel.startPos);
 			PopulateMonsters(prefabConfig);
 			yield return PreTurn();
 		}

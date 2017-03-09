@@ -40,9 +40,10 @@ public class DjikstraMap {
 	}
 
 	public delegate bool TileCheck(Coord c, Entity e);
-	public void Calculate(TileCheck passable, Entity e) {
+	public void Calculate(TileCheck passable, Entity e, int maxIterations = 1000) {
 		bool madeChangeLastIteration = true;
-		while (madeChangeLastIteration) {
+		int currentIteration = 0;
+		while (madeChangeLastIteration && currentIteration < maxIterations ) {
 			madeChangeLastIteration = false;
 			for ( int x = 0; x < size.x; x += 1) {
 				for (int y = 0; y < size.y; y += 1) {
@@ -59,6 +60,7 @@ public class DjikstraMap {
 					}
 				}
 			}
+			currentIteration += 1;
 		}
 	}
 	public float Value(int x, int y) {
@@ -70,7 +72,7 @@ public class DjikstraMap {
 	public void Scale(float f) {
 		for ( int x = 0; x < size.x; x += 1) {
 			for (int y = 0; y < size.y; y += 1) {
-				if (map[x][y] != unreachable) {
+				if (map[x][y] <= unreachable-1) {
 					map[x][y] *= f;
 				}
 			}
@@ -81,12 +83,29 @@ public class DjikstraMap {
 		Coord rtn = p;
 		foreach(Coord o in offsets) {
 			Coord c = o + p;
-			if (InBounds(c) && Value(c) != unreachable && Value(c)*multiplier < value) {
+			if (InBounds(c) && Value(c) <= unreachable-1 && Value(c)*multiplier < value) {
 				rtn = c;
 				value = Value(c)*multiplier;
 			}
 		}
 		return rtn;
+	}
+
+	public Coord FindWorstPoint() {
+		Coord bestSoFar = new Coord(0,0);
+		for (int x = 0; x < size.x; x+=1) {
+			for (int y = 0; y < size.y; y+=1) {
+				float newVal = Value(new Coord(x, y));
+				// If new point is unreachable
+				if (newVal >= unreachable-1) {
+					continue;
+				}
+				if (Value(bestSoFar) < newVal || Value(bestSoFar) >= unreachable-1) {
+					bestSoFar = new Coord(x, y);
+				}
+			}
+		}
+		return bestSoFar;
 	}
 
 	private bool InBounds(Coord c) {

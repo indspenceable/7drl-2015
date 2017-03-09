@@ -221,6 +221,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1036225661691564, guid: 7d0c7cc95a5b4465a8e850808baa16e7, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7d0c7cc95a5b4465a8e850808baa16e7, type: 2}
   m_IsPrefabParent: 0
@@ -474,7 +478,7 @@ MonoBehaviour:
     type: 2}
   instance: {fileID: 0}
   mapConfig:
-    totalNumberOfLevels: 1
+    totalNumberOfLevels: 10
     width: 19
     height: 20
     open: {fileID: 11400000, guid: 28a10832692ad43cc99f4607bc5b7fb2, type: 2}

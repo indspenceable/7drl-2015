@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
+using System.Linq;
 
 [System.Serializable]
 public class LevelMap {
@@ -30,11 +31,16 @@ public class LevelMap {
 	};
 	private string[] myMap;
 	public Coroutine GenerateCallback;
+	public Coord startPos = new Coord(0,0);
+	public List<Coord> MonsterPositions = new List<Coord>();
+	int difficulty;
 
-	public IEnumerator Generate(GameManager.MapConfig config) {
+	public IEnumerator Generate(int difficulty, GameManager.MapConfig config) {
+		this.difficulty = difficulty;
 		yield return GenerateNewMapAndSave(config, config.vaults[0], config.vaults);
 		GenerateFromStringMap(config, myMap);
 		yield return Cleanup(config);
+		yield return PlaceFeatures(config);
 	}
 	public TileTerrain GetAt(Coord c) {
 		return map[c.x][c.y];
@@ -96,6 +102,59 @@ public class LevelMap {
 	}
 	private bool InBounds(int x, int y, GameManager.MapConfig config) {
 		return !(x < 0 || y < 0 || x >= config.width || y  >= config.height);
+	}
+
+	Coord SelectRandomOpenCoord(GameManager.MapConfig config) {
+		Coord c = new Coord(0,0);
+		while (map[c.x][c.y] != config.open) {
+			c = new Coord(Random.Range(0, config.width), Random.Range(0, config.height));
+		}
+		return c;
+	}
+
+	private IEnumerator PlaceFeatures(GameManager.MapConfig config) {
+		yield return null;
+		DjikstraMap dm = new DjikstraMap(config.width, config.height);
+		Coord startCoord = SelectRandomOpenCoord(config);
+		List<Coord> targetPositions = new List<Coord>();
+		targetPositions.Add(startCoord);
+
+		bool first = true;
+		while (targetPositions.Count < difficulty + 4) {
+			foreach(Coord c in targetPositions) {
+				yield return null;
+				Debug.Log("added a goal.");
+				dm.SetGoal(c);
+			}
+				
+			dm.Calculate((c,e) => map[c.x][c.y] == config.open, null);
+			targetPositions.Add(dm.FindWorstPoint());
+			yield return null;
+
+			if (first) {
+				targetPositions.RemoveAt(0);
+				first = false;
+			}
+		}
+			
+		int i = 0;
+		foreach (Coord c in targetPositions) {
+			switch(i){
+			case 0:
+				startPos = c;
+				break;
+			case 1:	
+				map[c.x][c.y] = config.stairs;
+				break;
+			case 2:
+				map[c.x][c.y] = config.item;
+				break;
+			default:
+				MonsterPositions.Add(c);
+				break;
+			}
+			i+=1;
+		}
 	}
 
 	private IEnumerator GenerateNewMapAndSave(GameManager.MapConfig config, VaultDefinition entry, VaultDefinition[] vaults) {
@@ -205,7 +264,7 @@ public class LevelMap {
 	private TileTerrain TileTerrainForChar(GameManager.MapConfig defs, char c) {
 		if (c == 'x') {
 			return defs.wall;
-		} else if (c == '.' || c=='<') {
+		} else if (c == '.' || c== '<') {
 			return defs.open;
 		} else if (c == '~') {
 			return defs.pit;
