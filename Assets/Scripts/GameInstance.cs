@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class GameInstance : MonoBehaviour {
@@ -35,6 +36,15 @@ public class GameInstance : MonoBehaviour {
 	private GearUI[] gearUIs;
 	[SerializeField]
 	private GameObject LevelGeneratingOverlay;
+	[SerializeField]
+	private GameObject statusArea;
+	[SerializeField]
+	private Text statusAreaText;
+
+	private void SetStatus(string status) {
+		statusAreaText.text = status;
+		statusArea.SetActive(status != "");
+	}
 
 	public IEnumerator Startup(GameManager manager, GameManager.MapConfig mapConfig, GameManager.PrefabConfig prefabs) {
 		// Save the map config for use with making Djikstra maps
@@ -43,6 +53,7 @@ public class GameInstance : MonoBehaviour {
 		this.prefabConfig = prefabs;
 		// Save the manager so that we can transition back to the main menu when we win/lose
 		this.manager = manager;
+		SetStatus("");
 
 		// Build the level maps
 		levels = new LevelMap[mapConfig.totalNumberOfLevels];
@@ -173,9 +184,11 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	public IEnumerator SelectItemToReplace(System.Action<int> callback, IEnumerator success, IEnumerator back) {
+		
 		while (true){
 			yield return null;
 			if (Input.GetKeyDown(KeyCode.Escape)) {
+				SetStatus("");
 				yield return back;
 				yield break;
 			} else if (Input.GetKeyDown(KeyCode.I)) {
@@ -192,6 +205,7 @@ public class GameInstance : MonoBehaviour {
 				yield break;
 			} else if (Input.GetKeyDown(KeyCode.L)) {
 				callback(3);
+
 				yield return success;
 				yield break;
 			}
@@ -207,8 +221,10 @@ public class GameInstance : MonoBehaviour {
 			yield return success;
 			yield break;
 		case TileTerrain.Interaction.GIVE_ITEM:
+			SetStatus("Select item to replace with " + GetTile(dest).item.displayName);
 			yield return SelectItemToReplace(
 					(i)=>{
+						SetStatus("");
 						player.SetItem(i, GetTile(dest).item);
 						GetTile(dest).SetTerrain(mapConfig.wall);
 					},
