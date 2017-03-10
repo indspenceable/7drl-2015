@@ -23,4 +23,12 @@ public class Monster : ScriptableObject {
 	public string displayName;
 	[TextArea]
 	public string desc;
+
+	public enum AttackAnimation {
+		PUNCH = 0,
+		ARROW = 1,
+		SHOCK = 2,
+	}
+
+	public AttackAnimation anim;
 }

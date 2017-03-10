@@ -64,7 +64,7 @@ public class LevelMap {
 		bool requiresAdditionalSweep = true;
 		int iteration = 0;
 
-		while (requiresAdditionalSweep) {
+		while (requiresAdditionalSweep || iteration > 9) {
 			requiresAdditionalSweep = false;
 			List<Coord> newWalls = new List<Coord>();
 			List<Coord> newOpens = new List<Coord>();
@@ -81,8 +81,10 @@ public class LevelMap {
 								}
 								surroundingWallsAll += 1;
 							}
+
 						}
 					}
+
 					if (surroundingWallsCardinal >= 3 && map[x][y] == config.open){ 
 						newWalls.Add(new Coord(x,y));
 					}
@@ -99,8 +101,6 @@ public class LevelMap {
 				requiresAdditionalSweep = true;
 				map[c.x][c.y] = config.open;
 			}
-			// Uhhhh so this sometimes locks up without this line, even though we don't actually
-			// use the variable for anything.
 			iteration += 1;
 
 			yield return null;

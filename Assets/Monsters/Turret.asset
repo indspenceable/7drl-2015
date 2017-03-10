@@ -21,7 +21,8 @@ MonoBehaviour:
   flies: 0
   minimumFloor: 2
   displayName: Turret
-  desc: 'Hits at range 2-4; but can''t move. Get into it''s minimum range and you''re
+  desc: 'Hits at range 2-4; but can''t move. Get into its minimum range and you''re
     golden.
 
 '
+  anim: 2

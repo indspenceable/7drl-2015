@@ -296,6 +296,7 @@ public class GameInstance : MonoBehaviour {
 			manager.StartCoroutine(manager.Win());
 		} else {
 			AddEvent( player.DisplayName() + " descends to the next level.");
+			yield return DisplayShock(player.pos, player.pos);
 			yield return SetTerrain();
 			player.SetCoords(CurrentLevel.startPos);
 			PopulateMonsters(prefabConfig);
@@ -450,6 +451,33 @@ public class GameInstance : MonoBehaviour {
 			yield return ListenForPlayerInput();
 		}
 	}
+
+	// Particle stuff
+	public GameObject punchParticles;
+	public IEnumerator DisplayPunch(Coord target) {
+		GameObject go = Instantiate(punchParticles, target.toVec(), Quaternion.identity);
+		yield return new WaitForSeconds(0.5f);
+		Destroy(go);
+	}
+	public GameObject arrowParticles;
+	public IEnumerator DisplayArrow(Coord origin, Coord target) {
+		GameObject go = Instantiate(shockParticles, origin.toVec(), Quaternion.identity);
+		yield return SlowMove(go, target, GameManager.StandardDelay);
+		Destroy(go);
+	}
+	public GameObject shockParticles;
+	public IEnumerator DisplayShock(Coord origin, Coord target) {
+		GameObject go = Instantiate(shockParticles, origin.toVec(), Quaternion.identity);
+		yield return SlowMove(go, target, GameManager.StandardDelay);
+		Destroy(go);
+	}
+	public GameObject healParticles;
+	public IEnumerator DisplayHealing(Coord target) {
+		GameObject go = Instantiate(punchParticles, target.toVec(), Quaternion.identity);
+		yield return new WaitForSeconds(0.5f);
+		Destroy(go);
+	}
+
 
 	public IEnumerator SlowMove(GameObject go, Coord target, float time) {
 		float dt = 0;

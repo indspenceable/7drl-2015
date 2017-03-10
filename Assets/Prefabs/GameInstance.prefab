@@ -1336,6 +1336,14 @@ MonoBehaviour:
   overlayArea: {fileID: 1664099818858538}
   overlayText: {fileID: 114415979005335152}
   eventLog: {fileID: 114995641058792928}
+  punchParticles: {fileID: 1955933936236310, guid: 0575cf8d807324ce6a8c9db109fe3ffe,
+    type: 2}
+  arrowParticles: {fileID: 1955933936236310, guid: 3d0c50e4eeba7442f842465089224640,
+    type: 2}
+  shockParticles: {fileID: 1955933936236310, guid: 4346165c9df7347d6a767760e901d983,
+    type: 2}
+  healParticles: {fileID: 1955933936236310, guid: 4346165c9df7347d6a767760e901d983,
+    type: 2}
 --- !u!114 &114476418330814294
 MonoBehaviour:
   m_ObjectHideFlags: 1

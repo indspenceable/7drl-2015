@@ -24,3 +24,4 @@ MonoBehaviour:
   desc: 'This monstrosity takes 3 hits to kill.
 
 '
+  anim: 2

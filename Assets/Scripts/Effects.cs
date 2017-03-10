@@ -36,6 +36,11 @@ public class Effects {
 			target = instance.GetEntityAt(c);
 			if (target != null) {
 				instance.AddEvent(message.Replace("<name>", target.DisplayName()));
+				if (power > 0) {
+					yield return instance.DisplayPunch(c);
+				} else {
+					yield return instance.DisplayHealing(c);
+				}
 				yield return target.TakeHit(power);
 				yield return success;
 			} else {
@@ -46,6 +51,11 @@ public class Effects {
 			target = instance.GetEntityAt(c);
 			if (target != null && !target.HasQuality(Qualities.Quality.FLYING)) {
 				instance.AddEvent(message.Replace("<name>", target.DisplayName()))	;
+				if (power > 0) {
+					yield return instance.DisplayPunch(c);
+				} else {
+					yield return instance.DisplayHealing(c);
+				}
 				yield return target.TakeHit(power);
 				yield return success;
 			} else {
@@ -58,6 +68,11 @@ public class Effects {
 			MapTileComponent tile = instance.GetTile(dest);
 			if (tile.passable && instance.GetEntityAt(dest) == null && target != null) {
 				instance.AddEvent(message.Replace("<name>", target.DisplayName()));
+				if (power > 0) {
+					yield return instance.DisplayPunch(c);
+				} else {
+					yield return instance.DisplayHealing(c);
+				}
 				yield return target.TakeHit(power);
 				yield return instance.AttemptMove(dest, success, cancel);
 			} else {
@@ -66,6 +81,7 @@ public class Effects {
 			yield break;
 		case Effects.Effect.GOTO:
 			instance.AddEvent(message);
+			yield return instance.DisplayShock(c, c);
 			yield return instance.AttemptMove(c, success, cancel);
 			yield break;
 		case Effects.Effect.ADD_TILE_EFFECT:
@@ -100,6 +116,8 @@ public class Effects {
 				int tilesPushed = 0;
 				instance.AddEvent(message.Replace("<name>", monster.DisplayName()));
 
+				yield return instance.DisplayPunch(c);
+
 				while (instance.EmptyAndPassable(monster.pos + pushDirection) && tilesPushed<range) {
 					yield return instance.SlowMove(monster.gameObject, monster.pos + pushDirection, GameManager.StandardDelay);
 					monster.pos = monster.pos + pushDirection;
@@ -118,6 +136,8 @@ public class Effects {
 				yield break;
 			} else {
 				MonsterComponent monster = instance.GetEntityAt(c) as MonsterComponent;
+				yield return instance.DisplayArrow(c, c);
+
 				instance.AddEvent(message.Replace("<name>", monster.DisplayName()));
 
 				monster.stunned += power;

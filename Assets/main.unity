@@ -152,6 +152,24 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1033426578}
+    - target: {fileID: 114459373487398144, guid: 7d0c7cc95a5b4465a8e850808baa16e7,
+        type: 2}
+      propertyPath: shockParticles
+      value: 
+      objectReference: {fileID: 1955933936236310, guid: 4346165c9df7347d6a767760e901d983,
+        type: 2}
+    - target: {fileID: 114459373487398144, guid: 7d0c7cc95a5b4465a8e850808baa16e7,
+        type: 2}
+      propertyPath: healParticles
+      value: 
+      objectReference: {fileID: 1955933936236310, guid: 4346165c9df7347d6a767760e901d983,
+        type: 2}
+    - target: {fileID: 114459373487398144, guid: 7d0c7cc95a5b4465a8e850808baa16e7,
+        type: 2}
+      propertyPath: arrowParticles
+      value: 
+      objectReference: {fileID: 1955933936236310, guid: 3d0c50e4eeba7442f842465089224640,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7d0c7cc95a5b4465a8e850808baa16e7, type: 2}
   m_IsPrefabParent: 0

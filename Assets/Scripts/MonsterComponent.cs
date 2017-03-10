@@ -72,6 +72,21 @@ using UnityEngine;
 
 	public IEnumerator DisplayAndExecuteAttack(GameInstance instance) {
 		instance.AddEvent("The " + DisplayName() + " hits " + instance.player.DisplayName());
+		switch(mt.anim) {
+		case Monster.AttackAnimation.PUNCH:
+			yield return instance.DisplayPunch(instance.player.pos);
+			break;
+		case Monster.AttackAnimation.ARROW:
+			yield return instance.DisplayArrow(pos, instance.player.pos);
+			break;
+		case Monster.AttackAnimation.SHOCK:
+			yield return instance.DisplayShock(pos, instance.player.pos);
+			break;
+		default:
+			// No animation
+//			throw new UnityException("Unexpected attack animation!");
+			break;
+		}
 		yield return instance.player.TakeHit(mt.damage);
 	}
 
