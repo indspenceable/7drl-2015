@@ -20,3 +20,6 @@ MonoBehaviour:
   range: 0
   targetsFliers: 0
   avoid: 1
+  explanation: 
+  targettedMessage: The lava swallows <name>!
+  untargettedMessage: 

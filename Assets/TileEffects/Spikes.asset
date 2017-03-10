@@ -21,3 +21,5 @@ MonoBehaviour:
   targetsFliers: 1
   avoid: 1
   explanation: 
+  targettedMessage: the spikes impale <name>
+  untargettedMessage: 

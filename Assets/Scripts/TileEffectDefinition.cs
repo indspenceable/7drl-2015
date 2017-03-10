@@ -21,4 +21,7 @@ public class TileEffectDefinition: ScriptableObject {
 	public bool avoid;
 
 	public string explanation;
+
+	public string targettedMessage;
+	public string untargettedMessage;
 }

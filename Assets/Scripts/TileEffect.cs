@@ -44,13 +44,22 @@ public class TileEffect {
 		}
 	}
 
+	public IEnumerator AddTargettedMessageToLog(GameInstance instance, Coord c) {
+		if (def.targettedMessage != "") {
+			Entity e = instance.GetEntityAt(c);
+			instance.AddEvent(def.targettedMessage.Replace("<name>", e.DisplayName()));			
+		}
+
+		yield return null;
+	}
 	public IEnumerator Activate(GameInstance instance) {
+		instance.AddEvent(def.untargettedMessage);
 		List<Coroutine> coroutines = new List<Coroutine>();
 		for (int i = -def.range; i <=def.range; i+=1) {
 			for (int j = -def.range; j <=def.range; j+=1) {
 				Coord c = new Coord(myTile.x + i, myTile.y + j);
 				if (instance.InBounds(c)) {
-					coroutines.Add(instance.StartCoroutine(Effects.TargettedActivation(instance, c, null, null, def.onTrigger, def.power, 0, null)));
+					coroutines.Add(instance.StartCoroutine(Effects.TargettedActivation(instance, c, AddTargettedMessageToLog(instance, c), null, def.onTrigger, def.power, 0, null)));
 				}
 			}
 		}

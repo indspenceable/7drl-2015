@@ -66,12 +66,12 @@ using UnityEngine;
 	}
 
 	public IEnumerator TakeHit(int power) {
-		Debug.Log("Monster Got hit for " + power + " power.");
 		hits += power;
 		yield return null;
 	}
 
 	public IEnumerator DisplayAndExecuteAttack(GameInstance instance) {
+		instance.AddEvent("The " + DisplayName() + " hits " + instance.player.DisplayName());
 		yield return instance.player.TakeHit(mt.damage);
 	}
 

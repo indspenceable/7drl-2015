@@ -18,3 +18,8 @@ MonoBehaviour:
   onTrigger: 0
   power: 1
   range: 2
+  targetsFliers: 0
+  avoid: 0
+  explanation: 
+  targettedMessage: 
+  untargettedMessage: the bomb explodes!

@@ -46,6 +46,9 @@ public class GameInstance : MonoBehaviour {
 	[SerializeField]
 	private Text overlayText;
 
+	[SerializeField]
+	private Text eventLog;
+
 	private void SetInstructions(string status) {
 		statusAreaText.text = status;
 		statusArea.SetActive(status != "");
@@ -54,6 +57,11 @@ public class GameInstance : MonoBehaviour {
 	private void SetOverlay(string status) {
 		overlayText.text = status;
 		overlayArea.SetActive(status != "");
+	}
+
+	public void AddEvent(string message)  {
+		if (message == null || message == "") return;
+		eventLog.text = message + "\n" + eventLog.text;
 	}
 
 	public void Update() {
@@ -268,11 +276,12 @@ public class GameInstance : MonoBehaviour {
 		case TileTerrain.Interaction.GIVE_ITEM:
 			SetInstructions("Select item to replace with " + GetTile(dest).item.displayName);
 			yield return SelectItemToReplace(
-					(i)=>{
-						SetInstructions("");
-						player.SetItem(i, GetTile(dest).item);
-						GetTile(dest).SetTerrain(mapConfig.open);
-					},
+				(i)=>{
+					SetInstructions("");
+					player.SetItem(i, GetTile(dest).item);
+					AddEvent( player.DisplayName() + " equips the " + GetTile(dest).item);
+					GetTile(dest).SetTerrain(mapConfig.open);
+				},
 				success, back);
 			yield break;
 		case TileTerrain.Interaction.NONE:
@@ -286,6 +295,7 @@ public class GameInstance : MonoBehaviour {
 		if (this.currentLevelIndex == mapConfig.totalNumberOfLevels) {
 			manager.Win();
 		} else {
+			AddEvent( player.DisplayName() + " descends to the next level.");
 			yield return SetTerrain();
 			player.SetCoords(CurrentLevel.startPos);
 			PopulateMonsters(prefabConfig);

@@ -18,7 +18,11 @@ public class Player : MonoBehaviour, Entity {
 			SetItem(i, startingGear[i]);
 		}
 	}
-	
+
+	public string DisplayName() {
+		return "the player";
+	}
+
 	// Update is called once per frame
 	void Update () {
 		
