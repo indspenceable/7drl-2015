@@ -44,6 +44,12 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	MainMenu mainMenu;
 
+	[SerializeField]
+	GameObject youWin;
+	[SerializeField]
+	GameObject youLose;
+
+
 	// Use this for initialization
 	void Start () {
 		GameManager.StandardDelay = standardDelay;
@@ -57,10 +63,29 @@ public class GameManager : MonoBehaviour {
 		mainMenu.Startup();
 	}
 
-	public void Win() {
-		Debug.Log("You win!");
+	public IEnumerator Win() {
+		if (instance != null) {
+			Destroy(instance.gameObject);
+		}
+		youWin.SetActive(true);
+		yield return new WaitForSeconds(3f);
+		youWin.SetActive(false);
+
 		SwapToMainMenu();
 	}
+
+	public IEnumerator GameOver() {
+		if (instance != null) {
+			Destroy(instance.gameObject);
+		}
+		youLose.SetActive(true);
+		yield return new WaitForSeconds(3f);
+		youLose.SetActive(false);
+
+		SwapToMainMenu();
+	}
+
+
 	public void StartNewGame() {
 		mainMenu.gameObject.SetActive(false);
 //		instance = new GameObject("GameInstance").AddComponent<GameInstance>();

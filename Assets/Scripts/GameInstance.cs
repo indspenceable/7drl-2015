@@ -293,7 +293,7 @@ public class GameInstance : MonoBehaviour {
 		this.currentLevelIndex += 1;
 
 		if (this.currentLevelIndex == mapConfig.totalNumberOfLevels) {
-			manager.Win();
+			manager.StartCoroutine(manager.Win());
 		} else {
 			AddEvent( player.DisplayName() + " descends to the next level.");
 			yield return SetTerrain();
@@ -441,16 +441,11 @@ public class GameInstance : MonoBehaviour {
 		if (player.IsDead()) {
 			Debug.Log("Dead!!!");
 			// You died!
-			yield return GameOver();
+			manager.StartCoroutine(manager.GameOver());
 		} else {
 			player.RestItems();
 			yield return ListenForPlayerInput();
 		}
-	}
-
-	private IEnumerator GameOver() {
-		yield return null;
-		manager.SwapToMainMenu();
 	}
 
 	public IEnumerator SlowMove(GameObject go, Coord target, float time) {
