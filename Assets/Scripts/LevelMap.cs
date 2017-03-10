@@ -36,11 +36,16 @@ public class LevelMap {
 	int difficulty;
 
 	public IEnumerator Generate(int difficulty, GameManager.MapConfig config) {
-		this.difficulty = difficulty;
-		yield return GenerateNewMapAndSave(config, config.vaults[0], config.vaults);
-		GenerateFromStringMap(config, myMap);
-		yield return Cleanup(config);
-		yield return PlaceFeatures(config);
+//		while (true){
+			this.difficulty = difficulty;
+			yield return GenerateNewMapAndSave(config, config.vaults[0], config.vaults);
+			GenerateFromStringMap(config, myMap);
+			yield return null;
+			yield return Cleanup(config);
+			yield return null;
+			yield return PlaceFeatures(config);
+			yield return null;
+//		}
 	}
 	public TileTerrain GetAt(Coord c) {
 		return map[c.x][c.y];
@@ -57,8 +62,9 @@ public class LevelMap {
 
 	private IEnumerator Cleanup(GameManager.MapConfig config) {
 		bool requiresAdditionalSweep = true;
+		int iteration = 0;
+
 		while (requiresAdditionalSweep) {
-//			Debug.Log("Starting sweep.");
 			requiresAdditionalSweep = false;
 			List<Coord> newWalls = new List<Coord>();
 			List<Coord> newOpens = new List<Coord>();
@@ -89,11 +95,14 @@ public class LevelMap {
 				requiresAdditionalSweep = true;
 				map[c.x][c.y] = config.wall;
 			}
-
 			foreach (Coord c in newOpens) {
 				requiresAdditionalSweep = true;
 				map[c.x][c.y] = config.open;
 			}
+			// Uhhhh so this sometimes locks up without this line, even though we don't actually
+			// use the variable for anything.
+			iteration += 1;
+
 			yield return null;
 		}
 	}
@@ -194,8 +203,8 @@ public class LevelMap {
 			for (int i = 0; i < 200; i+=1) {
 //				Debug.Log("Trying to place a vault...");
 				yield return null;
-				VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
-				if (AttemptToPlaceAndAdd(config, tempMap, v)) {
+//				VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
+				if (AttemptToPlaceAndAdd(config, tempMap, new List<VaultDefinition>(vaults).OrderBy( x => Random.value ).ToList( ))) {
 					vaultCount += 1;
 				}
 			}
@@ -212,18 +221,20 @@ public class LevelMap {
 		}
 		myMap = rtn;
 	}
-	private bool AttemptToPlaceAndAdd(GameManager.MapConfig config, StringBuilder[] tempMap, VaultDefinition vd) {
-		foreach (Vault v in vd.Process()) {
-			List<Coord> possibleOutlets = FindPossibleOutlets(config, tempMap);
-			List<Coord> vaultOutlets = FindAttachPointInVault(v);
-			foreach (Coord p1 in possibleOutlets) {
-				foreach(Coord p2 in vaultOutlets) {
-					Coord placeVaultAt= new Coord(p1.x - p2.x, p1.y - p2.y);
+	private bool AttemptToPlaceAndAdd(GameManager.MapConfig config, StringBuilder[] tempMap, List<VaultDefinition> vds) {
+		foreach(VaultDefinition vd in vds) {
+			foreach (Vault v in vd.Process().OrderBy( x => Random.value ).ToList( )) {
+				List<Coord> possibleOutlets = FindPossibleOutlets(config, tempMap);
+				List<Coord> vaultOutlets = FindAttachPointInVault(v);
+				foreach (Coord p1 in possibleOutlets) {
+					foreach(Coord p2 in vaultOutlets) {
+						Coord placeVaultAt= new Coord(p1.x - p2.x, p1.y - p2.y);
 
-					if (CheckVault(tempMap, v, placeVaultAt)) {
-						AddVault(tempMap, v, placeVaultAt);
-						tempMap[p1.y][p1.x] = '.';
-						return true;
+						if (CheckVault(tempMap, v, placeVaultAt)) {
+							AddVault(tempMap, v, placeVaultAt);
+							tempMap[p1.y][p1.x] = '.';
+							return true;
+						}
 					}
 				}
 			}
