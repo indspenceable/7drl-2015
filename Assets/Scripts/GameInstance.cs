@@ -409,10 +409,13 @@ public class GameInstance : MonoBehaviour {
 	}
 	public IEnumerator TakeAllMonstersTurn() {
 		PruneDeadMonsters();
+		yield return TakePassivesTurn();
+		PruneDeadMonsters();
 		foreach( MonsterComponent m in monsters) {
 			yield return TakeMonsterTurn(m);
 		}
-		yield return TakePassivesTurn();
+		PruneDeadMonsters();
+		yield return PreTurn();
 	}
 
 	private IEnumerator TakePassivesTurn() {
@@ -430,7 +433,7 @@ public class GameInstance : MonoBehaviour {
 			yield return co;
 		}
 		PruneDeadMonsters();
-		yield return PreTurn();
+//		yield return PreTurn();
 	}
 
 	private IEnumerator PreTurn() {
