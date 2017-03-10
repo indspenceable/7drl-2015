@@ -42,7 +42,7 @@ public class Item  {
 	}
 
 	public IEnumerator TargettedItemActivation(GameInstance instance, Coord c, IEnumerator success, IEnumerator cancel) {
-		yield return Effects.TargettedActivation(instance, c, success, cancel, itemType.effect, itemType.power, itemType.targettingRange, itemType.tileEffect);
+		yield return Effects.TargettedActivation(instance, c, success, cancel, itemType.effect, itemType.power, itemType.targettingRange, itemType.tileEffect, itemType.message);
 	}
 
 	public IEnumerator BeginActivation(GameInstance instance, IEnumerator success, IEnumerator back) {

@@ -27,3 +27,4 @@ MonoBehaviour:
   LOSModifier: 0
   thornsDamage: 1
   providesFlight: 0
+  message: 

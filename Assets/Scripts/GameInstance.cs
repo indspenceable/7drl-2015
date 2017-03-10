@@ -279,7 +279,7 @@ public class GameInstance : MonoBehaviour {
 				(i)=>{
 					SetInstructions("");
 					player.SetItem(i, GetTile(dest).item);
-					AddEvent( player.DisplayName() + " equips the " + GetTile(dest).item);
+					AddEvent( player.DisplayName() + " equips the " + GetTile(dest).item.displayName);
 					GetTile(dest).SetTerrain(mapConfig.open);
 				},
 				success, back);
@@ -402,6 +402,7 @@ public class GameInstance : MonoBehaviour {
 	public void PruneDeadMonsters() {
 		List<MonsterComponent> deadMonsters = monsters.FindAll( m => m.IsDead() );
 		foreach( MonsterComponent m in deadMonsters) {
+			AddEvent(m.DisplayName() + " dies.");
 			monsters.Remove(m);
 			Destroy(m.gameObject);
 		}

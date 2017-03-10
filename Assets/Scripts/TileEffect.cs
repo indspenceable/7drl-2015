@@ -59,7 +59,7 @@ public class TileEffect {
 			for (int j = -def.range; j <=def.range; j+=1) {
 				Coord c = new Coord(myTile.x + i, myTile.y + j);
 				if (instance.InBounds(c)) {
-					coroutines.Add(instance.StartCoroutine(Effects.TargettedActivation(instance, c, AddTargettedMessageToLog(instance, c), null, def.onTrigger, def.power, 0, null)));
+					coroutines.Add(instance.StartCoroutine(Effects.TargettedActivation(instance, c, AddTargettedMessageToLog(instance, c), null, def.onTrigger, def.power, 0, null, null)));
 				}
 			}
 		}

@@ -27,3 +27,4 @@ MonoBehaviour:
   LOSModifier: 0
   thornsDamage: 0
   providesFlight: 0
+  message: The player blinks

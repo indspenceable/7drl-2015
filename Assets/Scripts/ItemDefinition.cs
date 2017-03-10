@@ -28,4 +28,5 @@ public class ItemDefinition : ScriptableObject {
 	public int LOSModifier = 0;
 	public int thornsDamage = 0;
 	public bool providesFlight = false;
+	public string message;
 }
