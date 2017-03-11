@@ -191,23 +191,21 @@ public class LevelMap {
 			int tries = 0;
 			while (!CheckVault(tempMap, v1, c1) && tries < 100) {
 				if (tries%10 == 0) yield return null;
-				c1 = new Coord(Random.Range(0, 7), Random.Range(0, 7));
+				c1 = new Coord(Random.Range(1, 3), Random.Range(1, 3));
 				tries += 1;
 			}
 			yield return null;
+			Debug.Log("Tries is " + tries);
 			if (tries >= 100) continue;
 			AddVault(tempMap, v1, c1);
 			// Move floor size out of here
 
 			vaultCount = 0;
-			for (int i = 0; i < 200; i+=1) {
-//				Debug.Log("Trying to place a vault...");
-				yield return null;
-//				VaultDefinition v = vaults[Random.Range(0, vaults.Length)];
-				if (AttemptToPlaceAndAdd(config, tempMap, new List<VaultDefinition>(vaults).OrderBy( x => Random.value ).ToList( ))) {
-					vaultCount += 1;
-				}
+			int tries2 = 0;
+			while (AttemptToPlaceAndAdd(config, tempMap, new List<VaultDefinition>(vaults).OrderBy( x => Random.value ).ToList( ))) {
+				vaultCount += 1;
 			}
+			Debug.Log("Got " + tries2);
 //			Debug.Log("Placed: " + vaultCount);
 		}
 
@@ -239,6 +237,7 @@ public class LevelMap {
 				}
 			}
 		}
+//		tempMap[p1.y][p1.x] = '.';
 		return false;
 	}
 
