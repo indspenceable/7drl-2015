@@ -195,7 +195,7 @@ public class LevelMap {
 				tries += 1;
 			}
 			yield return null;
-			Debug.Log("Tries is " + tries);
+//			Debug.Log("Tries is " + tries);
 			if (tries >= 100) continue;
 			AddVault(tempMap, v1, c1);
 			// Move floor size out of here
@@ -205,7 +205,7 @@ public class LevelMap {
 			while (AttemptToPlaceAndAdd(config, tempMap, new List<VaultDefinition>(vaults).OrderBy( x => Random.value ).ToList( ))) {
 				vaultCount += 1;
 			}
-			Debug.Log("Got " + tries2);
+//			Debug.Log("Got " + tries2);
 //			Debug.Log("Placed: " + vaultCount);
 		}
 
